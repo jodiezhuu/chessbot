@@ -17,8 +17,8 @@ class Board {
         ~Board();
     private:
         void intializeBoard();
-        PieceList[] piecelists;
-        Square[][] boardlist;
+        PieceList piecelists[2];
+        Square boardlist[8][8];
 }
 
 #endif

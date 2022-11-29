@@ -65,11 +65,15 @@ Square* Board::getCell(int row, int col) {
 bool Board::addPiece(int row, int col, Piece* piece) {
     if (boardlist[row][col].getPiece != nullptr) return false;
     boardlist[row][col].setPiece(piece);
+    PieceColor colour = piece->getColor();
+    piecelists[colour].addPiece(piece);
     return true;
 }
 
 void Board::removePiece(int row, int col) {
+    Piece* temp = boardlist[row][col].getPiece();
     boardlist[row][col].setPiece(nullptr);
+    piecelists[temp->getColor()].removePiece(temp);
 }
 
 Board::~Board() {
