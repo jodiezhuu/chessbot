@@ -8,7 +8,7 @@ class Piece {
     Square *pos;
     PieceType type;
 public:
-    Piece(PieceColor color, Square pos, PieceType type);
+    Piece(PieceColor color, Square *pos, PieceType type);
 };
 
 #endif
