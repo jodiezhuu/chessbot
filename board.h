@@ -3,17 +3,20 @@
 #include "game.h"
 #include "piecelist.h"
 #include "square"
+#include <string>
 
 class Board {
     public:
         Board();
         void resetBoard();
-        PieceList[] getPieceLists();
-        Square[][] getBoard():
+        PieceList* getWhitePieces();
+        PieceList* getBlackPieces();
+        Square* getCell(int row, int col);
         bool addPiece(int row, int col, Piece* piece);
         void removePiece(int row, int col);
         ~Board();
     private:
+        void intializeBoard();
         PieceList[] piecelists;
         Square[][] boardlist;
 }

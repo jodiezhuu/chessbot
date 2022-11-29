@@ -9,11 +9,15 @@ Board::Board() {
     for (int colour = 0; colour < 2; ++colour) {
         piecelists[colour] = new PieceList();
     }
+    this->intializeBoard();
+}
+
+void Board::intializeBoard() {
     for (int colour = 0; colour < 2; ++colour) {
         for (int i = 0; i < 8; ++i) {
             Piece* temp = new Pawn();
             piecelists[colour].addPiece(temp);
-            boardlist[colour * 6 + 1][i].setPiece(temp);
+            boardlist[colour * 5 + 1][i].setPiece(temp);
         }
         for (int i = 0; i < 2; ++i) {
             Piece* temp = new Rook();
@@ -42,43 +46,19 @@ void Board::resetBoard() {
             boardlist[i][j].setPiece(null);
         }
     }
-
-    for (int colour = 0; colour < 2; ++colour) {
-        for (int i = 0; i < piecelists[colour].getList().size(); ++i) {
-            piecelists[colour].getList().pop_back()
-        }
-
-        for (int i = 0; i < 8; ++i) {
-            Piece* temp = new Pawn();
-            piecelists[colour].addPiece(temp);
-            boardlist[colour * 6 + 1][i].setPiece(temp);
-        }
-        for (int i = 0; i < 2; ++i) {
-            Piece* temp = new Rook();
-            piecelists[colour].addPiece(temp);
-            boardlist[colour * 7][i * 7].setPiece(temp);
-            temp = new Knight();
-            piecelists[colour].addPiece(temp);
-            boardlist[colour * 7][i * 5 + 1].setPiece(temp);
-            temp = new Bishop();
-            piecelists[colour].addPiece(temp);
-            boardlist[colour * 7][i * 3 + 2].setPiece(temp);
-        }
-        Piece *queen = new Queen();
-        Piece *king = new King();
-        piecelists[colour].addPiece(queen);
-        piecelists[colour].addPiece(king);
-        boardlist[colour * 7][3].setPiece(queen);
-        boardlist[colour * 7][3].setPiece(king);
-    }
+    this->intializeBoard();
 }
 
-PieceList[] Board::getPieceLists() {
-    return piecelists;
+PieceList* Board::getWhitePieces() {
+    return &piecelists[0];
 }
 
-Square[][] Board::getBoard() {
-    return boardlist;
+PieceList* Board::getBlackPieces() {
+    return &piecelists[1];
+}
+
+Square* Board::getCell(int row, int col) {
+    return &boardlist[row][col];
 }
 
 bool Board::addPiece(int row, int col, Piece* piece) {
