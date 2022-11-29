@@ -23,14 +23,12 @@ void PieceList::addPiece(Piece *p) {
 bool PieceList::removePieces(Piece *piece) {
     int counter = 0;
     if (pieceCount[piece] > 0) {
-        for (auto p: pieces) {
-            if (p == piece) {
-                break;
+        for (auto it = pieces.begin(); it != pieces.end(); it++) {
+            if (*it == piece) {
+                pieces.erase(it);
+                return true;
             }
-            counter++;
         }
-        pieces.erase(pieces.begin() + counter);
-        return true;
     } return false;
 }
 
