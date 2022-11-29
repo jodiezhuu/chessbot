@@ -23,7 +23,7 @@ public:
     PieceType getState(int row, int col);
     void render();
     bool addPiece(std::string type, std::string location);
-    void removePiece(std::string location);
+    bool removePiece(std::string location);
 };
 
 #endif

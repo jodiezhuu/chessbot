@@ -48,7 +48,7 @@ void TextView::notify() {
     for (int row = 0; row < 8; ++row) {
         out << rowDisplay-- << " |";
         for (int col = 0; col < 8; ++col) {
-            out << game->getState(row, col) << "|";
+            out << convertPiece(game->getState(row, col)) << "|";
         }
     }
     out << "-----------";
