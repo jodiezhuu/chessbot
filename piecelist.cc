@@ -23,9 +23,9 @@ void PieceList::addPiece(Piece *p) {
 bool PieceList::removePieces(Piece *piece) {
     int counter = 0;
     if (pieceCount[piece] > 0) {
-        for (auto it = pieces.begin(); it != pieces.end(); it++) {
-            if (*it == piece) {
-                pieces.erase(it);
+        for (auto p = pieces.begin(); p != pieces.end(); p++) {
+            if (*p == piece) {
+                pieces.erase(p);
                 return true;
             }
         }
