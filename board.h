@@ -11,6 +11,7 @@ class Board {
         void resetBoard();
         PieceList* getWhitePieces();
         PieceList* getBlackPieces();
+        Square* getBoard();
         Square* getCell(int row, int col);
         bool addPiece(int row, int col, Piece* piece);
         void removePiece(int row, int col);

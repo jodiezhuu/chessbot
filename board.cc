@@ -58,6 +58,10 @@ PieceList* Board::getBlackPieces() {
     return &piecelists[1];
 }
 
+Square* Board::getBoard() {
+    return boardlist;
+}
+
 Square* Board::getCell(int row, int col) {
     return &boardlist[row][col];
 }
