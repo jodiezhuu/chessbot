@@ -8,12 +8,12 @@
 #include <string>
 
 class Game: public Subject {
-    // Board * board;
+    Board * board;
     bool finished;
     PieceColor turn;
     // Player players[2];
-    enum CheckStatus = {InCheckBlack = 0, InCheckWhite, CheckmatedBlack, CheckmatedWhite, None};
-    enum Result = {BlackWon = 0, WhiteWon, Draw, Ongoing};
+    enum class CheckStatus {InCheckBlack, InCheckWhite, CheckmatedBlack, CheckmatedWhite, None};
+    enum class Result {BlackWon, WhiteWon, Draw, Ongoing};
     CheckStatus status;
     Result result;
     int scores[2];
@@ -21,7 +21,6 @@ public:
     Game();
     ~Game();
     PieceType getState(int row, int col);
-    void render();
     bool addPiece(std::string type, std::string location);
     bool removePiece(std::string location);
 };
