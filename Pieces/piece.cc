@@ -19,10 +19,10 @@ Square *Piece::getPosition() const{
     return pos;
 }
 
-std::vector <Square *> *Piece::getValidMoves() const{
-    return &validMoves;
+std::vector <Square *> Piece::getValidMoves() const{
+    return validMoves;
 }
 
-std::vector <Square *> *Piece::getCapturingMoves() const{
-    return &capturingMoves;
+std::vector <Square *> Piece::getCapturingMoves() const{
+    return capturingMoves;
 }
