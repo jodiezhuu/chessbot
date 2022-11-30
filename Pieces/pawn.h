@@ -7,8 +7,8 @@ class Pawn: public Piece {
 public:
     Pawn(Board *b, PieceColor color, Square *pos, PieceType type);
     bool isMoveValid(int row, int col) override;
-    virtual Square ** validMoves() override;
-    virtual Square ** capturingMoves() override; 
+    virtual std::vector <Square *> validMoves() override;
+    virtual std::vector <Square *> capturingMoves() override; 
     virtual bool canBeCaptured() override; 
 };
 
