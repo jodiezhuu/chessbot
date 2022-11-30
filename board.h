@@ -2,6 +2,7 @@
 #define __BOARD_H__
 #include "game.h"
 #include "square.h"
+#include "Pieces/piecetype.h"
 #include <string>
 
 class PieceList;
@@ -12,7 +13,7 @@ private:
     Square* boardlist[8][8];
     void intializeBoard();
 public:
-    bool addPiece(int row, int col, Piece* piece);
+    bool addPiece(int row, int col, PieceType piece);
     void removePiece(int row, int col);
     Board();
     void resetBoard();
