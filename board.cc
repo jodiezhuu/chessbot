@@ -1,6 +1,7 @@
 #include "board.h"
 #include "Pieces/piecelist.h"
 #include "Pieces/piececolor.h"
+#include "Pieces/piecetype.h"
 #include "Pieces/piece.h"
 #include "Pieces/bishop.h"
 #include "Pieces/king.h"
@@ -70,11 +71,52 @@ Square* Board::getCell(int row, int col) {
     return boardlist[row][col];
 }
 
-bool Board::addPiece(int row, int col, Piece* piece) {
+bool Board::addPiece(int row, int col, PieceType piece) {
     if (boardlist[row][col]->getPiece() != nullptr) return false;
-    boardlist[row][col]->setPiece(piece);
-    int colour = (int) piece->getColor();
-    piecelists[colour]->addPiece(piece);
+    Piece *temp;
+    switch (piece) {
+        case PieceType::WhiteKing: 
+            temp = new King(this, PieceColor::White, boardlist[row][col], piece);
+            break;
+        case PieceType::BlackKing
+            temp = new King(this, PieceColor::Black, boardlist[row][col], piece);
+            break;
+        case PieceType::WhiteQueen:
+            temp = new Queen(this, PieceColor::White, boardlist[row][col], piece);
+            break;
+        case PieceType::BlackQueen:
+            temp = new Queen(this, PieceColor::Black, boardlist[row][col], piece);
+            break;
+        case PieceType::WhiteRook:
+            temp = new Rook(this, PieceColor::White, boardlist[row][col], piece);
+            break;
+        case PieceType::BlackRook:
+            temp = new Rook(this, PieceColor::Black, boardlist[row][col], piece);
+            break;
+        case PieceType::WhiteKnight:
+            temp = new Knight(this, PieceColor::White, boardlist[row][col], piece);
+            break;
+        case PieceType::BlackKnight:
+            temp = new Knight(this, PieceColor::Black, boardlist[row][col], piece);
+            break;
+        case PieceType::WhiteBishop:
+            temp = new Bishop(this, PieceColor::White, boardlist[row][col], piece);
+            break;
+        case PieceType::BlackBishop:
+            temp = new Bishop(this, PieceColor::Black, boardlist[row][col], piece);
+            break;
+        case PieceType::WhitePawn:
+            temp = new Pawn(this, PieceColor::White, boardlist[row][col], piece);
+            break;
+        case PieceType::BlackPawn:
+            temp = new Pawn(this, PieceColor::Black, boardlist[row][col], piece);
+            break;
+        default:
+            return false;
+    }
+    boardlist[row][col]->setPiece(temp);
+    int colour = (int) temp->getColor();
+    piecelists[colour]->addPiece(temp);
     return true;
 }
 
