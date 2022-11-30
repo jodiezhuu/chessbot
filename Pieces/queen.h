@@ -4,10 +4,10 @@
 class Queen: public Piece {
 public:
     Queen(Board *b, PieceColor color, Square *pos, PieceType type);
-    // bool isMoveValid(int row, int col, PieceColor color, Board *b) override;
-    // Square[] validMoves(Board *b) override;
-    // Square[] capturingMoves(Board *b) override; 
-    // bool canBeCaptured(Board *b) override;
+    bool isMoveValid(int row, int col) override;
+    virtual void calculateValidMoves() override;
+    virtual void calculateCapturingMoves() override;
+    virtual bool canBeCaptured() override; 
 };
 
 #endif
