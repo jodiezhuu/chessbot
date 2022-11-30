@@ -1,6 +1,7 @@
 #ifndef __SQUARE_H__
 #define __SQUARE_H__
-#include "piece.h"
+
+class Piece;
 
 class Square {
     const int row, col;

@@ -2,7 +2,7 @@
 #define __COMPUTERENGINE_H__
 #include "move.h"
 #include "board.h"
-#include "piececolor.h"
+#include "Pieces/piececolor.h"
 
 class ComputerEngine {
     public:
@@ -10,6 +10,6 @@ class ComputerEngine {
         Move makeMove(Board* board, PieceColor color);
     private:
         int level;
-}
+};
 
 #endif

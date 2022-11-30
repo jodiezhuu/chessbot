@@ -2,7 +2,7 @@
 #define _TEXTVIEW_H_
 #include "observer.h"
 #include "game.h"
-#include "piecetype.h"
+#include "Pieces/piecetype.h"
 #include <iostream>
 
 class TextView: public Observer {

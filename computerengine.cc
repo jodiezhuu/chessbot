@@ -1,6 +1,6 @@
 #include "computerengine.h"
-#include "piecelist.h"
-#include "piece.h"
+#include "Pieces/piecelist.h"
+#include "Pieces/piece.h"
 
 ComputerEngine::ComputerEngine(int level) : level{level} {}
 

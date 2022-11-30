@@ -1,6 +1,6 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
-#include "piececolor.h"
+#include "Pieces/piececolor.h"
 #include "computerengine.h"
 
 class Player {
@@ -17,6 +17,6 @@ class Player {
         PieceColor color;
         bool computer;
         ComputerEngine* engine;
-}
+};
 
 #endif
