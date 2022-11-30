@@ -1,7 +1,7 @@
 #ifndef __GAME_H__
 #define __GAME_H__
-#include "piececolor.h"
-#include "piecetype.h"
+#include "Pieces/piececolor.h"
+#include "Pieces/piecetype.h"
 //#include "player.h"
 #include "subject.h"
 #include <string>

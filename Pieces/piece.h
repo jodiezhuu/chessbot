@@ -1,9 +1,9 @@
 #ifndef __PIECE_H__
 #define __PIECE_H__
 #include "piececolor.h"
-#include "square.h"
+#include "../square.h"
 #include "piecetype.h"
-#include "board.h"
+#include "../board.h"
 
 class Piece {
     PieceColor color;

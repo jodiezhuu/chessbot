@@ -1,13 +1,13 @@
 #include "board.h"
-#include "piecelist.h"
-#include "piececolor.h"
-#include "piece.h"
-#include "bishop.h"
-#include "king.h"
-#include "knight.h"
-#include "queen.h"
-#include "pawn.h"
-#include "rook.h"
+#include "Pieces/piecelist.h"
+#include "Pieces/piececolor.h"
+#include "Pieces/piece.h"
+#include "Pieces/bishop.h"
+#include "Pieces/king.h"
+#include "Pieces/knight.h"
+#include "Pieces/queen.h"
+#include "Pieces/pawn.h"
+#include "Pieces/rook.h"
 
 Board::Board() {
     for (int i = 0; i < 8; ++i) {

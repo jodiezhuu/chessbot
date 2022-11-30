@@ -1,7 +1,7 @@
 #ifndef __MOVE_H__
 #define __MOVE_H__
 #include "square.h"
-#include "piece.h"
+#include "Pieces/piece.h"
 
 class Move {
     public:

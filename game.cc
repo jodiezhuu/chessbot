@@ -1,5 +1,5 @@
 #include "game.h"
-#include "piece.h"
+#include "Pieces/piece.h"
 
 Game::Game(): finished{false}, turn{PieceColor::White}, status{CheckStatus::None}, result{Result::Ongoing} {
     board = new Board{};
