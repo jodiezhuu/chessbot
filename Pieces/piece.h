@@ -3,6 +3,7 @@
 #include "piececolor.h"
 #include "../square.h"
 #include "piecetype.h"
+#include "piecelist.h"
 #include "../board.h"
 #include <vector>
 
