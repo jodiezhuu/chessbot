@@ -7,14 +7,22 @@ bool Piece::inBound(int row, int col) {
     return (0 <= row && row <= 7 && 0 <= col && col <= 7);
 }
 
-PieceType Piece::getPieceType() {
+PieceType Piece::getPieceType() const{
     return type;
 }
 
-PieceColor Piece::getColor() {
+PieceColor Piece::getColor() const{
     return color;
 }
 
-Square *Piece::getPosition() {
+Square *Piece::getPosition() const{
     return pos;
+}
+
+std::vector <Square *> *Piece::getValidMoves() const{
+    return &validMoves;
+}
+
+std::vector <Square *> *Piece::getCapturingMoves() const{
+    return &capturingMoves;
 }
