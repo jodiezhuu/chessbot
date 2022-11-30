@@ -18,7 +18,6 @@ class Game: public Subject {
     CheckStatus status;
     Result result;
     float scores[2];
-private:
     PieceType convertChar(char c);
     void reset();
 public:
