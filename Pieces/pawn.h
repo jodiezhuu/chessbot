@@ -3,6 +3,7 @@
 #include "piece.h"
 
 class Pawn: public Piece {
+    int moveNum = 0;
 public:
     Pawn(Board *b, PieceColor color, Square *pos, PieceType type);
     bool isMoveValid(int row, int col) override;
