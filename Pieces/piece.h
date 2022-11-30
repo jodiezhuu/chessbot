@@ -4,20 +4,23 @@
 #include "../square.h"
 #include "piecetype.h"
 #include "../board.h"
+#include <vector>
 
 class Piece {
+protected:
     PieceColor color;
     Square *pos;
     PieceType type;
+    Board *b;
 public:
-    Piece(PieceColor color, Square *pos, PieceType type);
+    Piece(Board *b, PieceColor color, Square *pos, PieceType type);
     PieceType getPieceType();
     PieceColor getColor();
     Square *getPosition();
-    // virtual bool isMoveValid(int row, int col, PieceColor color, Board *b) = 0;
-    // virtual Square *[] checkMoves(Board *b) = 0;
-    // virtual Square *[] capturingMoves(Board *b) = 0; 
-    // virtual bool canBeCaptured(Board *b) = 0; 
+    virtual bool isMoveValid(int row, int col) = 0;
+    virtual std::vector <Square *> validMoves() = 0;
+    virtual std::vector <Square *> capturingMoves() = 0; 
+    virtual bool canBeCaptured() = 0; 
     ~Piece() {};  
 };
 
