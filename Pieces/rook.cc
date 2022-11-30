@@ -1,4 +1,4 @@
 #include "rook.h"
 
-Rook::Rook(PieceColor color, Square *pos, PieceType type)
-: Piece{color, pos, type} {}
+Rook::Rook(Board *b, PieceColor color, Square *pos, PieceType type)
+: Piece{b, color, pos, type} {}
