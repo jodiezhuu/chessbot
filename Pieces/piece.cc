@@ -1,7 +1,7 @@
 #include "piece.h"
 #include "piecelist.h"
 
-Piece::Piece(PieceColor color, Square *pos, PieceType type): color{color}, pos{pos}, type{type} {}
+Piece::Piece(Board *b, PieceColor color, Square *pos, PieceType type): b{b}, color{color}, pos{pos}, type{type} {}
 
 PieceType Piece::getPieceType() {
     return type;
