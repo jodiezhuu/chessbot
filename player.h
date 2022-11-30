@@ -17,6 +17,6 @@ class Player {
         PieceColor color;
         bool computer;
         ComputerEngine* engine;
-}
+};
 
 #endif

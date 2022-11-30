@@ -10,6 +10,6 @@ class ComputerEngine {
         Move makeMove(Board* board, PieceColor color);
     private:
         int level;
-}
+};
 
 #endif

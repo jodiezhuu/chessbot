@@ -2,10 +2,11 @@
 #define __GAME_H__
 #include "piececolor.h"
 #include "piecetype.h"
-#include "board.h"
 //#include "player.h"
 #include "subject.h"
 #include <string>
+
+class Board;
 
 class Game: public Subject {
     Board * board;
@@ -23,6 +24,7 @@ public:
     PieceType getState(int row, int col);
     bool addPiece(std::string type, std::string location);
     bool removePiece(std::string location);
+    void render();
 };
 
 #endif

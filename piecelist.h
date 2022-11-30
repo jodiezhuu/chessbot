@@ -7,11 +7,11 @@
 #include <map>
 
 class PieceList {
-std::vector<Piece *> pieces;
-const PieceColor color;
-std::map <Piece *, int> pieceCount;
+    std::vector<Piece *> pieces;
+    const PieceColor color;
+    std::map <Piece *, int> pieceCount;
 public:
-    PieceList(PieceColor color);
+    PieceList(int color);
     std::vector<Piece *> *getPieces();
     int getPieceCount(Piece *piece);
     ~PieceList();

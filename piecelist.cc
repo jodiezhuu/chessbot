@@ -4,8 +4,8 @@
 #include <vector>
 #include <map>
 
-PieceList::PieceList(PieceColor color)
-: color{color} {}
+PieceList::PieceList(int color)
+: color{color == 0 ? PieceColor::White : PieceColor::Black} {}
 
 int PieceList::getPieceCount(Piece *piece) {
     return pieceCount[piece];

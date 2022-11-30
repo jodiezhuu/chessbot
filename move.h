@@ -16,6 +16,6 @@ class Move {
         Square* from;
         Square* to;
         Piece* piece;
-}
+};
 
 #endif

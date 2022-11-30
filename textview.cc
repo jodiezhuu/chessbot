@@ -41,17 +41,13 @@ char TextView::convertPiece(PieceType type) {
 void TextView::notify() {
     int rowDisplay = 8;
 
-    out << "   ";
-    for (int col = 0; col < 8; ++col) {
-        out << '-';
-    }
+    out << std::endl;
     for (int row = 0; row < 8; ++row) {
         out << rowDisplay-- << " |";
         for (int col = 0; col < 8; ++col) {
             out << convertPiece(game->getState(row, col)) << "|";
         }
+        out << std::endl;
     }
-    out << "-----------";
-    out << "           ";
-    out << "   abcdefgh";
+    out << "   a b c d e f g h" << std::endl;
 }

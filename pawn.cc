@@ -1,10 +1,7 @@
 #include "pawn.h"
-#include "board.h"
-#include "square.h"
-#include "piececolor.h"
 
-Pawn::Pawn(PieceColor color, Square *pos)
-: color{color}, pos{pos} {}
+Pawn::Pawn(PieceColor color, Square *pos, PieceType type)
+: Piece{color, pos, type} {}
 
 // bool Pawn::isMoveValid(int row, int col, PieceColor color, Board *b) {
 //     if (color == White && (b->getCell(row, col))->getPiece() == nullptr && row == ++pos->row && col == pos->col) {

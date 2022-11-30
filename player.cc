@@ -1,9 +1,7 @@
 #include "player.h"
 
-Player::Player(PieceColor color, bool computer, ComputerEngine* engine = nullptr) 
-: color{color}, computer{computer}, engine{engine} {
-
-}
+Player::Player(PieceColor color, bool computer, ComputerEngine* engine) 
+: color{color}, computer{computer}, engine{engine} {}
 
 PieceColor Player::getColor() {
     return color;

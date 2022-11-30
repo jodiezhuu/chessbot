@@ -1,11 +1,16 @@
 #include <iostream>
 #include <string>
 #include "game.h"
+#include "textview.h"
 
 using namespace std;
 
 int main() {
     string command;
+    cout << "running" << endl;
+    Game * gameEngine = new Game{};
+    TextView * textOutput = new TextView{gameEngine};
+    gameEngine->render();
     while (cin >> command) {
         if (command == "game") {
 
@@ -31,4 +36,5 @@ int main() {
     // Print final score here
 
     // Delete all objects
+    delete gameEngine;
 }
