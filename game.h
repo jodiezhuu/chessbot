@@ -9,15 +9,17 @@
 class Board;
 
 class Game: public Subject {
+    bool ongoing;
     Board * board;
-    bool finished;
     PieceColor turn;
     // Player players[2];
     enum class CheckStatus {InCheckBlack, InCheckWhite, CheckmatedBlack, CheckmatedWhite, None};
     enum class Result {BlackWon, WhiteWon, Draw, Ongoing};
     CheckStatus status;
     Result result;
-    int scores[2];
+    float scores[2];
+    PieceType convertChar(char c);
+    void reset();
 public:
     Game();
     ~Game();
@@ -25,6 +27,9 @@ public:
     bool addPiece(std::string type, std::string location);
     bool removePiece(std::string location);
     void render();
+    void setTurn(std::string colour);
+    void printScore();
+    void resign();
 };
 
 #endif
