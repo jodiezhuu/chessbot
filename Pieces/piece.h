@@ -10,15 +10,16 @@ protected:
     PieceColor color;
     Square *pos;
     PieceType type;
+    Board *b;
 public:
-    Piece(PieceColor color, Square *pos, PieceType type);
+    Piece(Board *b, PieceColor color, Square *pos, PieceType type);
     PieceType getPieceType();
     PieceColor getColor();
     Square *getPosition();
-    virtual bool isMoveValid(int row, int col, PieceColor color, Board *b) = 0;
-    virtual Square ** checkMoves(PieceColor color, Board *b) = 0;
-    virtual Square ** capturingMoves(PieceColor color, Board *b) = 0; 
-    virtual bool canBeCaptured(Board *b) = 0; 
+    virtual bool isMoveValid(int row, int col) = 0;
+    virtual Square ** checkMoves() = 0;
+    virtual Square ** capturingMoves() = 0; 
+    virtual bool canBeCaptured() = 0; 
     ~Piece() {};  
 };
 

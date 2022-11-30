@@ -1,10 +1,10 @@
 #include "pawn.h"
 #include "square.h"
 
-Pawn::Pawn(PieceColor color, Square *pos, PieceType type)
-: Piece{color, pos, type} {}
+Pawn::Pawn(Board *b, PieceColor color, Square *pos, PieceType type)
+: Piece{b, color, pos, type} {}
 
-bool Pawn::isMoveValid(int row, int col, PieceColor color, Board *b) {
+bool Pawn::isMoveValid(int row, int col) {
     if (color == PieceColor::White && (b->getCell(row, col))->getPiece() == nullptr && row == pos->getRow() + 1 && col == pos->getCol()) {
         return true;
     } else if (color == PieceColor::Black && (b->getCell(row, col))->getPiece() == nullptr && row == pos->getRow() - 1 && col == pos->getCol()) {
@@ -17,7 +17,7 @@ bool Pawn::isMoveValid(int row, int col, PieceColor color, Board *b) {
     return false;
 }
 
-Square ** Pawn::checkMoves(PieceColor color, Board *b) {
+Square ** Pawn::checkMoves() {
     int index = 0;
     int row = pos->getRow();
     int col = pos->getCol();
@@ -65,7 +65,7 @@ Square ** Pawn::checkMoves(PieceColor color, Board *b) {
     return moves;
 }
 
-Square ** Pawn::capturingMoves(PieceColor color, Board *b) {
+Square ** Pawn::capturingMoves() {
     int index = 0;
     int row = pos->getRow();
     int col = pos->getCol();

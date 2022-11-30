@@ -1,4 +1,4 @@
 #include "king.h"
 
-King::King(PieceColor color, Square *pos, PieceType type) 
-: Piece{color, pos, type} {}
+King::King(Board *b, PieceColor color, Square *pos, PieceType type) 
+: Piece{b, color, pos, type} {}
