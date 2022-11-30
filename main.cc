@@ -17,7 +17,6 @@ int main() {
         } else if (command == "resign") {
             gameEngine->resign();
         } else if (command == "move") {
-            
         } else if (command == "setup") {
             string subCommand;
             while (cin >> subCommand) {

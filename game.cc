@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 
-Game::Game(): finished{false}, turn{PieceColor::White}, status{CheckStatus::None}, result{Result::Ongoing} {
+Game::Game(): ongoing{false}, turn{PieceColor::White}, status{CheckStatus::None}, result{Result::Ongoing} {
     board = new Board{};
     scores[0] = 0;
     scores[1] = 0;
@@ -85,5 +85,13 @@ void Game::resign() {
     } else if (turn == PieceColor::Black) {
         scores[0] += 1;
     }
-    // reset();
+    reset();
+}
+
+void Game::reset() {
+    turn = PieceColor::White;
+    status = CheckStatus::None;
+    result = Result::Ongoing;
+    board->resetBoard();
+    ongoing = false;
 }

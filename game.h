@@ -9,8 +9,8 @@
 class Board;
 
 class Game: public Subject {
+    bool ongoing;
     Board * board;
-    bool finished;
     PieceColor turn;
     // Player players[2];
     enum class CheckStatus {InCheckBlack, InCheckWhite, CheckmatedBlack, CheckmatedWhite, None};
@@ -20,6 +20,7 @@ class Game: public Subject {
     float scores[2];
 private:
     PieceType convertChar(char c);
+    void reset();
 public:
     Game();
     ~Game();
@@ -30,7 +31,6 @@ public:
     void setTurn(std::string colour);
     void printScore();
     void resign();
-    void reset();
 };
 
 #endif
