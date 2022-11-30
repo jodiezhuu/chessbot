@@ -13,6 +13,7 @@ protected:
     Square *pos;
     PieceType type;
     Board *b;
+    bool inBound(int row, int col);
 public:
     Piece(Board *b, PieceColor color, Square *pos, PieceType type);
     PieceType getPieceType();
