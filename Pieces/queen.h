@@ -3,7 +3,7 @@
 #include "piece.h"
 class Queen: public Piece {
 public:
-    Queen(PieceColor color, Square *pos, PieceType type);
+    Queen(Board *b, PieceColor color, Square *pos, PieceType type);
     // bool isMoveValid(int row, int col, PieceColor color, Board *b) override;
     // Square[] validMoves(Board *b) override;
     // Square[] capturingMoves(Board *b) override; 

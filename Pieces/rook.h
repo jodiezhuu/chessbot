@@ -3,7 +3,7 @@
 #include "piece.h"
 class Rook: public Piece {
 public:
-    Rook(PieceColor color, Square *pos, PieceType type);
+    Rook(Board *b, PieceColor color, Square *pos, PieceType type);
     // bool isMoveValid(int row, int col, PieceColor color, Board *b) override;
     // Square[] validMoves(Board *b) override;
     // Square[] capturingMoves(Board *b) override; 
