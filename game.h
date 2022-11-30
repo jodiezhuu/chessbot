@@ -17,7 +17,9 @@ class Game: public Subject {
     enum class Result {BlackWon, WhiteWon, Draw, Ongoing};
     CheckStatus status;
     Result result;
-    int scores[2];
+    float scores[2];
+private:
+    PieceType convertChar(char c);
 public:
     Game();
     ~Game();
@@ -25,6 +27,10 @@ public:
     bool addPiece(std::string type, std::string location);
     bool removePiece(std::string location);
     void render();
+    void setTurn(std::string colour);
+    void printScore();
+    void resign();
+    void reset();
 };
 
 #endif
