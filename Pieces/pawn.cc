@@ -17,7 +17,7 @@ bool Pawn::isMoveValid(int row, int col) {
     return false;
 }
 
-Square ** Pawn::checkMoves() {
+Square ** Pawn::validMoves() {
     int index = 0;
     int row = pos->getRow();
     int col = pos->getCol();

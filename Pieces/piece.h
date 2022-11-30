@@ -17,7 +17,7 @@ public:
     PieceColor getColor();
     Square *getPosition();
     virtual bool isMoveValid(int row, int col) = 0;
-    virtual Square ** checkMoves() = 0;
+    virtual Square ** validMoves() = 0;
     virtual Square ** capturingMoves() = 0; 
     virtual bool canBeCaptured() = 0; 
     ~Piece() {};  
