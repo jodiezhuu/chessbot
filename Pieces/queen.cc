@@ -1,4 +1,4 @@
 #include "queen.h"
 
-Queen::Queen(PieceColor color, Square *pos, PieceType type)
-: Piece{color, pos, type} {}
+Queen::Queen(Board *b, PieceColor color, Square *pos, PieceType type)
+: Piece{b, color, pos, type} {}
