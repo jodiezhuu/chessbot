@@ -8,6 +8,7 @@ void Queen::calculateMoves() {
     capturingMoves.clear();
     // right
     for (int col = pos->getCol() + 1; col <= 7; ++col) {
+        if (!inBound(pos->getRow(), col)) break;
         Square * sq = b->getCell(pos->getRow(), col);
         Piece *piece = sq->getPiece();
         if (piece == nullptr) {
@@ -20,6 +21,7 @@ void Queen::calculateMoves() {
     }
     // left
     for (int col = pos->getCol() - 1; col >= 0; --col) {
+        if (!inBound(pos->getRow(), col)) break;
         Square * sq = b->getCell(pos->getRow(), col);
         Piece *piece = sq->getPiece();
         if (piece == nullptr) {
@@ -32,6 +34,7 @@ void Queen::calculateMoves() {
     }
     // up
     for (int row = pos->getRow() - 1; row >= 0; --row) {
+        if (!inBound(row, pos->getCol())) break;
         Square * sq = b->getCell(row, pos->getCol());
         Piece *piece = sq->getPiece();
         if (piece == nullptr) {
@@ -44,19 +47,21 @@ void Queen::calculateMoves() {
     }
     // down
     for (int row = pos->getRow() + 1; row <= 7; ++row) {
-    Square * sq = b->getCell(row, pos->getCol());
-    Piece *piece = sq->getPiece();
-    if (piece == nullptr) {
-        validMoves.emplace_back(sq);
-    } else if (piece->getColor() != color) {
-        validMoves.emplace_back(sq);
-        capturingMoves.emplace_back(sq);
-        break;
-    }
+        if (!inBound(row, pos->getCol())) break;
+        Square * sq = b->getCell(row, pos->getCol());
+        Piece *piece = sq->getPiece();
+        if (piece == nullptr) {
+            validMoves.emplace_back(sq);
+        } else if (piece->getColor() != color) {
+            validMoves.emplace_back(sq);
+            capturingMoves.emplace_back(sq);
+            break;
+        }
     }
     // left-up diagonal
     for (int row = pos->getRow() - 1; row >= 0; --row) {
         for (int col = pos->getCol() - 1; col >= 0; --col) {
+            if (!inBound(row, col)) break;
             Square * sq = b->getCell(row, col);
             Piece *piece = sq->getPiece();
             if (piece == nullptr) {
@@ -71,6 +76,7 @@ void Queen::calculateMoves() {
     // right-up diagonal
     for (int row = pos->getRow() - 1; row >= 0; --row) {
         for (int col = pos->getCol() + 1; col <= 7; ++col) {
+            if (!inBound(row, col)) break;
             Square * sq = b->getCell(row, col);
             Piece *piece = sq->getPiece();
             if (piece == nullptr) {
@@ -85,6 +91,7 @@ void Queen::calculateMoves() {
     // left-down diagonal
     for (int row = pos->getRow() + 1; row <= 7; ++row) {
         for (int col = pos->getCol() - 1; col >= 0; --col) {
+            if (!inBound(row, col)) break;
             Square * sq = b->getCell(row, col);
             Piece *piece = sq->getPiece();
             if (piece == nullptr) {
@@ -99,6 +106,7 @@ void Queen::calculateMoves() {
     // right-down diagonal
     for (int row = pos->getRow() + 1; row <= 7; ++row) {
         for (int col = pos->getCol() + 1; col <= 7; ++col) {
+            if (!inBound(row, col)) break;
             Square * sq = b->getCell(row, col);
             Piece *piece = sq->getPiece();
             if (piece == nullptr) {
