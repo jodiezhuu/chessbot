@@ -12,9 +12,10 @@ void Rook::calculateMoves() {
         if (!inBound(pos->getRow(), col)) break;
         Square * sq = b->getCell(pos->getRow(), col);
         Piece *piece = sq->getPiece();
-        if (piece->getColor() == color) break;
         if (piece == nullptr) {
             validMoves.push_back(sq);
+        } else if (piece->getColor() == color) {
+            break;
         } else if (piece->getColor() != color) {
             validMoves.push_back(sq);
             capturingMoves.push_back(sq);
@@ -26,9 +27,10 @@ void Rook::calculateMoves() {
         if (!inBound(pos->getRow(), col)) break;
         Square * sq = b->getCell(pos->getRow(), col);
         Piece *piece = sq->getPiece();
-        if (piece->getColor() == color) break;
         if (piece == nullptr) {
             validMoves.push_back(sq);
+        } else if (piece->getColor() == color) {
+            break;
         } else if (piece->getColor() != color) {
             validMoves.push_back(sq);
             capturingMoves.push_back(sq);
@@ -40,9 +42,10 @@ void Rook::calculateMoves() {
         if (!inBound(row, pos->getCol())) break;
         Square * sq = b->getCell(row, pos->getCol());
         Piece *piece = sq->getPiece();
-        if (piece->getColor() == color) break;
         if (piece == nullptr) {
             validMoves.push_back(sq);
+        } else if (piece->getColor() == color) {
+            break;
         } else if (piece->getColor() != color) {
             validMoves.push_back(sq);
             capturingMoves.push_back(sq);
@@ -54,9 +57,10 @@ void Rook::calculateMoves() {
         if (!inBound(row, pos->getCol())) break;
         Square * sq = b->getCell(row, pos->getCol());
         Piece *piece = sq->getPiece();
-        if (piece->getColor() == color) break;
         if (piece == nullptr) {
             validMoves.push_back(sq);
+        } else if (piece->getColor() == color) {
+            break;
         } else if (piece->getColor() != color) {
             validMoves.push_back(sq);
             capturingMoves.push_back(sq);

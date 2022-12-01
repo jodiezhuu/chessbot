@@ -7,6 +7,7 @@ private:
 public:
     King(Board *b, PieceColor color, Square *pos, PieceType type);
     void calculateMoves() override;
+    void filterChecks();
 };
 
 #endif

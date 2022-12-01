@@ -22,17 +22,15 @@ void PieceList::addPiece(Piece *p) {
     } else {
         pieceCount[p->getPieceType()] += 1;
     }
-    pieces.emplace_back(p);
+    pieces.push_back(p);
 }
 
 void PieceList::removePieces(Piece *piece) {
-    if (pieceCount[piece->getPieceType()] > 0) {
-        for (auto p = pieces.begin(); p != pieces.end(); ++p) {
-            if (*p == piece) {
-                pieceCount[(*p)->getPieceType()] -= 1;
-                pieces.erase(p);
-                return;
-            }
+    for (auto p = pieces.begin(); p != pieces.end(); ++p) {
+        if (*p == piece) {
+            pieceCount[(*p)->getPieceType()] -= 1;
+            pieces.erase(p);
+            return;
         }
     }
 }
