@@ -1,5 +1,5 @@
 #include "pawn.h"
-#include "square.h"
+#include "../square.h"
 #include "bishop.h"
 #include "king.h"
 #include "knight.h"
@@ -10,27 +10,25 @@ Pawn::Pawn(Board *b, PieceColor color, Square *pos, PieceType type)
 : Piece{b, color, pos, type} {}
 
 bool Pawn::isMoveValid(int row, int col) {
-    int row = pos->getRow();
-    int col = pos->getCol();
     std::vector <Square *> moves;
     if (color == PieceColor::Black) {
-        if ((b->getCell(row + 1, col))->getPiece() == nullptr && inBound(row + 1, col)) {
+        if ((b->getCell(pos->getRow() + 1, pos->getCol()))->getPiece() == nullptr && inBound(pos->getRow() + 1, pos->getCol())) {
             return true;
-        } else if ((b->getCell(row + 1, col - 1))->getPiece() != nullptr && (b->getCell(row + 1, col - 1))->getPiece()->getColor() != color && inBound(row + 1, col - 1)) {
+        } else if ((b->getCell(pos->getRow() + 1, pos->getCol() - 1))->getPiece() != nullptr && (b->getCell(pos->getRow() + 1, pos->getCol() - 1))->getPiece()->getColor() != color && inBound(pos->getRow() + 1, pos->getCol() - 1)) {
             return true;
-        } else if ((b->getCell(row + 1, col + 1))->getPiece() != nullptr && (b->getCell(row + 1, col + 1))->getPiece()->getColor() != color && inBound(row + 1, col + 1)) {
+        } else if ((b->getCell(pos->getRow() + 1, pos->getCol() + 1))->getPiece() != nullptr && (b->getCell(pos->getRow() + 1, pos->getCol() + 1))->getPiece()->getColor() != color && inBound(pos->getRow() + 1, pos->getCol() + 1)) {
             return true;
-        } else if (row == 2 && (b->getCell(row + 2, col))->getPiece() == nullptr) {
+        } else if (pos->getRow() == 2 && (b->getCell(pos->getRow() + 2, pos->getCol()))->getPiece() == nullptr) {
             return true;
         }
     } else if (color == PieceColor::White) {
-        if ((b->getCell(row - 1, col))->getPiece() == nullptr && inBound(row - 1, col)) {
+        if ((b->getCell(pos->getRow() - 1, pos->getCol()))->getPiece() == nullptr && inBound(pos->getRow() - 1, pos->getCol())) {
             return true;
-        } else if ((b->getCell(row - 1, col + 1))->getPiece() != nullptr && (b->getCell(row - 1, col + 1))->getPiece()->getColor() != color && inBound(row - 1, col + 1)) {
+        } else if ((b->getCell(pos->getRow() - 1, pos->getCol() + 1))->getPiece() != nullptr && (b->getCell(pos->getRow() - 1, pos->getCol() + 1))->getPiece()->getColor() != color && inBound(pos->getRow() - 1, pos->getCol() + 1)) {
             return true;
-        } else if ((b->getCell(row - 1, col - 1))->getPiece() != nullptr && (b->getCell(row - 1, col - 1))->getPiece()->getColor() != color && inBound(row + 1, col + 1)) {
+        } else if ((b->getCell(pos->getRow() - 1, pos->getCol() - 1))->getPiece() != nullptr && (b->getCell(pos->getRow() - 1, pos->getCol() - 1))->getPiece()->getColor() != color && inBound(pos->getRow() + 1, pos->getCol() + 1)) {
             return true;
-        } else if (row == 7 && (b->getCell(row - 2, col))->getPiece() == nullptr) {
+        } else if (pos->getRow() == 7 && (b->getCell(pos->getRow() - 2, pos->getCol()))->getPiece() == nullptr) {
             return true;
         }
     }
@@ -40,41 +38,39 @@ bool Pawn::isMoveValid(int row, int col) {
 
 void Pawn::calculateValidMoves() {
     validMoves.clear();
-    int row = pos->getRow();
-    int col = pos->getCol();
     std::vector <Square *> moves;
     if (color == PieceColor::Black) {
-        if ((b->getCell(row + 1, col))->getPiece() == nullptr && inBound(row + 1, col)) {
-            Square * m = b->getCell(row + 1, col);
+        if ((b->getCell(pos->getRow() + 1, pos->getCol()))->getPiece() == nullptr && inBound(pos->getRow() + 1, pos->getCol())) {
+            Square * m = b->getCell(pos->getRow() + 1, pos->getCol());
             validMoves.emplace_back(m);
         }
-        if ((b->getCell(row + 1, col - 1))->getPiece() != nullptr && (b->getCell(row + 1, col - 1))->getPiece()->getColor() != color && inBound(row + 1, col - 1)) {
-            Square * m = b->getCell(row + 1, col - 1);
+        if ((b->getCell(pos->getRow() + 1, pos->getCol() - 1))->getPiece() != nullptr && (b->getCell(pos->getRow() + 1, pos->getCol() - 1))->getPiece()->getColor() != color && inBound(pos->getRow() + 1, pos->getCol() - 1)) {
+            Square * m = b->getCell(pos->getRow() + 1, pos->getCol() - 1);
             validMoves.emplace_back(m);
         }
-        if ((b->getCell(row + 1, col + 1))->getPiece() != nullptr && (b->getCell(row + 1, col + 1))->getPiece()->getColor() != color && inBound(row + 1, col + 1)) {
-            Square * m = b->getCell(row + 1, col + 1);
+        if ((b->getCell(pos->getRow() + 1, pos->getCol() + 1))->getPiece() != nullptr && (b->getCell(pos->getRow() + 1, pos->getCol() + 1))->getPiece()->getColor() != color && inBound(pos->getRow() + 1, pos->getCol() + 1)) {
+            Square * m = b->getCell(pos->getRow() + 1, pos->getCol() + 1);
             validMoves.emplace_back(m);
         }
-        if (row == 2 && (b->getCell(row + 2, col))->getPiece() == nullptr) {
-            Square * m = b->getCell(row + 2, col);
+        if (pos->getRow() == 2 && (b->getCell(pos->getRow() + 2, pos->getCol()))->getPiece() == nullptr) {
+            Square * m = b->getCell(pos->getRow() + 2, pos->getCol());
             validMoves.emplace_back(m);
         }
     } else if (color == PieceColor::White) {
-        if ((b->getCell(row - 1, col))->getPiece() == nullptr && inBound(row - 1, col)) {
-            Square * m = b->getCell(row - 1, col);
+        if ((b->getCell(pos->getRow() - 1, pos->getCol()))->getPiece() == nullptr && inBound(pos->getRow() - 1, pos->getCol())) {
+            Square * m = b->getCell(pos->getRow() - 1, pos->getCol());
             validMoves.emplace_back(m);
         }
-        if ((b->getCell(row - 1, col + 1))->getPiece() != nullptr && (b->getCell(row - 1, col + 1))->getPiece()->getColor() != color && inBound(row - 1, col + 1)) {
-            Square * m = b->getCell(row - 1, col + 1);
+        if ((b->getCell(pos->getRow() - 1, pos->getCol() + 1))->getPiece() != nullptr && (b->getCell(pos->getRow() - 1, pos->getCol() + 1))->getPiece()->getColor() != color && inBound(pos->getRow() - 1, pos->getCol() + 1)) {
+            Square * m = b->getCell(pos->getRow() - 1, pos->getCol() + 1);
             validMoves.emplace_back(m);
         }
-        if ((b->getCell(row - 1, col - 1))->getPiece() != nullptr && (b->getCell(row - 1, col - 1))->getPiece()->getColor() != color && inBound(row - 1, col - 1)) {
-            Square * m = b->getCell(row - 1, col - 1);
+        if ((b->getCell(pos->getRow() - 1, pos->getCol() - 1))->getPiece() != nullptr && (b->getCell(pos->getRow() - 1, pos->getCol() - 1))->getPiece()->getColor() != color && inBound(pos->getRow() - 1, pos->getCol() - 1)) {
+            Square * m = b->getCell(pos->getRow() - 1, pos->getCol() - 1);
             validMoves.emplace_back(m);
         }
-        if (row == 7 && (b->getCell(row - 2, col))->getPiece() == nullptr) {
-            Square * m = b->getCell(row - 2, col);
+        if (pos->getRow() == 7 && (b->getCell(pos->getRow() - 2, pos->getCol()))->getPiece() == nullptr) {
+            Square * m = b->getCell(pos->getRow() - 2, pos->getCol());
             validMoves.emplace_back(m);
         }
     }
@@ -82,24 +78,22 @@ void Pawn::calculateValidMoves() {
 
 void Pawn::calculateCapturingMoves() {
     capturingMoves.clear();
-    int row = pos->getRow();
-    int col = pos->getCol();
     if (color == PieceColor::Black) {
-        if ((b->getCell(row + 1, col - 1))->getPiece() != nullptr && (b->getCell(row + 1, col - 1))->getPiece()->getColor() != color && inBound(row + 1, col - 1)) {
-            Square * m = b->getCell(row + 1, col - 1);
+        if ((b->getCell(pos->getRow() + 1, pos->getCol() - 1))->getPiece() != nullptr && (b->getCell(pos->getRow() + 1, pos->getCol() - 1))->getPiece()->getColor() != color && inBound(pos->getRow() + 1, pos->getCol() - 1)) {
+            Square * m = b->getCell(pos->getRow() + 1, pos->getCol() - 1);
             capturingMoves.emplace_back(m);
         } 
-        if ((b->getCell(row + 1, col + 1))->getPiece() != nullptr && (b->getCell(row + 1, col + 1))->getPiece()->getColor() != color && inBound(row + 1, col + 1)) {
-            Square * m = b->getCell(row + 1, col + 1);
+        if ((b->getCell(pos->getRow() + 1, pos->getCol() + 1))->getPiece() != nullptr && (b->getCell(pos->getRow() + 1, pos->getCol() + 1))->getPiece()->getColor() != color && inBound(pos->getRow() + 1, pos->getCol() + 1)) {
+            Square * m = b->getCell(pos->getRow() + 1, pos->getCol() + 1);
             capturingMoves.emplace_back(m);
         }
     } else if (color == PieceColor::White) {
-        if ((b->getCell(row - 1, col + 1))->getPiece() != nullptr && (b->getCell(row - 1, col + 1))->getPiece()->getColor() != color && inBound(row - 1, col + 1)) {
-            Square * m = b->getCell(row - 1, col + 1);
+        if ((b->getCell(pos->getRow() - 1, pos->getCol() + 1))->getPiece() != nullptr && (b->getCell(pos->getRow() - 1, pos->getCol() + 1))->getPiece()->getColor() != color && inBound(pos->getRow() - 1, pos->getCol() + 1)) {
+            Square * m = b->getCell(pos->getRow() - 1, pos->getCol() + 1);
             capturingMoves.emplace_back(m);
         }
-        if ((b->getCell(row - 1, col - 1))->getPiece() != nullptr && (b->getCell(row - 1, col - 1))->getPiece()->getColor() != color && inBound(row - 1, col - 1)) {
-            Square * m = b->getCell(row - 1, col - 1);
+        if ((b->getCell(pos->getRow() - 1, pos->getCol() - 1))->getPiece() != nullptr && (b->getCell(pos->getRow() - 1, pos->getCol() - 1))->getPiece()->getColor() != color && inBound(pos->getRow() - 1, pos->getCol() - 1)) {
+            Square * m = b->getCell(pos->getRow() - 1, pos->getCol() - 1);
             capturingMoves.emplace_back(m);
         }
     }

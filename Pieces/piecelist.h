@@ -11,13 +11,14 @@ class PieceList {
     const PieceColor color;
     std::map <Piece *, int> pieceCount;
 public:
-    PieceList(int color);
+    PieceList(PieceColor color);
     std::vector<Piece *> *getPieces();
     int getPieceCount(Piece *piece);
     ~PieceList();
     bool verify();
     void addPiece(Piece *piece);
-    bool removePieces(Piece *piece);
+    void removePieces(Piece *piece);
+    size_t getLength();
 };
 
 #endif

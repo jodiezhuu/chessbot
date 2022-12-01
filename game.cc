@@ -13,10 +13,6 @@ Game::~Game() {
     delete board;
 }
 
-void Game::render() {
-    notifyObservers();
-}
-
 PieceType Game::getState(int row, int col) {
     Piece * piece= board->getCell(row, col)->getPiece();
     if (piece == nullptr) {
@@ -26,15 +22,24 @@ PieceType Game::getState(int row, int col) {
 }
 
 bool Game::addPiece(std::string type, std::string location) {
-   int col = location[0] - 'a';
-   int row = 8 - (int) location[1];
-//    board->addPiece(row, col, convertChar(type[0]))
+    std::cout << "adding piece in game" << std::endl;
+    std::cout << location[0] << "_" << location[1] << std::endl;
+    int col = location[0] - 'a';
+    int row = 8 - (location[1] - '0');
+    std::cout << "row: " << row << " col: " << col << " type: " << (int) convertChar(type[0]) << std::endl;
+    bool res = board->addPiece(row, col, convertChar(type[0]));
+    std::cout << "here" << std::endl;
+    notifyObservers();
+    return res;
 }
 
-bool Game::removePiece(std::string location) {
-   int col = location[0] - 'a';
-   int row = 8 - (int) location[1];
-   board->removePiece(row, col);
+void Game::removePiece(std::string location) {
+    std::cout << "removing piece in game" << std::endl;
+    int col = location[0] - 'a';
+    int row = 8 - (location[1] - '0');
+    std::cout << "row: " << row << " col: " << col << std::endl;
+    board->removePiece(row, col);
+    notifyObservers();
 }
 
 void Game::setTurn(std::string colour) {

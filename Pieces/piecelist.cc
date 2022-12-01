@@ -3,9 +3,9 @@
 #include "piececolor.h"
 #include <vector>
 #include <map>
+#include <iostream>
 
-PieceList::PieceList(int color)
-: color{color == 0 ? PieceColor::White : PieceColor::Black} {}
+PieceList::PieceList(PieceColor color): color{color} {}
 
 int PieceList::getPieceCount(Piece *piece) {
     return pieceCount[piece];
@@ -20,16 +20,20 @@ void PieceList::addPiece(Piece *p) {
     pieces.emplace_back(p);
 }
 
-bool PieceList::removePieces(Piece *piece) {
-    int counter = 0;
+void PieceList::removePieces(Piece *piece) {
     if (pieceCount[piece] > 0) {
-        for (auto p = pieces.begin(); p != pieces.end(); p++) {
+        for (auto p = pieces.begin(); p != pieces.end(); ++p) {
             if (*p == piece) {
+                pieceCount[*p] -= 1;
                 pieces.erase(p);
-                return true;
+                return;
             }
         }
-    } return false;
+    }
+}
+
+size_t PieceList::getLength() {
+    return pieces.size();
 }
 
 PieceList::~PieceList() {
