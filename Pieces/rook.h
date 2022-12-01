@@ -4,10 +4,7 @@
 class Rook: public Piece {
 public:
     Rook(Board *b, PieceColor color, Square *pos, PieceType type);
-    bool isMoveValid(int row, int col) override;
-    virtual void calculateValidMoves() override;
-    virtual void calculateCapturingMoves() override;
-    virtual bool canBeCaptured() override; 
+    virtual void calculateMoves() override;
 };
 
 #endif
