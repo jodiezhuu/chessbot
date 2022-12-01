@@ -119,21 +119,3 @@ void Queen::calculateMoves() {
         }
     }
 }
-
-bool Queen::canBeCaptured() {
-    std::vector<Piece *> *list;
-    if (color == PieceColor::White) {
-        list = b->getBlackPieces()->getPieces();
-    } else {
-        list = b->getWhitePieces()->getPieces();
-    }
-
-    for (auto piece : *list) {
-        for (auto moves : piece->getCapturingMoves()) {
-            if (moves == pos) {
-                return true;
-            }
-        }
-    }
-    return false;
-}

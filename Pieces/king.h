@@ -7,7 +7,6 @@ private:
 public:
     King(Board *b, PieceColor color, Square *pos, PieceType type);
     void calculateMoves() override;
-    bool canBeCaptured() override;
 };
 
 #endif
