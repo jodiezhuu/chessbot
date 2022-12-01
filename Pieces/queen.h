@@ -5,8 +5,7 @@ class Queen: public Piece {
 public:
     Queen(Board *b, PieceColor color, Square *pos, PieceType type);
     bool isMoveValid(int row, int col) override;
-    virtual void calculateValidMoves() override;
-    virtual void calculateCapturingMoves() override;
+    virtual void calculateMoves() override;
     virtual bool canBeCaptured() override; 
 };
 
