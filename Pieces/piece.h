@@ -24,8 +24,7 @@ public:
     virtual bool isMoveValid(int row, int col) = 0;
     std::vector <Square *> getValidMoves() const;
     std::vector <Square *> getCapturingMoves() const;
-    virtual void calculateValidMoves() = 0;
-    virtual void calculateCapturingMoves() = 0; 
+    virtual void calculateMoves() = 0;
     virtual bool canBeCaptured() = 0; 
     ~Piece() {};  
 };
