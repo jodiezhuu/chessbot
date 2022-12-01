@@ -34,13 +34,19 @@ int main() {
                     cin >> colour;
                     gameEngine->setTurn(colour);
                 } else if (subCommand == "done") {
-                    // verify
-                    break;
+                    if (gameEngine->verifySetup()) {
+                        break;
+                    } else {
+                        cout << std::endl;
+                        cout << "Board conditions are not satisfied: " << std::endl;
+                        cout << "- There must be exactly one king for each colour" << std::endl;
+                        cout << "- No pawns can be on the first or last row" << std::endl;
+                        cout << "- Neither king can be in check" << std::endl << std::endl;
+                    }
                 }
             }
         }
     }
-    cout << "here" << endl;
     gameEngine->printScore();
     // Delete all objects
     delete gameEngine;

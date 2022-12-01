@@ -145,3 +145,34 @@ Board::~Board() {
     }
 }
     
+
+bool Board::verifyBoard() {
+    // no pawns on first or last row of the board
+    for (int col = 0; col <= 7; ++col) {
+        Piece *piece1 = boardlist[0][col]->getPiece();
+        Piece *piece2 = boardlist[7][col]->getPiece();
+        if (piece1 != nullptr && (piece1->getPieceType() == PieceType::BlackPawn || piece1->getPieceType() == PieceType::WhitePawn)) {
+            return false;
+        }
+        if (piece2 != nullptr && (piece2->getPieceType() == PieceType::BlackPawn || piece2->getPieceType() == PieceType::WhitePawn)) {
+            return false;
+        }
+    }
+    // only one white king and one black king
+    if (piecelists[0]->getPieceCount(PieceType::BlackKing) != 0 || piecelists[1]->getPieceCount(PieceType::WhiteKing) != 0) {
+        return false;
+    }
+    // neither king is in check
+    for (auto piece : *(piecelists[0]->getPieces())) {
+        if (piece->getPieceType() == PieceType::BlackKing) {
+            return !(piece->canBeCaptured());
+        }
+    }
+    for (auto piece : *(piecelists[1]->getPieces())) {
+        if (piece->getPieceType() == PieceType::WhiteKing) {
+            return !(piece->canBeCaptured());
+        }
+    }
+
+    return true;
+}

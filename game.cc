@@ -100,3 +100,7 @@ void Game::reset() {
     board->resetBoard();
     ongoing = false;
 }
+
+bool Game::verifySetup() {
+    return board->verifyBoard();
+}

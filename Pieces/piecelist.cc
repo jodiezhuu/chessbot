@@ -7,8 +7,9 @@
 
 PieceList::PieceList(PieceColor color): color{color} {}
 
-int PieceList::getPieceCount(Piece *piece) {
-    return pieceCount[piece];
+int PieceList::getPieceCount(PieceType type) {
+    if (pieceCount.count(type) == 0) return 0;
+    return pieceCount[type];
 }
 
 std::vector<Piece *> *PieceList::getPieces() {
@@ -16,15 +17,19 @@ std::vector<Piece *> *PieceList::getPieces() {
 }
 
 void PieceList::addPiece(Piece *p) {
-    pieceCount[p] += 1;
+    if (pieceCount.count(p->getPieceType()) == 0) {
+        pieceCount[p->getPieceType()] = 1;
+    } else {
+        pieceCount[p->getPieceType()] += 1;
+    }
     pieces.emplace_back(p);
 }
 
 void PieceList::removePieces(Piece *piece) {
-    if (pieceCount[piece] > 0) {
+    if (pieceCount[piece->getPieceType()] > 0) {
         for (auto p = pieces.begin(); p != pieces.end(); ++p) {
             if (*p == piece) {
-                pieceCount[*p] -= 1;
+                pieceCount[(*p)->getPieceType()] -= 1;
                 pieces.erase(p);
                 return;
             }

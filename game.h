@@ -30,6 +30,7 @@ public:
     void setTurn(std::string colour);
     void printScore();
     void resign();
+    bool verifySetup();
 };
 
 #endif
