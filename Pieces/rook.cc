@@ -1,4 +1,5 @@
 #include "rook.h"
+#include <iostream>
 
 Rook::Rook(Board *b, PieceColor color, Square *pos, PieceType type)
 : Piece{b, color, pos, type} {}
@@ -11,11 +12,12 @@ void Rook::calculateMoves() {
         if (!inBound(pos->getRow(), col)) break;
         Square * sq = b->getCell(pos->getRow(), col);
         Piece *piece = sq->getPiece();
+        if (piece->getColor() == color) break;
         if (piece == nullptr) {
-            validMoves.emplace_back(sq);
+            validMoves.push_back(sq);
         } else if (piece->getColor() != color) {
-            validMoves.emplace_back(sq);
-            capturingMoves.emplace_back(sq);
+            validMoves.push_back(sq);
+            capturingMoves.push_back(sq);
             break;
         }
     }
@@ -24,11 +26,12 @@ void Rook::calculateMoves() {
         if (!inBound(pos->getRow(), col)) break;
         Square * sq = b->getCell(pos->getRow(), col);
         Piece *piece = sq->getPiece();
+        if (piece->getColor() == color) break;
         if (piece == nullptr) {
-            validMoves.emplace_back(sq);
+            validMoves.push_back(sq);
         } else if (piece->getColor() != color) {
-            validMoves.emplace_back(sq);
-            capturingMoves.emplace_back(sq);
+            validMoves.push_back(sq);
+            capturingMoves.push_back(sq);
             break;
         }
     }
@@ -37,11 +40,12 @@ void Rook::calculateMoves() {
         if (!inBound(row, pos->getCol())) break;
         Square * sq = b->getCell(row, pos->getCol());
         Piece *piece = sq->getPiece();
+        if (piece->getColor() == color) break;
         if (piece == nullptr) {
-            validMoves.emplace_back(sq);
+            validMoves.push_back(sq);
         } else if (piece->getColor() != color) {
-            validMoves.emplace_back(sq);
-            capturingMoves.emplace_back(sq);
+            validMoves.push_back(sq);
+            capturingMoves.push_back(sq);
             break;
         }
     }
@@ -50,11 +54,12 @@ void Rook::calculateMoves() {
         if (!inBound(row, pos->getCol())) break;
         Square * sq = b->getCell(row, pos->getCol());
         Piece *piece = sq->getPiece();
+        if (piece->getColor() == color) break;
         if (piece == nullptr) {
-            validMoves.emplace_back(sq);
+            validMoves.push_back(sq);
         } else if (piece->getColor() != color) {
-            validMoves.emplace_back(sq);
-            capturingMoves.emplace_back(sq);
+            validMoves.push_back(sq);
+            capturingMoves.push_back(sq);
             break;
         }
     }

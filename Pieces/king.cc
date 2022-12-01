@@ -30,10 +30,10 @@ void King::calculateMoves() {
             if (!(inBound(row, col) && (row != pos->getRow() && col != pos->getCol()))) continue;
             Piece * piece = b->getCell(row, col)->getPiece();
             if (piece == nullptr && !moveInCheck(row, col)) {
-                validMoves.emplace_back(b->getCell(row, col));
+                validMoves.push_back(b->getCell(row, col));
             } else if (piece != nullptr && piece->getColor() != color && !moveInCheck(row, col)) {
-                validMoves.emplace_back(b->getCell(row, col));
-                capturingMoves.emplace_back(b->getCell(row, col));
+                validMoves.push_back(b->getCell(row, col));
+                capturingMoves.push_back(b->getCell(row, col));
             }
         }
     }
