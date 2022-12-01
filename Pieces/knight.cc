@@ -6,7 +6,7 @@ Knight::Knight(Board *b, PieceColor color, Square *pos, PieceType type)
 void Knight::calculateMoves() {
     validMoves.clear();
     capturingMoves.clear();
-    // up left 
+    // down left 
     if (inBound(pos->getRow() + 2, pos->getCol() - 1)) {
         if (b->getCell(pos->getRow() + 2, pos->getCol() - 1)->getPiece() == nullptr) {
             validMoves.emplace_back(b->getCell(pos->getRow() + 2, pos->getCol() - 1));
@@ -14,7 +14,7 @@ void Knight::calculateMoves() {
             capturingMoves.emplace_back(b->getCell(pos->getRow() + 2, pos->getCol() - 1));
         }
     }
-    // up right
+    // down right
     if (inBound(pos->getRow() + 2, pos->getCol() + 1)) {
         if (b->getCell(pos->getRow() + 2, pos->getCol() + 1)->getPiece() == nullptr) {
             validMoves.emplace_back(b->getCell(pos->getRow() + 2, pos->getCol() + 1));
@@ -38,7 +38,7 @@ void Knight::calculateMoves() {
             capturingMoves.emplace_back(b->getCell(pos->getRow() + 1, pos->getCol() + 2));
         }
     }
-    // down left
+    // up left
     if (inBound(pos->getRow() - 2, pos->getCol() - 1)) {
         if (b->getCell(pos->getRow() - 2, pos->getCol() - 1)->getPiece() == nullptr) {
             validMoves.emplace_back(b->getCell(pos->getRow() - 2, pos->getCol() - 1));
@@ -46,7 +46,7 @@ void Knight::calculateMoves() {
             capturingMoves.emplace_back(b->getCell(pos->getRow() - 2, pos->getCol() - 1));
         }
     }
-    // down right
+    // up right
     if (inBound(pos->getRow() - 2, pos->getCol() + 1)) {
         if (b->getCell(pos->getRow() - 2, pos->getCol() + 1)->getPiece() == nullptr) {
             validMoves.emplace_back(b->getCell(pos->getRow() - 2, pos->getCol() + 1));
