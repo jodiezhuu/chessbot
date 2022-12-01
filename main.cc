@@ -9,7 +9,7 @@ int main() {
     string command;
     Game * gameEngine = new Game{};
     TextView * textOutput = new TextView{gameEngine};
-    gameEngine->render();
+    gameEngine->notifyObservers();
     while (cin >> command) {
         if (command == "game") {
             string playerOneType, playerTwoType;
@@ -18,6 +18,7 @@ int main() {
             gameEngine->resign();
         } else if (command == "move") {
         } else if (command == "setup") {
+            cout << "in setup" << endl;
             string subCommand;
             while (cin >> subCommand) {
                 if (subCommand == "+") {
@@ -39,6 +40,7 @@ int main() {
             }
         }
     }
+    cout << "here" << endl;
     gameEngine->printScore();
     // Delete all objects
     delete gameEngine;

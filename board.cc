@@ -9,6 +9,7 @@
 #include "Pieces/queen.h"
 #include "Pieces/pawn.h"
 #include "Pieces/rook.h"
+#include <iostream>
 
 Board::Board() {
     for (int i = 0; i < 8; ++i) {
@@ -17,7 +18,7 @@ Board::Board() {
         }
     }
     for (int colour = 0; colour < 2; ++colour) {
-        piecelists[colour] = new PieceList(colour);
+        piecelists[colour] = new PieceList((PieceColor) colour);
     }
     this->intializeBoard();
 }
@@ -25,28 +26,29 @@ Board::Board() {
 void Board::intializeBoard() {
     for (int colour = 0; colour < 2; ++colour) {
         for (int i = 0; i < 8; ++i) {
-            Piece* temp = new Pawn((PieceColor) colour, boardlist[colour * 5 + 1][i], colour == 1 ? PieceType::WhitePawn : PieceType::BlackPawn);
+            Piece* temp = new Pawn(this, (PieceColor) colour, boardlist[colour * 5 + 1][i], colour == 1 ? PieceType::WhitePawn : PieceType::BlackPawn);
             piecelists[colour]->addPiece(temp);
             boardlist[colour * 5 + 1][i]->setPiece(temp);
         }
         for (int i = 0; i < 2; ++i) {
-            Piece* temp = new Rook((PieceColor) colour, boardlist[colour * 7][i * 7], colour == 1 ? PieceType::WhiteRook : PieceType::BlackRook);
+            Piece* temp = new Rook(this, (PieceColor) colour, boardlist[colour * 7][i * 7], colour == 1 ? PieceType::WhiteRook : PieceType::BlackRook);
             piecelists[colour]->addPiece(temp);
             boardlist[colour * 7][i * 7]->setPiece(temp);
-            temp = new Knight((PieceColor) colour, boardlist[colour * 7][i * 5 + 1], colour == 1 ? PieceType::WhiteKnight : PieceType::BlackKnight);
+            temp = new Knight(this, (PieceColor) colour, boardlist[colour * 7][i * 5 + 1], colour == 1 ? PieceType::WhiteKnight : PieceType::BlackKnight);
             piecelists[colour]->addPiece(temp);
             boardlist[colour * 7][i * 5 + 1]->setPiece(temp);
-            temp = new Bishop((PieceColor) colour, boardlist[colour * 7][i * 3 + 2], colour == 1 ? PieceType::WhiteBishop : PieceType::BlackBishop);
+            temp = new Bishop(this, (PieceColor) colour, boardlist[colour * 7][i * 3 + 2], colour == 1 ? PieceType::WhiteBishop : PieceType::BlackBishop);
             piecelists[colour]->addPiece(temp);
             boardlist[colour * 7][i * 3 + 2]->setPiece(temp);
         }
-        Piece *queen = new Queen((PieceColor) colour, boardlist[colour * 7][3], colour == 1 ? PieceType::WhiteQueen : PieceType::BlackQueen);
-        Piece *king = new King((PieceColor) colour, boardlist[colour * 7][4], colour == 1 ? PieceType::WhiteKing : PieceType::BlackKing);
+        Piece *queen = new Queen(this, (PieceColor) colour, boardlist[colour * 7][3], colour == 1 ? PieceType::WhiteQueen : PieceType::BlackQueen);
+        Piece *king = new King(this, (PieceColor) colour, boardlist[colour * 7][4], colour == 1 ? PieceType::WhiteKing : PieceType::BlackKing);
         piecelists[colour]->addPiece(queen);
         piecelists[colour]->addPiece(king);
         boardlist[colour * 7][3]->setPiece(queen);
         boardlist[colour * 7][4]->setPiece(king);
     }
+    std::cout << "black: " << piecelists[0]->getLength() << " white: " << piecelists[1]->getLength() << std::endl;
 }
 
 void Board::resetBoard() {
@@ -60,11 +62,11 @@ void Board::resetBoard() {
 }
 
 PieceList* Board::getWhitePieces() {
-    return piecelists[0];
+    return piecelists[1];
 }
 
 PieceList* Board::getBlackPieces() {
-    return piecelists[1];
+    return piecelists[0];
 }
 
 Square* Board::getCell(int row, int col) {
@@ -72,13 +74,14 @@ Square* Board::getCell(int row, int col) {
 }
 
 bool Board::addPiece(int row, int col, PieceType piece) {
+    std::cout << "adding piece in board" << std::endl;
     if (boardlist[row][col]->getPiece() != nullptr) return false;
     Piece *temp;
     switch (piece) {
         case PieceType::WhiteKing: 
             temp = new King(this, PieceColor::White, boardlist[row][col], piece);
             break;
-        case PieceType::BlackKing
+        case PieceType::BlackKing:
             temp = new King(this, PieceColor::Black, boardlist[row][col], piece);
             break;
         case PieceType::WhiteQueen:
@@ -117,13 +120,18 @@ bool Board::addPiece(int row, int col, PieceType piece) {
     boardlist[row][col]->setPiece(temp);
     int colour = (int) temp->getColor();
     piecelists[colour]->addPiece(temp);
+    std::cout << "black: " << piecelists[0]->getLength() << " white: " << piecelists[1]->getLength() << std::endl;
     return true;
 }
 
 void Board::removePiece(int row, int col) {
     Piece* temp = boardlist[row][col]->getPiece();
+    if (temp == nullptr) return;
     boardlist[row][col]->setPiece(nullptr);
     piecelists[(int) temp->getColor()]->removePieces(temp);
+    std::cout << (int) temp->getPieceType() << " and " << (int) temp->getColor() << std::endl;
+    delete temp;
+    std::cout << "black: " << piecelists[0]->getLength() << " white: " << piecelists[1]->getLength() << std::endl;
 }
 
 Board::~Board() {

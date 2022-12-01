@@ -25,7 +25,7 @@ public:
     ~Game();
     PieceType getState(int row, int col);
     bool addPiece(std::string type, std::string location);
-    bool removePiece(std::string location);
+    void removePiece(std::string location);
     void render();
     void setTurn(std::string colour);
     void printScore();
