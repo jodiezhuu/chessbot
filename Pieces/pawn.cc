@@ -13,33 +13,41 @@ void Pawn::calculateMoves() {
     validMoves.clear();
     capturingMoves.clear();
     if (color == PieceColor::Black) {
-        if ((b->getCell(pos->getRow() + 1, pos->getCol()))->getPiece() == nullptr && inBound(pos->getRow() + 1, pos->getCol())) {
+        // black moving down
+        if (inBound(pos->getRow() + 1, pos->getCol()) && (b->getCell(pos->getRow() + 1, pos->getCol()))->getPiece() == nullptr) {
             validMoves.emplace_back(pos->getRow() + 1, pos->getCol());
         }
-        if ((b->getCell(pos->getRow() + 1, pos->getCol() - 1))->getPiece() != nullptr && (b->getCell(pos->getRow() + 1, pos->getCol() - 1))->getPiece()->getColor() != color && inBound(pos->getRow() + 1, pos->getCol() - 1)) {
+        // black down left 
+        if (inBound(pos->getRow() + 1, pos->getCol() - 1) && (b->getCell(pos->getRow() + 1, pos->getCol() - 1))->getPiece() != nullptr && (b->getCell(pos->getRow() + 1, pos->getCol() - 1))->getPiece()->getColor() != color) {
             validMoves.emplace_back(b->getCell(pos->getRow() + 1, pos->getCol() - 1));
             capturingMoves.emplace_back(b->getCell(pos->getRow() + 1, pos->getCol() - 1));
         } 
-        if ((b->getCell(pos->getRow() + 1, pos->getCol() + 1))->getPiece() != nullptr && (b->getCell(pos->getRow() + 1, pos->getCol() + 1))->getPiece()->getColor() != color && inBound(pos->getRow() + 1, pos->getCol() + 1)) {
+        // black down right
+        if (inBound(pos->getRow() + 1, pos->getCol() + 1) && (b->getCell(pos->getRow() + 1, pos->getCol() + 1))->getPiece() != nullptr && (b->getCell(pos->getRow() + 1, pos->getCol() + 1))->getPiece()->getColor() != color) {
             validMoves.emplace_back(b->getCell(pos->getRow() + 1, pos->getCol() + 1));
             capturingMoves.emplace_back(b->getCell(pos->getRow() + 1, pos->getCol() + 1));
         }
+        // pawn in starting position, move two forward
         if (pos->getRow() == 1 && (b->getCell(pos->getRow() + 2, pos->getCol()))->getPiece() == nullptr) {
             Square * m = b->getCell(pos->getRow() + 2, pos->getCol());
             validMoves.emplace_back(m);
         }
     } else if (color == PieceColor::White) {
-        if ((b->getCell(pos->getRow() - 1, pos->getCol()))->getPiece() == nullptr && inBound(pos->getRow() - 1, pos->getCol())) {
+        // white move up
+        if (inBound(pos->getRow() - 1, pos->getCol()) && (b->getCell(pos->getRow() - 1, pos->getCol()))->getPiece() == nullptr) {
             validMoves.emplace_back(b->getCell(pos->getRow() - 1, pos->getCol()));
         }
-        if ((b->getCell(pos->getRow() - 1, pos->getCol() + 1))->getPiece() != nullptr && (b->getCell(pos->getRow() - 1, pos->getCol() + 1))->getPiece()->getColor() != color && inBound(pos->getRow() - 1, pos->getCol() + 1)) {
+        // white up right
+        if (inBound(pos->getRow() - 1, pos->getCol() + 1) && (b->getCell(pos->getRow() - 1, pos->getCol() + 1))->getPiece() != nullptr && (b->getCell(pos->getRow() - 1, pos->getCol() + 1))->getPiece()->getColor() != color) {
             validMoves.emplace_back(pos->getRow() - 1, pos->getCol() + 1);
             capturingMoves.emplace_back(pos->getRow() - 1, pos->getCol() + 1);
         }
-        if ((b->getCell(pos->getRow() - 1, pos->getCol() - 1))->getPiece() != nullptr && (b->getCell(pos->getRow() - 1, pos->getCol() - 1))->getPiece()->getColor() != color && inBound(pos->getRow() - 1, pos->getCol() - 1)) {
+        // white up left
+        if (inBound(pos->getRow() - 1, pos->getCol() - 1) && (b->getCell(pos->getRow() - 1, pos->getCol() - 1))->getPiece() != nullptr && (b->getCell(pos->getRow() - 1, pos->getCol() - 1))->getPiece()->getColor() != color) {
             validMoves.emplace_back(pos->getRow() - 1, pos->getCol() - 1);
             capturingMoves.emplace_back(pos->getRow() - 1, pos->getCol() - 1);
         }
+        // white in starting position, up two 
         if (pos->getRow() == 6 && (b->getCell(pos->getRow() - 2, pos->getCol()))->getPiece() == nullptr) {
             validMoves.emplace_back(pos->getRow() - 2, pos->getCol());
         }
