@@ -11,6 +11,7 @@ void Knight::calculateMoves() {
         if (b->getCell(pos->getRow() + 2, pos->getCol() - 1)->getPiece() == nullptr) {
             validMoves.emplace_back(b->getCell(pos->getRow() + 2, pos->getCol() - 1));
         } else if (b->getCell(pos->getRow() + 2, pos->getCol() - 1)->getPiece()->getColor() != color) {
+            validMoves.emplace_back(b->getCell(pos->getRow() + 2, pos->getCol() - 1));
             capturingMoves.emplace_back(b->getCell(pos->getRow() + 2, pos->getCol() - 1));
         }
     }
@@ -19,23 +20,26 @@ void Knight::calculateMoves() {
         if (b->getCell(pos->getRow() + 2, pos->getCol() + 1)->getPiece() == nullptr) {
             validMoves.emplace_back(b->getCell(pos->getRow() + 2, pos->getCol() + 1));
         } else if (b->getCell(pos->getRow() + 2, pos->getCol() + 1)->getPiece()->getColor() != color) {
+            validMoves.emplace_back(b->getCell(pos->getRow() + 2, pos->getCol() + 1));
             capturingMoves.emplace_back(b->getCell(pos->getRow() + 2, pos->getCol() + 1));
         }
     }
-    // right up
+    // right down
     if (inBound(pos->getRow() + 1, pos->getCol() + 2)) {
         if (b->getCell(pos->getRow() + 1, pos->getCol() + 2)->getPiece() == nullptr) {
             validMoves.emplace_back(b->getCell(pos->getRow() + 1, pos->getCol() + 2));
         } else if (b->getCell(pos->getRow() + 1, pos->getCol() + 2)->getPiece()->getColor() != color) {
+            validMoves.emplace_back(b->getCell(pos->getRow() + 1, pos->getCol() + 2));
             capturingMoves.emplace_back(b->getCell(pos->getRow() + 1, pos->getCol() + 2));
         } 
     }
-    // right down
+    // right up
     if (inBound(pos->getRow() - 1, pos->getCol() + 2)) {
         if (b->getCell(pos->getRow() - 1, pos->getCol() + 2)->getPiece() == nullptr) {
-            validMoves.emplace_back(b->getCell(pos->getRow() + 1, pos->getCol() + 2));
+            validMoves.emplace_back(b->getCell(pos->getRow() - 1, pos->getCol() + 2));
         } else if (b->getCell(pos->getRow() - 1, pos->getCol() + 2)->getPiece()->getColor() != color) {
-            capturingMoves.emplace_back(b->getCell(pos->getRow() + 1, pos->getCol() + 2));
+            validMoves.emplace_back(b->getCell(pos->getRow() - 1, pos->getCol() + 2));
+            capturingMoves.emplace_back(b->getCell(pos->getRow() - 1, pos->getCol() + 2));
         }
     }
     // up left
@@ -43,6 +47,7 @@ void Knight::calculateMoves() {
         if (b->getCell(pos->getRow() - 2, pos->getCol() - 1)->getPiece() == nullptr) {
             validMoves.emplace_back(b->getCell(pos->getRow() - 2, pos->getCol() - 1));
         } else if (b->getCell(pos->getRow() - 2, pos->getCol() - 1)->getPiece()->getColor() != color) {
+            validMoves.emplace_back(b->getCell(pos->getRow() - 2, pos->getCol() - 1));
             capturingMoves.emplace_back(b->getCell(pos->getRow() - 2, pos->getCol() - 1));
         }
     }
@@ -51,22 +56,25 @@ void Knight::calculateMoves() {
         if (b->getCell(pos->getRow() - 2, pos->getCol() + 1)->getPiece() == nullptr) {
             validMoves.emplace_back(b->getCell(pos->getRow() - 2, pos->getCol() + 1));
         } else if (b->getCell(pos->getRow() - 2, pos->getCol() + 1)->getPiece()->getColor() != color) {
+            validMoves.emplace_back(b->getCell(pos->getRow() - 2, pos->getCol() + 1));
             capturingMoves.emplace_back(b->getCell(pos->getRow() - 2, pos->getCol() + 1));
         }
     }
-    // left up 
+    // left down
     if (inBound(pos->getRow() + 1, pos->getCol() - 2)) {
         if (b->getCell(pos->getRow() + 1, pos->getCol() - 2)->getPiece() == nullptr) {
             validMoves.emplace_back(b->getCell(pos->getRow() + 1, pos->getCol() - 2));
         } else if (b->getCell(pos->getRow() + 1, pos->getCol() - 2)->getPiece()->getColor() != color) {
+            validMoves.emplace_back(b->getCell(pos->getRow() + 1, pos->getCol() - 2));
             capturingMoves.emplace_back(b->getCell(pos->getRow() + 1, pos->getCol() - 2));
         }
     }
-    // left down
+    // left up
     if (inBound(pos->getRow() - 1, pos->getCol() - 2)) {
         if (b->getCell(pos->getRow() - 1, pos->getCol() - 2)->getPiece() == nullptr) {
             validMoves.emplace_back(b->getCell(pos->getRow() - 1, pos->getCol() - 2));
         } else if (b->getCell(pos->getRow() - 1, pos->getCol() - 2)->getPiece()->getColor() != color) {
+            validMoves.emplace_back(b->getCell(pos->getRow() - 1, pos->getCol() - 2));
             capturingMoves.emplace_back(b->getCell(pos->getRow() - 1, pos->getCol() - 2));
         }
     }
