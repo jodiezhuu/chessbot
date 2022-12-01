@@ -24,7 +24,7 @@ void Pawn::calculateMoves() {
             validMoves.emplace_back(b->getCell(pos->getRow() + 1, pos->getCol() + 1));
             capturingMoves.emplace_back(b->getCell(pos->getRow() + 1, pos->getCol() + 1));
         }
-        if (pos->getRow() == 2 && (b->getCell(pos->getRow() + 2, pos->getCol()))->getPiece() == nullptr) {
+        if (pos->getRow() == 1 && (b->getCell(pos->getRow() + 2, pos->getCol()))->getPiece() == nullptr) {
             Square * m = b->getCell(pos->getRow() + 2, pos->getCol());
             validMoves.emplace_back(m);
         }
@@ -40,24 +40,8 @@ void Pawn::calculateMoves() {
             validMoves.emplace_back(pos->getRow() - 1, pos->getCol() - 1);
             capturingMoves.emplace_back(pos->getRow() - 1, pos->getCol() - 1);
         }
-        if (pos->getRow() == 7 && (b->getCell(pos->getRow() - 2, pos->getCol()))->getPiece() == nullptr) {
+        if (pos->getRow() == 6 && (b->getCell(pos->getRow() - 2, pos->getCol()))->getPiece() == nullptr) {
             validMoves.emplace_back(pos->getRow() - 2, pos->getCol());
         }
     }
-}
-
-bool Pawn::canBeCaptured() {
-    std::vector<Piece *> *list;
-    if (color == PieceColor::Black) {
-        list = b->getWhitePieces()->getPieces();
-    } else if (color == PieceColor::White) {
-        list =  b->getBlackPieces()->getPieces();
-    }
-    for (auto p: *list) {
-        for (auto moves: p->getCapturingMoves()) {
-            if (moves == pos) {
-                return true;
-            }
-        }
-    } return false;
 }

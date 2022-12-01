@@ -36,3 +36,22 @@ std::vector <Square *> Piece::getValidMoves() const{
 std::vector <Square *> Piece::getCapturingMoves() const{
     return capturingMoves;
 }
+
+
+bool Piece::canBeCaptured() const {
+    std::vector<Piece *> *list;
+    if (color == PieceColor::White) {
+        list = b->getBlackPieces()->getPieces();
+    } else {
+        list = b->getWhitePieces()->getPieces();
+    }
+
+    for (auto piece : *list) {
+        for (auto moves : piece->getCapturingMoves()) {
+            if (moves == pos) {
+                return true;
+            }
+        }
+    }
+    return false;
+}

@@ -6,7 +6,6 @@ class Pawn: public Piece {
 public:
     Pawn(Board *b, PieceColor color, Square *pos, PieceType type);
     virtual void calculateMoves() override;
-    virtual bool canBeCaptured() override; 
 };
 
 #endif
