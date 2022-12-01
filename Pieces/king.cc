@@ -1,4 +1,5 @@
 #include "king.h"
+#include "../square.h"
 
 King::King(Board *b, PieceColor color, Square *pos, PieceType type) 
 : Piece{b, color, pos, type} {}
@@ -21,33 +22,22 @@ bool King::moveInCheck(int row, int col) {
     return false;
 }
 
-bool King::isMoveValid(int row, int col) {
-    int posRow = pos->getRow();
-    int posCol = pos->getCol();
-
-    if ((posRow - 1 <= row && row <= posRow + 1) && (posCol - 1 <= col && col <= posCol + 1) && posCol != col && posRow != row) {
-        return !moveInCheck(row, col);
+void King::calculateMoves() {
+    validMoves.clear();
+    capturingMoves.clear();
+    for (int row = pos->getRow() - 1; row <= pos->getRow() + 1; ++row) {
+        for (int col = pos->getCol() - 1; col <= pos->getCol() + 1; ++col) {
+            if (!(inBound(row, col) && (row != pos->getRow() && col != pos->getCol()))) continue;
+            Piece * piece = b->getCell(row, col)->getPiece();
+            if (piece == nullptr && !moveInCheck(row, col)) {
+                validMoves.emplace_back(b->getCell(row, col));
+            } else if (piece != nullptr && piece->getColor() != color && !moveInCheck(row, col)) {
+                validMoves.emplace_back(b->getCell(row, col));
+                capturingMoves.emplace_back(b->getCell(row, col));
+            }
+        }
     }
-    return false;
 }
-
-// std::vector <Square *> King::validMoves() {
-//     std::vector <Square *> res;
-//     int posRow = pos->getRow();
-//     int posCol = pos->getCol();
-//     for (int row = posRow - 1; row <= posRow + 1; ++row) {
-//         for (int col = posCol - 1; col <= posCol + 1; ++col) {
-//             if (!(inBound(row, col) && (row != posRow && col != posCol))) continue;
-//             if (!moveInCheck(row, col)) {
-//                 res.emplace_back(b->getCell(row, col));
-//             }
-//         }
-//     }
-// }
-
-// std::vector <Square *> King::capturingMoves() {
-
-// } 
 
 bool King::canBeCaptured() {
     return moveInCheck(pos->getRow(), pos->getCol());

@@ -7,6 +7,16 @@ bool Piece::inBound(int row, int col) {
     return (0 <= row && row <= 7 && 0 <= col && col <= 7);
 }
 
+bool Piece::isMoveValid(int row, int col) {
+    calculateMoves();
+    for (auto moves : validMoves) {
+        if (moves == b->getCell(row, col)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 PieceType Piece::getPieceType() const{
     return type;
 }
