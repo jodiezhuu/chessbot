@@ -38,7 +38,3 @@ void King::calculateMoves() {
         }
     }
 }
-
-bool King::canBeCaptured() {
-    return moveInCheck(pos->getRow(), pos->getCol());
-}
