@@ -189,12 +189,13 @@ bool Game::move(std::string from, std::string to) {
             rook->setPosition(toRow, 3);
             rook->setHasMoved(true);
         }
-        return true;
+    } else {
+        board->getCell(fromRow, fromCol)->setPiece(nullptr);
+        board->getCell(toRow, toCol) ->setPiece(movedPiece);
+        movedPiece->setPosition(toRow, toCol);
+        movedPiece->setHasMoved(true);
     }
-    board->getCell(fromRow, fromCol)->setPiece(nullptr);
-    board->getCell(toRow, toCol) ->setPiece(movedPiece);
-    movedPiece->setPosition(toRow, toCol);
-    movedPiece->setHasMoved(true);
+    
     return true;
 }
 
