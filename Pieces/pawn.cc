@@ -7,7 +7,9 @@
 #include "rook.h"
 
 Pawn::Pawn(Board *b, PieceColor color, Square *pos, PieceType type)
-: Piece{b, color, pos, type} {}
+: Piece{b, color, pos, type} {
+    hasMoved = false;
+}
 
 void Pawn::calculateMoves() {
     validMoves.clear();

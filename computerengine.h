@@ -4,6 +4,9 @@
 #include "board.h"
 #include "Pieces/piececolor.h"
 
+class Board;
+class Move;
+
 class ComputerEngine {
     public:
         ComputerEngine(int level);

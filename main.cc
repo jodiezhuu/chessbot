@@ -18,12 +18,20 @@ int main() {
         } else if (command == "resign") {
             gameEngine->resign();
         } else if (command == "move") {
+            if (!gameEngine->getGameState()) {
+                cout << "must start game before moving pieces" << endl;
+                continue;
+            }
             if ((gameEngine->getTurn() == PieceColor::White && gameEngine->isComputer(PieceColor::White)) || (gameEngine->getTurn() == PieceColor::Black && gameEngine->isComputer(PieceColor::Black))) {
-                gameEngine->move();
+               // gameEngine->move();
             } else {
                 string from, to;
                 cin >> from >> to;
-                gameEngine->move(from, to);
+                if (gameEngine->move(from, to)) {
+                    if (gameEngine->getTurn() == PieceColor::Black) gameEngine->setTurn("white");
+                    else gameEngine->setTurn("black");
+                    gameEngine->notifyObservers();
+                }
             }
         } else if (command == "setup") {
             cout << endl;

@@ -1,7 +1,9 @@
 #include "queen.h"
 
 Queen::Queen(Board *b, PieceColor color, Square *pos, PieceType type)
-: Piece{b, color, pos, type} {}
+: Piece{b, color, pos, type} {
+    hasMoved = false;
+}
 
 void Queen::calculateMoves() {
     validMoves.clear();
