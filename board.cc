@@ -20,7 +20,7 @@ Board::Board() {
     for (int colour = 0; colour < 2; ++colour) {
         piecelists[colour] = new PieceList((PieceColor) colour);
     }
-    // this->intializeBoard();
+    this->intializeBoard();
 }
 
 void Board::intializeBoard() {

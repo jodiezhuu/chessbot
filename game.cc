@@ -1,5 +1,6 @@
 #include "game.h"
 #include "Pieces/piece.h"
+#include "computerengine.h"
 #include <string>
 #include <iostream>
 
@@ -99,8 +100,51 @@ void Game::reset() {
     result = Result::Ongoing;
     board->resetBoard();
     ongoing = false;
+    delete players[0];
+    delete players[1];
 }
 
 bool Game::verifySetup() {
     return board->verifyBoard();
+}
+
+void Game::startGame(std::string playerOneType, std::string playerTwoType) {
+    if (playerOneType  == "human") {
+        players[0] = new Player{PieceColor::White, false};
+    } else if (playerOneType == "computer1") {
+        players[0] = new Player{PieceColor::White, true, new ComputerEngine{1}};
+    } else if (playerOneType == "computer2") {
+        players[0] = new Player{PieceColor::White, true, new ComputerEngine{2}};
+    } else if (playerOneType == "computer3") {
+        players[0] = new Player{PieceColor::White, true, new ComputerEngine{3}};
+    } else if (playerOneType == "computer4") {
+        players[0] = new Player{PieceColor::White, true, new ComputerEngine{4}};
+    } else {
+        std::cout << "Invalid parameter for white-player" << std::endl;
+        return;
+    }
+
+    if (playerTwoType == "human") {
+        players[1] = new Player{PieceColor::Black, false};
+    } else if (playerTwoType == "computer1") {
+        players[1] = new Player{PieceColor::Black, true, new ComputerEngine{1}};
+    } else if (playerTwoType == "computer2") {
+        players[1] = new Player{PieceColor::Black, true, new ComputerEngine{2}};
+    } else if (playerTwoType == "computer3") {
+        players[1] = new Player{PieceColor::Black, true, new ComputerEngine{3}};
+    } else if (playerTwoType == "computer4") {
+        players[1] = new Player{PieceColor::Black, true, new ComputerEngine{4}};
+    } else {
+        std::cout << "Invalid parameter for black-player" << std::endl;
+        return;
+    }
+    ongoing = true;
+}
+
+bool Game::isComputer(PieceColor color) {
+    return players[1 - (int) color]->getComputer();
+}
+
+PieceColor Game::getTurn() {
+    return turn;
 }

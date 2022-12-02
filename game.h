@@ -2,7 +2,7 @@
 #define __GAME_H__
 #include "Pieces/piececolor.h"
 #include "Pieces/piecetype.h"
-//#include "player.h"
+#include "player.h"
 #include "subject.h"
 #include <string>
 
@@ -12,7 +12,7 @@ class Game: public Subject {
     bool ongoing;
     Board * board;
     PieceColor turn;
-    // Player players[2];
+    Player *players[2];
     enum class CheckStatus {InCheckBlack, InCheckWhite, CheckmatedBlack, CheckmatedWhite, None};
     enum class Result {BlackWon, WhiteWon, Draw, Ongoing};
     CheckStatus status;
@@ -24,6 +24,11 @@ public:
     Game();
     ~Game();
     PieceType getState(int row, int col);
+    PieceColor getTurn();
+    void move(std::string from, std::string to);
+    void move();
+    bool isComputer(PieceColor color);
+    void startGame(std::string playerOneType, std::string playerTwoType);
     bool addPiece(std::string type, std::string location);
     void removePiece(std::string location);
     void render();
