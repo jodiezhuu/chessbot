@@ -9,15 +9,26 @@ int main() {
     string command;
     Game * gameEngine = new Game{};
     TextView * textOutput = new TextView{gameEngine};
-    gameEngine->render();
+    gameEngine->notifyObservers();
     while (cin >> command) {
         if (command == "game") {
             string playerOneType, playerTwoType;
             cin >> playerOneType >> playerTwoType;
+            gameEngine->startGame(playerOneType, playerTwoType);
         } else if (command == "resign") {
             gameEngine->resign();
         } else if (command == "move") {
+            if ((gameEngine->getTurn() == PieceColor::White && gameEngine->isComputer(PieceColor::White)) || (gameEngine->getTurn() == PieceColor::Black && gameEngine->isComputer(PieceColor::Black))) {
+                gameEngine->move();
+            } else {
+                string from, to;
+                cin >> from >> to;
+                gameEngine->move(from, to);
+            }
         } else if (command == "setup") {
+            cout << endl;
+            cout << "Setup:" << endl;
+            gameEngine->notifyObservers();
             string subCommand;
             while (cin >> subCommand) {
                 if (subCommand == "+") {
@@ -33,8 +44,16 @@ int main() {
                     cin >> colour;
                     gameEngine->setTurn(colour);
                 } else if (subCommand == "done") {
-                    // verify
-                    break;
+                    if (gameEngine->verifySetup()) {
+                        cout << "Exiting setup" << endl << endl; 
+                        break;
+                    } else {
+                        cout << std::endl;
+                        cout << "Board conditions are not satisfied: " << std::endl;
+                        cout << "- There must be exactly one king for each colour" << std::endl;
+                        cout << "- No pawns can be on the first or last row" << std::endl;
+                        cout << "- Neither king can be in check" << std::endl << std::endl;
+                    }
                 }
             }
         }

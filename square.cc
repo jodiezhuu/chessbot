@@ -1,4 +1,5 @@
 #include "square.h"
+#include "Pieces/piece.h"
 
 Square::Square(int row, int col, Piece* piece) 
 : row{row}, col{col}, piece{piece} {}

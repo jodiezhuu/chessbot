@@ -20,6 +20,7 @@ public:
     PieceList* getWhitePieces();
     PieceList* getBlackPieces();
     Square* getCell(int row, int col);
+    bool verifyBoard();
     ~Board();
 };
 

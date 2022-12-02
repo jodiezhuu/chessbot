@@ -3,12 +3,13 @@
 #include "piececolor.h"
 #include <vector>
 #include <map>
+#include <iostream>
 
-PieceList::PieceList(int color)
-: color{color == 0 ? PieceColor::White : PieceColor::Black} {}
+PieceList::PieceList(PieceColor color): color{color} {}
 
-int PieceList::getPieceCount(Piece *piece) {
-    return pieceCount[piece];
+int PieceList::getPieceCount(PieceType type) {
+    if (pieceCount.count(type) == 0) return 0;
+    return pieceCount[type];
 }
 
 std::vector<Piece *> *PieceList::getPieces() {
@@ -16,20 +17,26 @@ std::vector<Piece *> *PieceList::getPieces() {
 }
 
 void PieceList::addPiece(Piece *p) {
-    pieceCount[p] += 1;
-    pieces.emplace_back(p);
+    if (pieceCount.count(p->getPieceType()) == 0) {
+        pieceCount[p->getPieceType()] = 1;
+    } else {
+        pieceCount[p->getPieceType()] += 1;
+    }
+    pieces.push_back(p);
 }
 
-bool PieceList::removePieces(Piece *piece) {
-    int counter = 0;
-    if (pieceCount[piece] > 0) {
-        for (auto p = pieces.begin(); p != pieces.end(); p++) {
-            if (*p == piece) {
-                pieces.erase(p);
-                return true;
-            }
+void PieceList::removePieces(Piece *piece) {
+    for (auto p = pieces.begin(); p != pieces.end(); ++p) {
+        if (*p == piece) {
+            pieceCount[(*p)->getPieceType()] -= 1;
+            pieces.erase(p);
+            return;
         }
-    } return false;
+    }
+}
+
+size_t PieceList::getLength() {
+    return pieces.size();
 }
 
 PieceList::~PieceList() {

@@ -3,6 +3,7 @@
 #include "piececolor.h"
 #include "../square.h"
 #include "piecetype.h"
+#include "piecelist.h"
 #include "../board.h"
 #include <vector>
 
@@ -12,15 +13,19 @@ protected:
     Square *pos;
     PieceType type;
     Board *b;
+    std::vector <Square *> validMoves;
+    std::vector <Square *> capturingMoves;
+    bool inBound(int row, int col);
 public:
     Piece(Board *b, PieceColor color, Square *pos, PieceType type);
-    PieceType getPieceType();
-    PieceColor getColor();
-    Square *getPosition();
-    virtual bool isMoveValid(int row, int col) = 0;
-    virtual std::vector <Square *> validMoves() = 0;
-    virtual std::vector <Square *> capturingMoves() = 0; 
-    virtual bool canBeCaptured() = 0; 
+    PieceType getPieceType() const;
+    PieceColor getColor() const;
+    Square *getPosition() const;
+    virtual void calculateMoves() = 0;
+    bool isMoveValid(int row, int col);
+    std::vector <Square *> getValidMoves();
+    std::vector <Square *> getCapturingMoves();
+    bool canBeCaptured() const; 
     ~Piece() {};  
 };
 
