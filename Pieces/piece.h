@@ -21,11 +21,11 @@ public:
     PieceType getPieceType() const;
     PieceColor getColor() const;
     Square *getPosition() const;
-    bool isMoveValid(int row, int col);
-    std::vector <Square *> getValidMoves() const;
-    std::vector <Square *> getCapturingMoves() const;
-    bool canBeCaptured() const; 
     virtual void calculateMoves() = 0;
+    bool isMoveValid(int row, int col);
+    std::vector <Square *> getValidMoves();
+    std::vector <Square *> getCapturingMoves();
+    bool canBeCaptured() const; 
     ~Piece() {};  
 };
 

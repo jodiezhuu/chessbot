@@ -14,11 +14,21 @@ int main() {
         if (command == "game") {
             string playerOneType, playerTwoType;
             cin >> playerOneType >> playerTwoType;
+            gameEngine->startGame(playerOneType, playerTwoType);
         } else if (command == "resign") {
             gameEngine->resign();
         } else if (command == "move") {
+            if ((gameEngine->getTurn() == PieceColor::White && gameEngine->isComputer(PieceColor::White)) || (gameEngine->getTurn() == PieceColor::Black && gameEngine->isComputer(PieceColor::Black))) {
+                gameEngine->move();
+            } else {
+                string from, to;
+                cin >> from >> to;
+                gameEngine->move(from, to);
+            }
         } else if (command == "setup") {
-            cout << "in setup" << endl;
+            cout << endl;
+            cout << "Setup:" << endl;
+            gameEngine->notifyObservers();
             string subCommand;
             while (cin >> subCommand) {
                 if (subCommand == "+") {
@@ -35,6 +45,7 @@ int main() {
                     gameEngine->setTurn(colour);
                 } else if (subCommand == "done") {
                     if (gameEngine->verifySetup()) {
+                        cout << "Exiting setup" << endl << endl; 
                         break;
                     } else {
                         cout << std::endl;

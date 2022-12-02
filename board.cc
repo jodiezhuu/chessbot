@@ -54,8 +54,11 @@ void Board::intializeBoard() {
 void Board::resetBoard() {
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
-            delete boardlist[i][j]->getPiece();
+            Piece * piece= boardlist[i][j]->getPiece();
+            if (piece == nullptr) continue;
             boardlist[i][j]->setPiece(nullptr);
+            piecelists[(int) piece->getColor()]->removePieces(piece);
+            delete piece;
         }
     }
     this->intializeBoard();
@@ -152,27 +155,38 @@ bool Board::verifyBoard() {
         Piece *piece1 = boardlist[0][col]->getPiece();
         Piece *piece2 = boardlist[7][col]->getPiece();
         if (piece1 != nullptr && (piece1->getPieceType() == PieceType::BlackPawn || piece1->getPieceType() == PieceType::WhitePawn)) {
+            std::cout << "pawn found on top row" << std::endl;
             return false;
         }
         if (piece2 != nullptr && (piece2->getPieceType() == PieceType::BlackPawn || piece2->getPieceType() == PieceType::WhitePawn)) {
+            std::cout << "pawn found on bottom row" << std::endl;
             return false;
         }
     }
     // only one white king and one black king
-    if (piecelists[0]->getPieceCount(PieceType::BlackKing) != 0 || piecelists[1]->getPieceCount(PieceType::WhiteKing) != 0) {
+    if (piecelists[0]->getPieceCount(PieceType::BlackKing) != 1 || piecelists[1]->getPieceCount(PieceType::WhiteKing) != 1) {
+        std::cout << "black king: " << piecelists[0]->getPieceCount(PieceType::BlackKing) << std::endl;
+        std::cout << "white king: " << piecelists[1]->getPieceCount(PieceType::WhiteKing) << std::endl;
+        std::cout << "not exactly one king each" << std::endl;
         return false;
     }
     // neither king is in check
     for (auto piece : *(piecelists[0]->getPieces())) {
         if (piece->getPieceType() == PieceType::BlackKing) {
-            return !(piece->canBeCaptured());
+            if (piece->canBeCaptured()) {
+                std::cout << "black king is in check" << std::endl;
+                return false;
+            }
         }
     }
     for (auto piece : *(piecelists[1]->getPieces())) {
         if (piece->getPieceType() == PieceType::WhiteKing) {
-            return !(piece->canBeCaptured());
+            if (piece->canBeCaptured()) {
+                std::cout << "white king is in check" << std::endl;
+                return false;
+            }
         }
     }
-
+    std::cout << "ALL GOOD :)" << std::endl;
     return true;
 }
