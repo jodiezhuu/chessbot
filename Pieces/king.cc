@@ -16,14 +16,20 @@ bool King::moveInCheck(int row, int col) {
     } else {
         list = b->getWhitePieces()->getPieces();
     }
-
+    
     for (auto piece : *list) {
-        for (auto moves : piece->getCapturingMoves()) {
-            if (moves == pos) {
-                return true;
-            }
+        for (auto moves : piece->getValidMoves()) {
+            if (moves->getCol() == col && moves->getRow() == row) return true;
         }
     }
+
+    // for (auto piece : *list) {
+    //     for (auto moves : piece->getCapturingMoves()) {
+    //         if (moves == pos) {
+    //             return true;
+    //         }
+    //     }
+    // }
     return false;
 }
 
