@@ -2,7 +2,9 @@
 #include <iostream>
 
 Bishop::Bishop(Board *b, PieceColor color, Square *pos, PieceType type)
-: Piece{b, color, pos, type} {}
+: Piece{b, color, pos, type} {
+    hasMoved = false;
+}
 
 void Bishop::calculateMoves() {
     validMoves.clear();

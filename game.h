@@ -7,6 +7,7 @@
 #include <string>
 
 class Board;
+class Player;
 
 class Game: public Subject {
     bool ongoing;
@@ -25,8 +26,9 @@ public:
     ~Game();
     PieceType getState(int row, int col);
     PieceColor getTurn();
-    void move(std::string from, std::string to);
-    void move();
+    bool getGameState() const;
+    bool move(std::string from, std::string to);
+    bool move();
     bool isComputer(PieceColor color);
     void startGame(std::string playerOneType, std::string playerTwoType);
     bool addPiece(std::string type, std::string location);

@@ -2,7 +2,9 @@
 #include <iostream>
 
 Rook::Rook(Board *b, PieceColor color, Square *pos, PieceType type)
-: Piece{b, color, pos, type} {}
+: Piece{b, color, pos, type} {
+    hasMoved = false;
+}
 
 void Rook::calculateMoves() {
     validMoves.clear();

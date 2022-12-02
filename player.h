@@ -3,6 +3,8 @@
 #include "Pieces/piececolor.h"
 #include "computerengine.h"
 
+class ComputerEngine;
+
 class Player {
     public:
         Player(PieceColor color, bool computer, ComputerEngine* engine = nullptr);

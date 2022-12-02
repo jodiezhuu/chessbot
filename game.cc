@@ -148,3 +148,60 @@ bool Game::isComputer(PieceColor color) {
 PieceColor Game::getTurn() {
     return turn;
 }
+
+bool Game::move(std::string from, std::string to) {
+    int fromCol = from[0] - 'a';
+    int fromRow = 8 - (from[1] - '0');
+    int toCol = to[0] - 'a';
+    int toRow = 8 - (to[1] - '0');
+    bool validMove = false;
+    Piece * movedPiece = board->getCell(fromRow, fromCol)->getPiece();
+    if (movedPiece == nullptr || movedPiece->getColor() != turn) {
+        std::cout << "entered move is not valid" << std::endl;
+        return false;
+    }
+    std::vector<Square*> moves = movedPiece->getValidMoves();
+    for (auto m : moves) {
+        if (toCol == m->getCol() && toRow == m->getRow()) {
+            validMove = true;
+            break;
+        }
+    }
+    if (!validMove) {
+        std::cout << "entered move is not valid" << std::endl;
+        return false;
+    }
+    if ((movedPiece->getPieceType() == PieceType::WhiteKing || movedPiece->getPieceType() == PieceType::BlackKing) && abs(fromCol - toCol) > 1 ) {
+        board->getCell(fromRow, fromCol)->setPiece(nullptr);
+        board->getCell(toRow, toCol) ->setPiece(movedPiece);
+        movedPiece->setPosition(toRow, toCol);
+        movedPiece->setHasMoved(true);
+        if (toCol == 6) {
+            Piece * rook = board->getCell(fromRow, 7)->getPiece();
+            board->getCell(fromRow, 7)->setPiece(nullptr);
+            board->getCell(toRow, 5) ->setPiece(rook);
+            rook->setPosition(toRow, 5);
+            rook->setHasMoved(true);
+        } else {
+            Piece * rook = board->getCell(fromRow, 0)->getPiece();
+            board->getCell(fromRow, 0)->setPiece(nullptr);
+            board->getCell(toRow, 3) ->setPiece(rook);
+            rook->setPosition(toRow, 3);
+            rook->setHasMoved(true);
+        }
+        return true;
+    }
+    board->getCell(fromRow, fromCol)->setPiece(nullptr);
+    board->getCell(toRow, toCol) ->setPiece(movedPiece);
+    movedPiece->setPosition(toRow, toCol);
+    movedPiece->setHasMoved(true);
+    return true;
+}
+
+bool Game::move() {
+
+}
+
+bool Game::getGameState() const {
+    return ongoing;
+}

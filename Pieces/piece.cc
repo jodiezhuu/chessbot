@@ -60,3 +60,15 @@ bool Piece::canBeCaptured() const {
     }
     return false;
 }
+
+bool Piece::getHasMoved() const {
+    return hasMoved;
+}
+
+void Piece::setPosition(int newrow, int newcol) {
+    pos = b->getCell(newrow, newcol);
+}
+
+void Piece::setHasMoved(bool val) {
+    hasMoved = val;
+}
