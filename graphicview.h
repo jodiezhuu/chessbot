@@ -4,11 +4,12 @@
 #include "game.h"
 #include "Pieces/piecetype.h"
 #include <iostream>
+#include "window.h"
 
 class GraphicView: public Observer {
     Game *game;
-    std::ostream &out = std::cout;
-    char convertPiece(PieceType type);
+    Xwindow window;
+    char drawPiece(PieceType type);
     PieceType pieceBoard[8][8];
 public:
     GraphicView(Game *game);
