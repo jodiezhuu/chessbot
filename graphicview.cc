@@ -52,9 +52,9 @@ void GraphicView::drawPiece(PieceType type, int x, int y) {
         window.drawString(x, y, "r", 0);
     } else if (type == PieceType::Empty) {
         if ((x + y) % 2 == 0) {
-            window.fillRectangle(x, y, 62, 62, 8);
-        } else {                
-            window.fillRectangle(x, y, 62, 62, 9);
+            window.fillRectangle(x * 62, y * 62, 62, 62, 8);
+        } else {               
+            window.fillRectangle(x * 62, y * 62, 62, 62, 9);
         }
     } else if (type == PieceType::WhiteBishop) {
         window.drawCircle(x, y, 40, 0);
@@ -81,8 +81,13 @@ void GraphicView::notify() {
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {
             if (pieceBoard[row][col] != game->getState(row, col)) {
-                drawPiece(game->getState(row, col), col * 62 + 30, row * 62 + 30);
-                pieceBoard[row][col] = game->getState(row, col);
+                if (game->getState(row, col) == PieceType::Empty) {
+                    drawPiece(game->getState(row, col), col, row);
+                    pieceBoard[row][col] = game->getState(row, col);
+                } else {
+                    drawPiece(game->getState(row, col), col * 62 + 30, row * 62 + 30);
+                    pieceBoard[row][col] = game->getState(row, col);
+                }
             }
         }
     }
