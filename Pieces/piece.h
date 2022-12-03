@@ -20,7 +20,7 @@ protected:
     std::vector <Square *> capturingMoves;
     bool inBound(int row, int col);
 public:
-    Piece(Board *b, PieceColor color, Square *pos, PieceType type);
+    Piece(Board *b, PieceColor color, Square *pos, PieceType type, bool hasMoved = false);
     PieceType getPieceType() const;
     PieceColor getColor() const;
     Square *getPosition() const;
@@ -32,7 +32,7 @@ public:
     std::vector <Square *> getValidMoves();
     std::vector <Square *> getCapturingMoves();
     bool canBeCaptured() const; 
-    ~Piece() {};  
+    ~Piece();  
 };
 
 #endif

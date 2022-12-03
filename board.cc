@@ -137,6 +137,12 @@ void Board::removePiece(int row, int col) {
     std::cout << "black: " << piecelists[0]->getLength() << " white: " << piecelists[1]->getLength() << std::endl;
 }
 
+void Board::removePiece(Piece * piece) {
+    piecelists[(int) piece->getColor()]->removePieces(piece);
+    delete piece;
+    std::cout << "black: " << piecelists[0]->getLength() << " white: " << piecelists[1]->getLength() << std::endl;
+}
+
 Board::~Board() {
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {
@@ -171,22 +177,87 @@ bool Board::verifyBoard() {
         return false;
     }
     // neither king is in check
-    for (auto piece : *(piecelists[0]->getPieces())) {
-        if (piece->getPieceType() == PieceType::BlackKing) {
-            if (piece->canBeCaptured()) {
-                std::cout << "black king is in check" << std::endl;
-                return false;
-            }
-        }
+    if (getBlackKing()->canBeCaptured()) {
+        std::cout << "black king is in check" << std::endl;
+        return false;
     }
-    for (auto piece : *(piecelists[1]->getPieces())) {
-        if (piece->getPieceType() == PieceType::WhiteKing) {
-            if (piece->canBeCaptured()) {
-                std::cout << "white king is in check" << std::endl;
-                return false;
-            }
-        }
+    if (getWhiteKing()->canBeCaptured()) {
+        std::cout << "white king is in check" << std::endl;
+        return false;
     }
     std::cout << "ALL GOOD :)" << std::endl;
     return true;
+}
+
+Piece *Board::getWhiteKing() {
+    for (auto piece : *(piecelists[1]->getPieces())) {
+        if (piece->getPieceType() == PieceType::WhiteKing) return piece;
+    }
+    return nullptr;
+}
+
+Piece *Board::getBlackKing() {
+    for (auto piece : *(piecelists[0]->getPieces())) {
+        if (piece->getPieceType() == PieceType::BlackKing) return piece;
+    }
+    return nullptr;
+}
+
+void Board::kingMovesHelper(Piece *king, std::vector <Square *> &validMoves, std::vector <Square *> &capturingMoves) {
+    // Update valid moves vector
+    // Makes each valid move, checks if move caues king to be in check, removes move accordingly
+    int toRemove = 0;
+    for (size_t idx = 0; idx < validMoves.size(); ++idx) {
+        auto move = validMoves[idx];
+        int fromRow = king->getPosition()->getRow();
+        int fromCol = king->getPosition()->getCol();
+        int toRow = move->getRow();
+        int toCol = move->getCol();
+        boardlist[fromRow][fromCol]->setPiece(nullptr);
+        Piece *temp = boardlist[toRow][toCol]->getPiece();
+        boardlist[toRow][toCol]->setPiece(king);
+        king->setPosition(toRow, toCol);
+        if (king->canBeCaptured()) {
+            validMoves[idx] = validMoves.back();
+            toRemove++;
+        }
+        boardlist[fromRow][fromCol]->setPiece(king);
+        boardlist[toRow][toCol]->setPiece(temp);
+        king->setPosition(fromRow, fromCol);
+    }
+    for (int j = 0; j < toRemove; ++j) {
+        validMoves.pop_back();
+    }
+
+    toRemove = 0;
+    // Update capturing moves vector
+    for (size_t i = 0; i < capturingMoves.size(); ++i) {
+        bool inValid = false;
+        for (auto vm = validMoves.begin(); vm != validMoves.end(); ++vm) {
+            if (capturingMoves[i] == *vm) inValid = true;
+        }
+        if (!inValid) {
+            capturingMoves[i] = capturingMoves.back();
+        }
+    }
+    for (int j = 0; j < toRemove; ++j) {
+        capturingMoves.pop_back();
+    }
+}
+
+
+std::vector <Square *> *Board::getWhiteKingMoves() {
+    Piece *king = getWhiteKing();
+    whiteKingMoves[0] = king->getValidMoves();
+    whiteKingMoves[1] = king->getCapturingMoves();
+    kingMovesHelper(king, whiteKingMoves[0], whiteKingMoves[1]);
+    return whiteKingMoves;
+}
+
+std::vector <Square *> *Board::getBlackKingMoves() {
+    Piece *king = getBlackKing();
+    blackKingMoves[0] = king->getValidMoves();
+    blackKingMoves[1] = king->getCapturingMoves();
+    kingMovesHelper(king, blackKingMoves[0], blackKingMoves[1]);
+    return blackKingMoves;
 }

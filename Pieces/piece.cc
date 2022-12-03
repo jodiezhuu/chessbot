@@ -2,7 +2,9 @@
 #include "piecelist.h"
 #include <iostream>
 
-Piece::Piece(Board *b, PieceColor color, Square *pos, PieceType type): b{b}, color{color}, pos{pos}, type{type} {}
+Piece::Piece(Board *b, PieceColor color, Square *pos, PieceType type, bool hasMoved): b{b}, color{color}, pos{pos}, type{type}, hasMoved{hasMoved} {}
+
+Piece::~Piece() {}
 
 bool Piece::inBound(int row, int col) {
     return (0 <= row && row <= 7 && 0 <= col && col <= 7);
@@ -48,15 +50,20 @@ bool Piece::canBeCaptured() const {
         list = b->getWhitePieces()->getPieces();
     }
 
+    // if ((int) color == 0) {
+    //     std::cout << "White Capturing Moves: " << std::endl;
+    // } else {
+    //     std::cout << "Black Capturing Moves: " << std::endl;
+    // }
     for (auto piece : *list) {
-        std::cout << "[" << piece->getPosition()->getRow() << "," << piece->getPosition()->getCol() << "]: " << (int) piece->getPieceType() << ": ";
+        // std::cout << "[" << piece->getPosition()->getRow() << "," << piece->getPosition()->getCol() << "]: " << (int) piece->getPieceType() << ": ";
         for (auto moves : piece->getCapturingMoves()) {
-            std::cout << "(" << moves->getRow() << "," << moves->getCol() << ") ";
+            // std::cout << "(" << moves->getRow() << "," << moves->getCol() << ") ";
             if (moves == pos) {
                 return true;
             }
         }
-        std::cout << std::endl;
+        // std::cout << std::endl;
     }
     return false;
 }
