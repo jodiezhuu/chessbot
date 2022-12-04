@@ -2,6 +2,7 @@
 #include <string>
 #include "game.h"
 #include "textview.h"
+#include "graphicview.h"
 
 using namespace std;
 
@@ -9,6 +10,7 @@ int main() {
     string command;
     Game * gameEngine = new Game{};
     TextView * textOutput = new TextView{gameEngine};
+    GraphicView * graphicOutput = new GraphicView{gameEngine};
     gameEngine->notifyObservers();
     while (cin >> command) {
         if (command == "game") {
@@ -76,4 +78,5 @@ int main() {
     // Delete all objects
     delete gameEngine;
     delete textOutput;
+    delete graphicOutput;
 }
