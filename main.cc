@@ -20,6 +20,7 @@ int main() {
                 string playerOneType, playerTwoType;
                 cin >> playerOneType >> playerTwoType;
                 gameEngine->startGame(playerOneType, playerTwoType);
+                gameEngine->applyStatus();
             }
         } else if (command == "resign") {
             gameEngine->resign();
