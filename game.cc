@@ -169,23 +169,23 @@ bool Game::move(std::string from, std::string to) {
         return false;
     }
 
-    // Return false if move causes king to be in check
-    if (movedPiece->getPieceType() == PieceType::WhiteKing || movedPiece->getPieceType() == PieceType::BlackKing) {
-        // Move king
-        board->getCell(fromRow, fromCol)->setPiece(nullptr);
-        board->getCell(toRow, toCol)->setPiece(movedPiece);
-        movedPiece->setPosition(toRow, toCol);
-        // Check if king is in check
-        if (movedPiece->canBeCaptured()) {
-            // If in check move king back
-            board->getCell(fromRow, fromCol)->setPiece(movedPiece);
-            board->getCell(toRow, toCol)->setPiece(old);
-            movedPiece->setPosition(fromRow, fromCol);
-            return false;
-        } else {
-            movedPiece->setHasMoved(true);
-        }
-    }
+    // // Return false if move causes king to be in check
+    // if (movedPiece->getPieceType() == PieceType::WhiteKing || movedPiece->getPieceType() == PieceType::BlackKing) {
+    //     // Move king
+    //     board->getCell(fromRow, fromCol)->setPiece(nullptr);
+    //     board->getCell(toRow, toCol)->setPiece(movedPiece);
+    //     movedPiece->setPosition(toRow, toCol);
+    //     // Check if king is in check
+    //     if (movedPiece->canBeCaptured()) {
+    //         // If in check move king back
+    //         board->getCell(fromRow, fromCol)->setPiece(movedPiece);
+    //         board->getCell(toRow, toCol)->setPiece(old);
+    //         movedPiece->setPosition(fromRow, fromCol);
+    //         return false;
+    //     } else {
+    //         movedPiece->setHasMoved(true);
+    //     }
+    // }
 
     // Castling
     if ((movedPiece->getPieceType() == PieceType::WhiteKing || movedPiece->getPieceType() == PieceType::BlackKing) && abs(fromCol - toCol) > 1 ) {
@@ -202,12 +202,13 @@ bool Game::move(std::string from, std::string to) {
             rook->setPosition(toRow, 3);
             rook->setHasMoved(true);
         }
-    } else if (!(movedPiece->getPieceType() == PieceType::WhiteKing || movedPiece->getPieceType() == PieceType::BlackKing)) { // Normal moves
-        board->getCell(fromRow, fromCol)->setPiece(nullptr);
-        board->getCell(toRow, toCol)->setPiece(movedPiece);
-        movedPiece->setPosition(toRow, toCol);
-        movedPiece->setHasMoved(true);
     }
+    // Normal moves
+    board->getCell(fromRow, fromCol)->setPiece(nullptr);
+    board->getCell(toRow, toCol)->setPiece(movedPiece);
+    movedPiece->setPosition(toRow, toCol);
+    movedPiece->setHasMoved(true);
+
 
     // if move made doesn't get rid of check then invalid
     if ((status == CheckStatus::WhiteInCheck || status == CheckStatus::BlackInCheck) && status == calculateStatus()) {
@@ -234,17 +235,15 @@ Game::CheckStatus Game::calculateStatus() {
     Piece *blackKing = board->getBlackKing();
     Piece *whiteKing = board->getWhiteKing();
     if (whiteKing->canBeCapturedIgnoreCheck()) {
-        if (whiteKing->getValidMoves().empty()) {
-            return CheckStatus::WhiteCheckmated;
-        } else {
-            return CheckStatus::WhiteInCheck;
+        for (auto piece : *(board->getWhitePieces()->getPieces())) {
+            if (!piece->getValidMoves().empty()) return CheckStatus::WhiteInCheck;
         }
+        return CheckStatus::WhiteCheckmated;
     } else if (blackKing->canBeCapturedIgnoreCheck()) {
-        if (blackKing->getValidMoves().empty()) {
-            return CheckStatus::BlackCheckmated;
-        } else {
-            return CheckStatus::BlackInCheck;
+        for (auto piece : *(board->getBlackPieces()->getPieces())) {
+            if (!piece->getValidMoves().empty()) return CheckStatus::BlackInCheck;
         }
+        return CheckStatus::BlackCheckmated;
     }
     std::vector <Piece *> *list;
     if (turn == PieceColor::Black) {
