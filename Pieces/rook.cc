@@ -5,7 +5,7 @@ Rook::Rook(Board *b, PieceColor color, Square *pos, PieceType type)
 : Piece{b, color, pos, type} {
 }
 
-void Rook::calculateMoves() {
+void Rook::calculateAllMoves() {
     validMoves.clear();
     capturingMoves.clear();
     if (b->getCell(pos->getRow(), pos->getCol())->getPiece() != this) return;

@@ -4,7 +4,7 @@ Knight::Knight(Board *b, PieceColor color, Square *pos, PieceType type)
 : Piece{b, color, pos, type} {
 }
 
-void Knight::calculateMoves() {
+void Knight::calculateAllMoves() {
     validMoves.clear();
     capturingMoves.clear();
     if (b->getCell(pos->getRow(), pos->getCol())->getPiece() != this) return;

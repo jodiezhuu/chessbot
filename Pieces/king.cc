@@ -7,25 +7,25 @@
 King::King(Board *b, PieceColor color, Square *pos, PieceType type) 
 : Piece{b, color, pos, type} {}
 
-bool King::moveInCheck(int row, int col) {
-    std::vector<Piece *> *list;
-    if (color == PieceColor::White) {
-        list = b->getBlackPieces()->getPieces();
-    } else {
-        list = b->getWhitePieces()->getPieces();
-    }
+// bool King::moveInCheck(int row, int col) {
+//     std::vector<Piece *> *list;
+//     if (color == PieceColor::White) {
+//         list = b->getBlackPieces()->getPieces();
+//     } else {
+//         list = b->getWhitePieces()->getPieces();
+//     }
     
-    for (auto piece : *list) {
-        for (auto moves : piece->getCapturingMoves()) {
-            if (moves == pos) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
+//     for (auto piece : *list) {
+//         for (auto moves : piece->getCapturingMoves()) {
+//             if (moves == pos) {
+//                 return true;
+//             }
+//         }
+//     }
+//     return false;
+// }
 
-void King::calculateMoves() {
+void King::calculateAllMoves() {
     validMoves.clear();
     capturingMoves.clear();
     for (int row = pos->getRow() - 1; row <= pos->getRow() + 1; ++row) {

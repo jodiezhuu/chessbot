@@ -5,7 +5,7 @@ Bishop::Bishop(Board *b, PieceColor color, Square *pos, PieceType type)
 : Piece{b, color, pos, type} {
 }
 
-void Bishop::calculateMoves() {
+void Bishop::calculateAllMoves() {
     validMoves.clear();
     capturingMoves.clear();
     if (b->getCell(pos->getRow(), pos->getCol())->getPiece() != this) return;

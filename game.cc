@@ -233,21 +233,29 @@ bool Game::move() {
 Game::CheckStatus Game::calculateStatus() {
     Piece *blackKing = board->getBlackKing();
     Piece *whiteKing = board->getWhiteKing();
-    if (whiteKing->canBeCaptured()) {
-        if (board->getWhiteKingMoves()[0].empty()) {
+    if (whiteKing->canBeCapturedIgnoreCheck()) {
+        if (whiteKing->getValidMoves().empty()) {
             return CheckStatus::WhiteCheckmated;
         } else {
             return CheckStatus::WhiteInCheck;
         }
-    } else if (blackKing->canBeCaptured()) {
-        if (board->getBlackKingMoves()[0].empty()) {
+    } else if (blackKing->canBeCapturedIgnoreCheck()) {
+        if (blackKing->getValidMoves().empty()) {
             return CheckStatus::BlackCheckmated;
         } else {
             return CheckStatus::BlackInCheck;
         }
+    }
+    std::vector <Piece *> *list;
+    if (turn == PieceColor::Black) {
+        list = board->getBlackPieces()->getPieces();
     } else {
-        return CheckStatus::None;
-    } 
+        list = board->getWhitePieces()->getPieces();
+    }
+    for (auto piece : *list) {
+        if (!piece->getValidMoves().empty()) return CheckStatus::None;
+    }
+    return CheckStatus::Stalemate; 
 }
 
 void Game::applyStatus() {
@@ -264,6 +272,11 @@ void Game::applyStatus() {
         std::cout << "White is in check" << std::endl;
     } else if (status == CheckStatus::BlackInCheck) {
         std::cout << "Black is in check" << std::endl;
+    } else if (status == CheckStatus::Stalemate) {
+        std::cout << "Stalemate!" << std::endl;
+        reset();
+        scores[0] += 0.5;
+        scores[1] += 0.5;
     }
 }
 

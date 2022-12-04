@@ -4,7 +4,7 @@
 class Rook: public Piece {
 public:
     Rook(Board *b, PieceColor color, Square *pos, PieceType type);
-    virtual void calculateMoves() override;
+    virtual void calculateAllMoves() override;
 };
 
 #endif

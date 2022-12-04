@@ -10,7 +10,7 @@ Pawn::Pawn(Board *b, PieceColor color, Square *pos, PieceType type)
 : Piece{b, color, pos, type} {
 }
 
-void Pawn::calculateMoves() {
+void Pawn::calculateAllMoves() {
     validMoves.clear();
     capturingMoves.clear();
     if (b->getCell(pos->getRow(), pos->getCol())->getPiece() != this) return;

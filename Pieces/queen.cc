@@ -4,7 +4,7 @@ Queen::Queen(Board *b, PieceColor color, Square *pos, PieceType type)
 : Piece{b, color, pos, type} {
 }
 
-void Queen::calculateMoves() {
+void Queen::calculateAllMoves() {
     validMoves.clear();
     capturingMoves.clear();
     if (b->getCell(pos->getRow(), pos->getCol())->getPiece() != this) return;
