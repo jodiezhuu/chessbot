@@ -10,7 +10,7 @@ class Move;
 class ComputerEngine {
     public:
         ComputerEngine(int level);
-        Move makeMove(Board* board, PieceColor color);
+        Move* makeMove(Board* board, PieceColor color);
     private:
         int level;
 };

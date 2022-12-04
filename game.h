@@ -26,6 +26,7 @@ public:
     PieceType convertChar(char c);
     bool isOngoing() const;
     bool move(std::string from, std::string to);
+    bool move(int fromCol, int fromRow, int toCol, int toRow);
     bool move();
     bool isComputer(PieceColor color);
     void startGame(std::string playerOneType, std::string playerTwoType);
