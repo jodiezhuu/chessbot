@@ -35,6 +35,12 @@ int main() {
                 string from, to;
                 cin >> from >> to;
                 if (gameEngine->move(from, to)) {
+                    if (gameEngine->isPawnUpgrading(to)) {
+                        string c;
+                        cin >> c;
+                        PieceType upgradedPiece = gameEngine->convertChar(c[0]);
+                        gameEngine->upgradePawn(upgradedPiece, to);
+                    }
                     if (gameEngine->getTurn() == PieceColor::Black) gameEngine->setTurn("white");
                     else gameEngine->setTurn("black");
                     gameEngine->notifyObservers();

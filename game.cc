@@ -283,3 +283,41 @@ void Game::applyStatus() {
 bool Game::isOngoing() const {
     return ongoing;
 }
+
+bool Game::isPawnUpgrading(std::string to) {
+    int toCol = to[0] - 'a';
+    int toRow = 8 - (to[1] - '0');
+    PieceType piece = board->getCell(toRow, toCol)->getPiece()->getPieceType();
+    if ((piece == PieceType::BlackPawn && toRow == 7) || (piece == PieceType::WhitePawn && toRow == 0)) {
+        return true;
+    } return false;
+}
+
+void Game::upgradePawn(PieceType type, std::string to) {
+    int toCol = to[0] - 'a';
+    int toRow = 8 - (to[1] - '0');
+    PieceType piece = board->getCell(toRow, toCol)->getPiece()->getPieceType();
+    if (piece == PieceType::BlackPawn && toRow == 7) {
+        board->removePiece(toRow, toCol);
+        if (type == PieceType::BlackBishop) {
+            board->addPiece(toRow, toCol, PieceType::BlackBishop);
+        } else if (type == PieceType::BlackQueen) {
+            board->addPiece(toRow, toCol, PieceType::BlackQueen);
+        } else if (type == PieceType::BlackKnight) {
+            board->addPiece(toRow, toCol, PieceType::BlackKnight);
+        } else if (type == PieceType::BlackRook) {
+            board->addPiece(toRow, toCol, PieceType::BlackRook);
+        }
+    } else if (piece == PieceType::WhitePawn && toRow == 0) {
+        board->removePiece(toRow, toCol);
+        if (type == PieceType::WhiteBishop) {
+            board->addPiece(toRow, toCol, PieceType::WhiteBishop);
+        } else if (type == PieceType::WhiteKnight) {
+            board->addPiece(toRow, toCol, PieceType::WhiteKnight);
+        } else if (type == PieceType::WhiteRook) {            
+            board->addPiece(toRow, toCol, PieceType::WhiteRook);
+        } else if (type == PieceType::WhiteQueen) {
+            board->addPiece(toRow, toCol, PieceType::WhiteQueen);
+        }
+    }
+}
