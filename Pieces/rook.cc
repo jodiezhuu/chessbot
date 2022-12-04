@@ -8,6 +8,7 @@ Rook::Rook(Board *b, PieceColor color, Square *pos, PieceType type)
 void Rook::calculateAllMoves() {
     validMoves.clear();
     capturingMoves.clear();
+    capturingMovesWithCheck.clear();
     if (b->getCell(pos->getRow(), pos->getCol())->getPiece() != this) return;
     // right
     for (int col = pos->getCol() + 1; col <= 7; ++col) {

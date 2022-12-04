@@ -28,6 +28,7 @@ King::King(Board *b, PieceColor color, Square *pos, PieceType type)
 void King::calculateAllMoves() {
     validMoves.clear();
     capturingMoves.clear();
+    capturingMovesWithCheck.clear();
     for (int row = pos->getRow() - 1; row <= pos->getRow() + 1; ++row) {
         for (int col = pos->getCol() - 1; col <= pos->getCol() + 1; ++col) {
             if (!inBound(row, col) || (row == pos->getRow() && col == pos->getCol())) continue;

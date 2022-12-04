@@ -17,13 +17,13 @@ class Game: public Subject {
     enum class CheckStatus {BlackInCheck, WhiteInCheck, BlackCheckmated, WhiteCheckmated, Stalemate, None};
     CheckStatus status;
     float scores[2];
-    PieceType convertChar(char c);
     void reset();
 public:
     Game();
     ~Game();
     PieceType getState(int row, int col);
     PieceColor getTurn();
+    PieceType convertChar(char c);
     bool isOngoing() const;
     bool move(std::string from, std::string to);
     bool move(int fromCol, int fromRow, int toCol, int toRow);
@@ -39,6 +39,8 @@ public:
     bool verifySetup();
     CheckStatus calculateStatus();
     void applyStatus();
+    bool isPawnUpgrading(std::string to);
+    void upgradePawn(PieceType type, std::string to);
 };
 
 #endif

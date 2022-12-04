@@ -9,7 +9,7 @@
 class GraphicView: public Observer {
     Game *game;
     Xwindow window;
-    char drawPiece(PieceType type);
+    void drawPiece(PieceType type, int x, int y);
     PieceType pieceBoard[8][8];
 public:
     GraphicView(Game *game);

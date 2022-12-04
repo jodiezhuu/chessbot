@@ -7,6 +7,7 @@ Knight::Knight(Board *b, PieceColor color, Square *pos, PieceType type)
 void Knight::calculateAllMoves() {
     validMoves.clear();
     capturingMoves.clear();
+    capturingMovesWithCheck.clear();
     if (b->getCell(pos->getRow(), pos->getCol())->getPiece() != this) return;
     // down left 
     if (inBound(pos->getRow() + 2, pos->getCol() - 1)) {

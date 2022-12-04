@@ -8,6 +8,7 @@ Bishop::Bishop(Board *b, PieceColor color, Square *pos, PieceType type)
 void Bishop::calculateAllMoves() {
     validMoves.clear();
     capturingMoves.clear();
+    capturingMovesWithCheck.clear();
     if (b->getCell(pos->getRow(), pos->getCol())->getPiece() != this) return;
     // left-up diagonal
     for (int i = 1; i <= 7; ++i) {
