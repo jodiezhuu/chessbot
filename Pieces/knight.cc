@@ -2,12 +2,12 @@
 
 Knight::Knight(Board *b, PieceColor color, Square *pos, PieceType type)
 : Piece{b, color, pos, type} {
-    hasMoved = false;
 }
 
-void Knight::calculateMoves() {
+void Knight::calculateAllMoves() {
     validMoves.clear();
     capturingMoves.clear();
+    if (b->getCell(pos->getRow(), pos->getCol())->getPiece() != this) return;
     // down left 
     if (inBound(pos->getRow() + 2, pos->getCol() - 1)) {
         if (b->getCell(pos->getRow() + 2, pos->getCol() - 1)->getPiece() == nullptr) {

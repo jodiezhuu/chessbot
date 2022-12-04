@@ -4,7 +4,7 @@
 class Bishop: public Piece {
 public:
     Bishop(Board *b, PieceColor color, Square *pos, PieceType type);
-    virtual void calculateMoves() override;
+    void calculateAllMoves() override;
 };
 
 #endif

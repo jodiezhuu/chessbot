@@ -8,12 +8,12 @@
 
 Pawn::Pawn(Board *b, PieceColor color, Square *pos, PieceType type)
 : Piece{b, color, pos, type} {
-    hasMoved = false;
 }
 
-void Pawn::calculateMoves() {
+void Pawn::calculateAllMoves() {
     validMoves.clear();
     capturingMoves.clear();
+    if (b->getCell(pos->getRow(), pos->getCol())->getPiece() != this) return;
     if (color == PieceColor::Black) {
         // black moving down
         if (inBound(pos->getRow() + 1, pos->getCol()) && (b->getCell(pos->getRow() + 1, pos->getCol()))->getPiece() == nullptr) {

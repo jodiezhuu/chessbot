@@ -14,10 +14,8 @@ class Game: public Subject {
     Board * board;
     PieceColor turn;
     Player *players[2];
-    enum class CheckStatus {InCheckBlack, InCheckWhite, CheckmatedBlack, CheckmatedWhite, None};
-    enum class Result {BlackWon, WhiteWon, Draw, Ongoing};
+    enum class CheckStatus {BlackInCheck, WhiteInCheck, BlackCheckmated, WhiteCheckmated, Stalemate, None};
     CheckStatus status;
-    Result result;
     float scores[2];
     PieceType convertChar(char c);
     void reset();
@@ -26,7 +24,7 @@ public:
     ~Game();
     PieceType getState(int row, int col);
     PieceColor getTurn();
-    bool getGameState() const;
+    bool isOngoing() const;
     bool move(std::string from, std::string to);
     bool move();
     bool isComputer(PieceColor color);
@@ -38,6 +36,8 @@ public:
     void printScore();
     void resign();
     bool verifySetup();
+    CheckStatus calculateStatus();
+    void applyStatus();
 };
 
 #endif

@@ -137,6 +137,12 @@ void Board::removePiece(int row, int col) {
     std::cout << "black: " << piecelists[0]->getLength() << " white: " << piecelists[1]->getLength() << std::endl;
 }
 
+void Board::removePiece(Piece * piece) {
+    piecelists[(int) piece->getColor()]->removePieces(piece);
+    delete piece;
+    std::cout << "black: " << piecelists[0]->getLength() << " white: " << piecelists[1]->getLength() << std::endl;
+}
+
 Board::~Board() {
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {
@@ -171,22 +177,28 @@ bool Board::verifyBoard() {
         return false;
     }
     // neither king is in check
-    for (auto piece : *(piecelists[0]->getPieces())) {
-        if (piece->getPieceType() == PieceType::BlackKing) {
-            if (piece->canBeCaptured()) {
-                std::cout << "black king is in check" << std::endl;
-                return false;
-            }
-        }
+    if (getBlackKing()->canBeCaptured()) {
+        std::cout << "black king is in check" << std::endl;
+        return false;
     }
-    for (auto piece : *(piecelists[1]->getPieces())) {
-        if (piece->getPieceType() == PieceType::WhiteKing) {
-            if (piece->canBeCaptured()) {
-                std::cout << "white king is in check" << std::endl;
-                return false;
-            }
-        }
+    if (getWhiteKing()->canBeCaptured()) {
+        std::cout << "white king is in check" << std::endl;
+        return false;
     }
     std::cout << "ALL GOOD :)" << std::endl;
     return true;
+}
+
+Piece *Board::getWhiteKing() {
+    for (auto piece : *(piecelists[1]->getPieces())) {
+        if (piece->getPieceType() == PieceType::WhiteKing) return piece;
+    }
+    return nullptr;
+}
+
+Piece *Board::getBlackKing() {
+    for (auto piece : *(piecelists[0]->getPieces())) {
+        if (piece->getPieceType() == PieceType::BlackKing) return piece;
+    }
+    return nullptr;
 }

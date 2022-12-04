@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 
-Game::Game(): ongoing{false}, turn{PieceColor::White}, status{CheckStatus::None}, result{Result::Ongoing} {
+Game::Game(): ongoing{false}, turn{PieceColor::White}, status{CheckStatus::None} {
     board = new Board{};
     scores[0] = 0;
     scores[1] = 0;
@@ -88,8 +88,10 @@ void Game::printScore() {
 void Game::resign() {
     if (turn == PieceColor::White) {
         scores[1] += 1;
+        std::cout << "Black wins!" << std::endl;
     } else if (turn == PieceColor::Black) {
         scores[0] += 1;
+        std::cout << "White wins!" << std::endl;
     }
     reset();
 }
@@ -97,7 +99,6 @@ void Game::resign() {
 void Game::reset() {
     turn = PieceColor::White;
     status = CheckStatus::None;
-    result = Result::Ongoing;
     board->resetBoard();
     ongoing = false;
     delete players[0];
@@ -156,26 +157,38 @@ bool Game::move(std::string from, std::string to) {
     int toRow = 8 - (to[1] - '0');
     bool validMove = false;
     Piece * movedPiece = board->getCell(fromRow, fromCol)->getPiece();
+    Piece *old = board->getCell(toRow, toCol)->getPiece();
     if (movedPiece == nullptr || movedPiece->getColor() != turn) {
-        std::cout << "entered move is not valid" << std::endl;
+        std::cout << "Entered move is not valid" << std::endl;
         return false;
     }
-    std::vector<Square*> moves = movedPiece->getValidMoves();
-    for (auto m : moves) {
-        if (toCol == m->getCol() && toRow == m->getRow()) {
-            validMove = true;
-            break;
+    validMove = movedPiece->isMoveValid(toRow, toCol);
+
+    if (!validMove) {
+        std::cout << "Entered move is not valid" << std::endl;
+        return false;
+    }
+
+    // Return false if move causes king to be in check
+    if (movedPiece->getPieceType() == PieceType::WhiteKing || movedPiece->getPieceType() == PieceType::BlackKing) {
+        // Move king
+        board->getCell(fromRow, fromCol)->setPiece(nullptr);
+        board->getCell(toRow, toCol)->setPiece(movedPiece);
+        movedPiece->setPosition(toRow, toCol);
+        // Check if king is in check
+        if (movedPiece->canBeCaptured()) {
+            // If in check move king back
+            board->getCell(fromRow, fromCol)->setPiece(movedPiece);
+            board->getCell(toRow, toCol)->setPiece(old);
+            movedPiece->setPosition(fromRow, fromCol);
+            return false;
+        } else {
+            movedPiece->setHasMoved(true);
         }
     }
-    if (!validMove) {
-        std::cout << "entered move is not valid" << std::endl;
-        return false;
-    }
+
+    // Castling
     if ((movedPiece->getPieceType() == PieceType::WhiteKing || movedPiece->getPieceType() == PieceType::BlackKing) && abs(fromCol - toCol) > 1 ) {
-        board->getCell(fromRow, fromCol)->setPiece(nullptr);
-        board->getCell(toRow, toCol) ->setPiece(movedPiece);
-        movedPiece->setPosition(toRow, toCol);
-        movedPiece->setHasMoved(true);
         if (toCol == 6) {
             Piece * rook = board->getCell(fromRow, 7)->getPiece();
             board->getCell(fromRow, 7)->setPiece(nullptr);
@@ -189,20 +202,84 @@ bool Game::move(std::string from, std::string to) {
             rook->setPosition(toRow, 3);
             rook->setHasMoved(true);
         }
-    } else {
+    } else if (!(movedPiece->getPieceType() == PieceType::WhiteKing || movedPiece->getPieceType() == PieceType::BlackKing)) { // Normal moves
         board->getCell(fromRow, fromCol)->setPiece(nullptr);
-        board->getCell(toRow, toCol) ->setPiece(movedPiece);
+        board->getCell(toRow, toCol)->setPiece(movedPiece);
         movedPiece->setPosition(toRow, toCol);
         movedPiece->setHasMoved(true);
     }
-    
+
+    // if move made doesn't get rid of check then invalid
+    if ((status == CheckStatus::WhiteInCheck || status == CheckStatus::BlackInCheck) && status == calculateStatus()) {
+        board->getCell(fromRow, fromCol)->setPiece(movedPiece);
+        board->getCell(toRow, toCol)->setPiece(old);
+        movedPiece->setPosition(fromRow, fromCol);
+        std::cout << "Your king is in check!" << std::endl;
+        return false;
+    }
+
+    // delete old piece if exists
+    if (old != nullptr) {
+        board->removePiece(old);
+    }
     return true;
 }
 
+// For computer
 bool Game::move() {
 
 }
 
-bool Game::getGameState() const {
+Game::CheckStatus Game::calculateStatus() {
+    Piece *blackKing = board->getBlackKing();
+    Piece *whiteKing = board->getWhiteKing();
+    if (whiteKing->canBeCapturedIgnoreCheck()) {
+        if (whiteKing->getValidMoves().empty()) {
+            return CheckStatus::WhiteCheckmated;
+        } else {
+            return CheckStatus::WhiteInCheck;
+        }
+    } else if (blackKing->canBeCapturedIgnoreCheck()) {
+        if (blackKing->getValidMoves().empty()) {
+            return CheckStatus::BlackCheckmated;
+        } else {
+            return CheckStatus::BlackInCheck;
+        }
+    }
+    std::vector <Piece *> *list;
+    if (turn == PieceColor::Black) {
+        list = board->getBlackPieces()->getPieces();
+    } else {
+        list = board->getWhitePieces()->getPieces();
+    }
+    for (auto piece : *list) {
+        if (!piece->getValidMoves().empty()) return CheckStatus::None;
+    }
+    return CheckStatus::Stalemate; 
+}
+
+void Game::applyStatus() {
+    status = calculateStatus();
+    if (status == CheckStatus::WhiteCheckmated) {
+        reset();
+        scores[1] += 1;
+        std::cout << "Checkmate! Black wins!" << std::endl;
+    } else if (status == CheckStatus::BlackCheckmated) {
+        reset();
+        scores[0] += 1;
+        std::cout << "Checkmate! White wins!" << std::endl;
+    } else if (status == CheckStatus::WhiteInCheck) {
+        std::cout << "White is in check" << std::endl;
+    } else if (status == CheckStatus::BlackInCheck) {
+        std::cout << "Black is in check" << std::endl;
+    } else if (status == CheckStatus::Stalemate) {
+        std::cout << "Stalemate!" << std::endl;
+        reset();
+        scores[0] += 0.5;
+        scores[1] += 0.5;
+    }
+}
+
+bool Game::isOngoing() const {
     return ongoing;
 }
