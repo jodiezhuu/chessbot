@@ -43,11 +43,11 @@ bool Piece::inBound(int row, int col) {
 bool Piece::isMoveValid(int row, int col) {
     calculateAllMoves();
     filterAllMoves();
-    std::cout << "Valid Moves of: " << "[" << pos->getRow() << "," << pos->getCol() << "] " << convertPiece(type) << std::endl;
-    for (auto move : validMoves) {
-        std::cout << "{" << move->getRow() << "," << move->getCol() << "} ";
-    }
-    std::cout << std::endl;
+    // std::cout << "Valid Moves of: " << "[" << pos->getRow() << "," << pos->getCol() << "] " << convertPiece(type) << std::endl;
+    // for (auto move : validMoves) {
+    //     std::cout << "{" << move->getRow() << "," << move->getCol() << "} ";
+    // }
+    // std::cout << std::endl;
     for (auto moves : validMoves) {
         if (moves == b->getCell(row, col)) {
             return true;
@@ -63,9 +63,10 @@ void Piece::filterAllMoves() {
     } else {
         king = b->getWhiteKing();
     }
+
     // Update valid moves vector
     // Makes each valid move, checks if move caues king to be in check, removes move accordingly
-    int toRemove = 0;
+    std::vector <Square *> newValidMoves;
     for (size_t idx = 0; idx < validMoves.size(); ++idx) {
         auto move = validMoves[idx];
         int fromRow = pos->getRow();
@@ -76,17 +77,18 @@ void Piece::filterAllMoves() {
         Piece *old = b->getCell(toRow, toCol)->getPiece();
         b->getCell(toRow, toCol)->setPiece(this);
         setPosition(toRow, toCol);
-        if (king->canBeCapturedIgnoreCheck()) {
-            validMoves[idx] = validMoves.back();
-            toRemove++;
+        if (!king->canBeCapturedIgnoreCheck()) {
+            newValidMoves.push_back(validMoves[idx]);
+            // auto temp = validMoves[idx];
+            // validMoves[idx] = validMoves[validMoves.size() - 1 - toRemove];
+            // validMoves[validMoves.size() - 1 - toRemove] = temp; 
+            // toRemove++;
         }
         b->getCell(fromRow, fromCol)->setPiece(this);
         b->getCell(toRow, toCol)->setPiece(old);
         setPosition(fromRow, fromCol);
     }
-    for (int j = 0; j < toRemove; ++j) {
-        validMoves.pop_back();
-    }
+    validMoves = newValidMoves;
 
     // Update capturing moves vector with check
     for (size_t i = 0; i < capturingMoves.size(); ++i) {
@@ -143,10 +145,11 @@ bool Piece::canBeCapturedIgnoreCheck() {
     //     std::cout << "Black Capturing Moves: " << std::endl;
     // }
     for (auto piece : *list) {
-        // std::cout << "[" << piece->getPosition()->getRow() << "," << piece->getPosition()->getCol() << "]: " << (int) piece->getPieceType() << ": ";
+        // std::cout << "[" << piece->getPosition()->getRow() << "," << piece->getPosition()->getCol() << "]: " << convertPiece(piece->getPieceType()) << ": ";
         for (auto moves : piece->getCapturingMovesNoCheck()) {
-            // std::cout << "(" << moves->getRow() << "," << moves->getCol() << ") ";
+            // std::cout << "(" << moves->getRow() << "," << moves->getCol() << "): " << convertPiece(moves->getPiece()->getPieceType()) << "| ";
             if (moves == pos) {
+                // std::cout << std::endl;
                 return true;
             }
         }
