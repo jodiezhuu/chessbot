@@ -155,17 +155,29 @@ bool Game::move(std::string from, std::string to) {
     int fromRow = 8 - (from[1] - '0');
     int toCol = to[0] - 'a';
     int toRow = 8 - (to[1] - '0');
+    return move(fromCol, fromRow, toCol, toRow);
+}
+
+// For computer
+bool Game::move() {
+    Move* computerMove = players[1 - (int) turn]->getEngine()->makeMove(board, turn);
+    return move(computerMove->getFrom()->getCol(), computerMove->getFrom()->getRow(), computerMove->getTo()->getCol(), computerMove->getTo()->getRow());
+}
+
+bool Game::move(int fromCol, int fromRow, int toCol, int toRow) {
     bool validMove = false;
     Piece * movedPiece = board->getCell(fromRow, fromCol)->getPiece();
     Piece *old = board->getCell(toRow, toCol)->getPiece();
     if (movedPiece == nullptr || movedPiece->getColor() != turn) {
-        std::cout << "Entered move is not valid" << std::endl;
+        std::cout << "1Entered move is not valid" << std::endl;
         return false;
     }
     validMove = movedPiece->isMoveValid(toRow, toCol);
 
     if (!validMove) {
-        std::cout << "Entered move is not valid" << std::endl;
+        std::cout << "FRow: " << fromRow << "\nFCol: " << fromCol << std::endl;
+        std::cout << "TRow: " << toRow << "\nTCol: " << toCol << std::endl;
+        std::cout << "2Entered move is not valid" << std::endl;
         return false;
     }
 
@@ -223,11 +235,6 @@ bool Game::move(std::string from, std::string to) {
         board->removePiece(old);
     }
     return true;
-}
-
-// For computer
-bool Game::move() {
-
 }
 
 Game::CheckStatus Game::calculateStatus() {

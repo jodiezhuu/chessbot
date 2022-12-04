@@ -2,15 +2,17 @@
 #include <string>
 #include "game.h"
 #include "textview.h"
-#include "graphicview.h"
+#include <time.h>
+//#include "graphicview.h"
 
 using namespace std;
 
 int main() {
+    //srand(time(0));
     string command;
     Game * gameEngine = new Game{};
     TextView * textOutput = new TextView{gameEngine};
-    GraphicView * graphicOutput = new GraphicView{gameEngine};
+    //GraphicView * graphicOutput = new GraphicView{gameEngine};
     gameEngine->notifyObservers();
     while (cin >> command) {
         if (command == "game") {
@@ -30,7 +32,10 @@ int main() {
                 continue;
             }
             if ((gameEngine->getTurn() == PieceColor::White && gameEngine->isComputer(PieceColor::White)) || (gameEngine->getTurn() == PieceColor::Black && gameEngine->isComputer(PieceColor::Black))) {
-               // gameEngine->move();
+                while(!gameEngine->move());
+                if (gameEngine->getTurn() == PieceColor::Black) gameEngine->setTurn("white");
+                else gameEngine->setTurn("black");
+                gameEngine->notifyObservers();
             } else {
                 string from, to;
                 cin >> from >> to;
@@ -79,5 +84,5 @@ int main() {
     // Delete all objects
     delete gameEngine;
     delete textOutput;
-    delete graphicOutput;
+    //delete graphicOutput;
 }
