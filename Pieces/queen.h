@@ -4,7 +4,7 @@
 class Queen: public Piece {
 public:
     Queen(Board *b, PieceColor color, Square *pos, PieceType type);
-    virtual void calculateMoves() override;
+    void calculateAllMoves() override;
 };
 
 #endif

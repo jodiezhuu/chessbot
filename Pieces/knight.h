@@ -4,7 +4,7 @@
 class Knight: public Piece {
 public:
     Knight(Board *b, PieceColor color, Square *pos, PieceType type);
-    void calculateMoves() override;
+    void calculateAllMoves() override;
 };
 
 #endif

@@ -18,21 +18,26 @@ protected:
     bool hasMoved;
     std::vector <Square *> validMoves;
     std::vector <Square *> capturingMoves;
+    std::vector <Square *> capturingMovesWithCheck;
     bool inBound(int row, int col);
+    std::vector <Square *> getCapturingMovesNoCheck();
 public:
-    Piece(Board *b, PieceColor color, Square *pos, PieceType type);
+    char convertPiece(PieceType type);
+    Piece(Board *b, PieceColor color, Square *pos, PieceType type, bool hasMoved = false);
     PieceType getPieceType() const;
     PieceColor getColor() const;
     Square *getPosition() const;
     bool getHasMoved() const;
     void setHasMoved(bool val);
+    bool canBeCapturedIgnoreCheck();
     void setPosition(int newrow, int newcol);
-    virtual void calculateMoves() = 0;
+    virtual void calculateAllMoves() = 0;
+    void filterAllMoves();
     bool isMoveValid(int row, int col);
     std::vector <Square *> getValidMoves();
     std::vector <Square *> getCapturingMoves();
     bool canBeCaptured() const; 
-    ~Piece() {};  
+    ~Piece();  
 };
 
 #endif

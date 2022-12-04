@@ -2,12 +2,10 @@
 #define __KING_H__
 #include "piece.h"
 class King: public Piece {
-private:
-    bool moveInCheck(int row, int col);
+    // bool moveInCheck(int row, int col);
 public:
     King(Board *b, PieceColor color, Square *pos, PieceType type);
-    void calculateMoves() override;
-    void filterChecks();
+    void calculateAllMoves() override;
 };
 
 #endif

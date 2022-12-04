@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-std=c++14 -MMD -Werror=vla
+CXXFLAGS=-std=c++14 -MMD
 SRCS=$(wildcard Pieces/*.cc) $(wildcard *.cc)
 OBJECTS=$(addsuffix .o,$(basename $(SRCS)))
 DEPENDS=${OBJECTS:.o=.d}
