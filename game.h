@@ -45,4 +45,6 @@ public:
     void upgradePawn(PieceType type, std::string to);
 };
 
+class InvalidInput {};
+
 #endif

@@ -19,41 +19,47 @@ int main() {
             if (gameEngine->isOngoing()) {
                 cout << "Game has already started" << endl;
             } else {
-                string playerOneType, playerTwoType;
-                cin >> playerOneType >> playerTwoType;
-                gameEngine->startGame(playerOneType, playerTwoType);
-                gameEngine->applyStatus();
+                try {
+                    string playerOneType, playerTwoType;
+                    cin >> playerOneType >> playerTwoType;
+                    gameEngine->startGame(playerOneType, playerTwoType);
+                    gameEngine->applyStatus();
+                    gameEngine->notifyObservers();
+                } catch (InvalidInput) {
+                    cout << "Invalid parameters" << endl;
+                }
             }
         } else if (command == "resign") {
-            gameEngine->resign();
-        } else if (command == "test") {
-            for (int i = 0; i < 100; ++i) {
-                cout << i << ": " << rand() % 10 << endl;
-            }
+            if (gameEngine->isOngoing()) gameEngine->resign();
+            else cout << "No game has been started" << endl;
         } else if (command == "move") {
             if (!gameEngine->isOngoing()) {
                 cout << "Must start the game before moving pieces" << endl;
                 continue;
             }
             if ((gameEngine->getTurn() == PieceColor::White && gameEngine->isComputer(PieceColor::White)) || (gameEngine->getTurn() == PieceColor::Black && gameEngine->isComputer(PieceColor::Black))) {
-                while(!gameEngine->move());
+                gameEngine->move();
                 if (gameEngine->getTurn() == PieceColor::Black) gameEngine->setTurn("white");
                 else gameEngine->setTurn("black");
                 gameEngine->notifyObservers();
             } else {
-                string from, to;
-                cin >> from >> to;
-                if (gameEngine->move(from, to)) {
-                    gameEngine->pawnMoveTwo(from, to);
-                    if (gameEngine->isPawnUpgrading(to)) {
-                        string c;
-                        cin >> c;
-                        PieceType upgradedPiece = gameEngine->convertChar(c[0]);
-                        gameEngine->upgradePawn(upgradedPiece, to);
+                try {
+                    string from, to;
+                    cin >> from >> to;
+                    if (gameEngine->move(from, to)) {
+                        gameEngine->pawnMoveTwo(from, to);
+                        if (gameEngine->isPawnUpgrading(to)) {
+                            string c;
+                            cin >> c;
+                            PieceType upgradedPiece = gameEngine->convertChar(c[0]);
+                            gameEngine->upgradePawn(upgradedPiece, to);
+                        }
+                        if (gameEngine->getTurn() == PieceColor::Black) gameEngine->setTurn("white");
+                        else gameEngine->setTurn("black");
+                        gameEngine->notifyObservers();
                     }
-                    if (gameEngine->getTurn() == PieceColor::Black) gameEngine->setTurn("white");
-                    else gameEngine->setTurn("black");
-                    gameEngine->notifyObservers();
+                } catch (InvalidInput) {
+                    cout << "Invalid parameters" << std::endl;
                 }
             }
             gameEngine->applyStatus();
@@ -65,27 +71,35 @@ int main() {
             string subCommand;
             while (cin >> subCommand) {
                 if (subCommand == "+") {
-                    string piece, location;
-                    cin >> piece >> location;
-                    gameEngine->addPiece(piece, location);
+                    try{
+                        string piece, location;
+                        cin >> piece >> location;
+                        gameEngine->addPiece(piece, location);
+                    } catch (InvalidInput) {
+                        cout << "Invalid parameters" << endl; 
+                    }
                 } else if (subCommand == "-") {
-                    string location;
-                    cin >> location;
-                    gameEngine->removePiece(location);
+                    try{
+                        string location;
+                        cin >> location;
+                        gameEngine->removePiece(location);
+                    } catch (InvalidInput) {
+                        cout << "Invalid parameters" << endl;
+                    }
                 } else if (subCommand == "=") {
-                    string colour;
-                    cin >> colour;
-                    gameEngine->setTurn(colour);
+                    try {
+                        string colour;
+                        cin >> colour;
+                        gameEngine->setTurn(colour);
+                    } catch (InvalidInput) {
+                        cout << "Invalid colour" << endl;
+                    }
                 } else if (subCommand == "done") {
                     if (gameEngine->verifySetup()) {
-                        cout << "Exiting setup" << endl << endl; 
+                        cout << endl << "Exiting setup" << endl;
                         break;
                     } else {
-                        cout << std::endl;
-                        cout << "Board conditions are not satisfied: " << std::endl;
-                        cout << "- There must be exactly one king for each colour" << std::endl;
-                        cout << "- No pawns can be on the first or last row" << std::endl;
-                        cout << "- Neither king can be in check" << std::endl << std::endl;
+                        cout << "Board conditions are not satisfied" << endl;
                     }
                 }
             }
