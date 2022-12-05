@@ -19,6 +19,7 @@ protected:
     std::vector <Square *> validMoves;
     std::vector <Square *> capturingMoves;
     std::vector <Square *> capturingMovesWithCheck;
+    std::vector <Square *> movesToCapture;
     bool inBound(int row, int col);
     std::vector <Square *> getCapturingMovesNoCheck();
 public:
@@ -36,6 +37,7 @@ public:
     bool isMoveValid(int row, int col);
     std::vector <Square *> getValidMoves();
     std::vector <Square *> getCapturingMoves();
+    std::vector <Square *> getMovesToCapture();
     bool canBeCaptured() const; 
     ~Piece();  
 };

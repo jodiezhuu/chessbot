@@ -11,8 +11,12 @@ class ComputerEngine {
     public:
         ComputerEngine(int level);
         Move* makeMove(Board* board, PieceColor color);
+        void setMoveCount(int count);
     private:
         int level;
+        int moveCount;
+        int opening;
+        Move* playOpening(Board* board);
 };
 
 #endif

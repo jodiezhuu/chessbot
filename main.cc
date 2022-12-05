@@ -26,6 +26,10 @@ int main() {
             }
         } else if (command == "resign") {
             gameEngine->resign();
+        } else if (command == "test") {
+            for (int i = 0; i < 100; ++i) {
+                cout << i << ": " << rand() % 10 << endl;
+            }
         } else if (command == "move") {
             if (!gameEngine->isOngoing()) {
                 cout << "Must start the game before moving pieces" << endl;
