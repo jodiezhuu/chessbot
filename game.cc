@@ -185,7 +185,6 @@ bool Game::move(int fromCol, int fromRow, int toCol, int toRow) {
     Square *right = board->getCell(movedPiece->getPosition()->getRow(), movedPiece->getPosition()->getCol() + 1);
     Square *left = board->getCell(movedPiece->getPosition()->getRow(), movedPiece->getPosition()->getCol() - 1);
     if (prevMove != nullptr && prevMove->getHasEnPassant() && ((left != nullptr && prevMove == left->getPiece()) || (right != nullptr && prevMove == right->getPiece()))) {
-        std::cout << "ABUHABUH" << std::endl;
         board->getCell(prevMove->getPosition()->getRow(), prevMove->getPosition()->getCol())->setPiece(nullptr);
         old = prevMove;
         prevMove->setHasEnPassant(false);
