@@ -18,6 +18,7 @@ class Game: public Subject {
     CheckStatus status;
     float scores[2];
     void reset();
+    Piece *prevMove;
 public:
     Game();
     ~Game();
@@ -39,6 +40,7 @@ public:
     bool verifySetup();
     CheckStatus calculateStatus();
     void applyStatus();
+    void pawnMoveTwo(std::string from, std::string to);
     bool isPawnUpgrading(std::string to);
     void upgradePawn(PieceType type, std::string to);
 };
