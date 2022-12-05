@@ -90,6 +90,26 @@ void Piece::filterAllMoves() {
     }
     validMoves = newValidMoves;
 
+    std::vector<Square *> newMovesToCapture;
+    for (size_t idx = 0; idx < movesToCapture.size(); ++idx) {
+        auto move = movesToCapture[idx];
+        int fromRow = pos->getRow();
+        int fromCol = pos->getCol();
+        int toRow = move->getRow();
+        int toCol = move->getCol();
+        b->getCell(fromRow, fromCol)->setPiece(nullptr);
+        Piece *old = b->getCell(toRow, toCol)->getPiece();
+        b->getCell(toRow, toCol)->setPiece(this);
+        setPosition(toRow, toCol);
+        if (!king->canBeCapturedIgnoreCheck()) {
+            newMovesToCapture.push_back(movesToCapture[idx]);
+        }
+        b->getCell(fromRow, fromCol)->setPiece(this);
+        b->getCell(toRow, toCol)->setPiece(old);
+        setPosition(fromRow, fromCol);
+    }
+    movesToCapture = newMovesToCapture;
+
     // Update capturing moves vector with check
     for (size_t i = 0; i < capturingMoves.size(); ++i) {
         bool inValid = true;
@@ -129,6 +149,12 @@ std::vector <Square *> Piece::getCapturingMoves() {
     calculateAllMoves();
     filterAllMoves();
     return capturingMovesWithCheck;
+}
+
+std::vector <Square *> Piece::getMovesToCapture() {
+    calculateAllMoves();
+    filterAllMoves();
+    return movesToCapture;
 }
 
 bool Piece::canBeCapturedIgnoreCheck() {

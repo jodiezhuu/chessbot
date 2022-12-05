@@ -1,9 +1,9 @@
 CXX=g++
-CXXFLAGS=-std=c++14 -MMD
+CXXFLAGS=-std=c++14 -MMD -Werror=vla
 SRCS=$(wildcard Pieces/*.cc) $(wildcard *.cc)
 OBJECTS=$(addsuffix .o,$(basename $(SRCS)))
 DEPENDS=${OBJECTS:.o=.d}
-EXEC=chess -lX11
+EXEC=chess
 
 ${EXEC}: ${OBJECTS}
 	${CXX} ${OBJECTS} -o ${EXEC}
@@ -12,5 +12,4 @@ ${EXEC}: ${OBJECTS}
 
 .PHONY: clean
 clean:
-	del /s *.o
-	del /s *.d
+	rm ${OBJECTS} ${DEPENDS} ${EXEC}

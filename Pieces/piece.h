@@ -19,6 +19,7 @@ protected:
     std::vector <Square *> validMoves;
     std::vector <Square *> capturingMoves;
     std::vector <Square *> capturingMovesWithCheck;
+    std::vector <Square *> movesToCapture;
     bool inBound(int row, int col);
     std::vector <Square *> getCapturingMovesNoCheck();
     bool hasPawnMovedTwo = false;
@@ -42,6 +43,7 @@ public:
     void setHasPawnMovedTwo(bool b);
     bool getHasEnPassant() const;
     void setHasEnPassant(bool b);
+    std::vector <Square *> getMovesToCapture();
     bool canBeCaptured() const; 
     ~Piece();  
 };
