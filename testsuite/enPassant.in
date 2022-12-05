@@ -1,0 +1,7 @@
+setup
++ p d4
+done 
+game human human
+move e2 e4
+move d4 e3
+resign
