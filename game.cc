@@ -4,6 +4,8 @@
 #include <string>
 #include <iostream>
 
+class ComputerEngine;
+
 Game::Game(): ongoing{false}, turn{PieceColor::White}, status{CheckStatus::None} {
     board = new Board{};
     scores[0] = 0;

@@ -3,6 +3,7 @@
 #include "Pieces/piece.h"
 #include <iostream>
 #include <cstdlib>
+#include <random>
 
 ComputerEngine::ComputerEngine(int level) : level{level} {
     moveCount = 0;
@@ -10,6 +11,11 @@ ComputerEngine::ComputerEngine(int level) : level{level} {
 }
 
 Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
+     // Create a random number generator
+    std::default_random_engine generator;
+
+    // Generate a random number between 1 and 10
+    std::uniform_int_distribution<int> distribution(1, 10000000);
     switch (level) {
         case 1:
             {
@@ -24,8 +30,8 @@ Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
                     for (auto move : piece->getValidMoves())
                     moves.push_back(new Move(piece->getPosition(), move, piece));
                 }
-                int num = rand() % moves.size();
-                return moves.at(num);
+                //int num = distribution(generator) % moves.size();
+                return moves.at(0);
             }
         case 2:
             {
