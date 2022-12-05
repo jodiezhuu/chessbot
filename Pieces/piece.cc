@@ -43,11 +43,11 @@ bool Piece::inBound(int row, int col) {
 bool Piece::isMoveValid(int row, int col) {
     calculateAllMoves();
     filterAllMoves();
-    std::cout << "Valid Moves of: " << "[" << pos->getRow() << "," << pos->getCol() << "] " << convertPiece(type) << std::endl;
-    for (auto move : validMoves) {
-        std::cout << "{" << move->getRow() << "," << move->getCol() << "} ";
-    }
-    std::cout << std::endl;
+    // std::cout << "Valid Moves of: " << "[" << pos->getRow() << "," << pos->getCol() << "] " << convertPiece(type) << std::endl;
+    // for (auto move : validMoves) {
+    //     std::cout << "{" << move->getRow() << "," << move->getCol() << "} ";
+    // }
+    // std::cout << std::endl;
     for (auto moves : validMoves) {
         if (moves == b->getCell(row, col)) {
             return true;
@@ -79,16 +79,41 @@ void Piece::filterAllMoves() {
         setPosition(toRow, toCol);
         if (!king->canBeCapturedIgnoreCheck()) {
             newValidMoves.push_back(validMoves[idx]);
-            // auto temp = validMoves[idx];
-            // validMoves[idx] = validMoves[validMoves.size() - 1 - toRemove];
-            // validMoves[validMoves.size() - 1 - toRemove] = temp; 
-            // toRemove++;
         }
         b->getCell(fromRow, fromCol)->setPiece(this);
         b->getCell(toRow, toCol)->setPiece(old);
         setPosition(fromRow, fromCol);
     }
+    // calculate moves that can deliver checks
+    deliverChecks.clear();
+    for (auto move : newValidMoves) {
+        int fromRow = pos->getRow();
+        int fromCol = pos->getCol();
+        int toRow = move->getRow();
+        int toCol = move->getCol();
+        b->getCell(fromRow, fromCol)->setPiece(nullptr);
+        Piece *old = b->getCell(toRow, toCol)->getPiece();
+        b->getCell(toRow, toCol)->setPiece(this);
+        setPosition(toRow, toCol);
+        calculateAllMoves();
+        for (auto move2 : validMoves) {
+            if ((color == PieceColor::White && move2->getPiece() != nullptr && move2->getPiece()->getPieceType() == PieceType::BlackKing) || 
+            (color == PieceColor::Black && move2->getPiece() != nullptr && move2->getPiece()->getPieceType() == PieceType::WhiteKing)) {
+                deliverChecks.push_back(move);
+            }
+        }
+        b->getCell(fromRow, fromCol)->setPiece(this);
+        b->getCell(toRow, toCol)->setPiece(old);
+        setPosition(fromRow, fromCol);
+    }
+
     validMoves = newValidMoves;
+
+    // std::cout << "Deliver Checks: " << "[" << pos->getRow() << "," << pos->getCol() << "] " << convertPiece(type) << ":" << std::endl;
+    // for (auto move : deliverChecks) {
+    //     std::cout << "{" << move->getRow() << "," << move->getCol() << "} ";
+    // }
+    // std::cout << std::endl;
 
     std::vector<Square *> newMovesToCapture;
     for (size_t idx = 0; idx < movesToCapture.size(); ++idx) {
@@ -151,6 +176,12 @@ std::vector <Square *> Piece::getCapturingMoves() {
     return capturingMovesWithCheck;
 }
 
+std::vector <Square *> Piece::getDeliverChecks() {
+    calculateAllMoves();
+    filterAllMoves();
+    return deliverChecks;
+}
+
 std::vector <Square *> Piece::getMovesToCapture() {
     calculateAllMoves();
     filterAllMoves();
@@ -166,9 +197,9 @@ bool Piece::canBeCapturedIgnoreCheck() {
     }
 
     // if ((int) color == 0) {
-    //     std::cout << "White Capturing Moves: " << std::endl;
+    //     std::cout << "White Capturing Moves of: " << convertPiece(type) << std::endl;
     // } else {
-    //     std::cout << "Black Capturing Moves: " << std::endl;
+    //     std::cout << "Black Capturing Moves of: " << convertPiece(type) << std::endl;
     // }
     for (auto piece : *list) {
         // std::cout << "[" << piece->getPosition()->getRow() << "," << piece->getPosition()->getCol() << "]: " << convertPiece(piece->getPieceType()) << ": ";
