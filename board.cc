@@ -73,7 +73,10 @@ PieceList* Board::getBlackPieces() {
 }
 
 Square* Board::getCell(int row, int col) {
-    return boardlist[row][col];
+    if (0 <= row && row <= 7 && 0 <= col && col <= 7) {
+        return boardlist[row][col];
+    }
+    return nullptr;
 }
 
 bool Board::addPiece(int row, int col, PieceType piece) {

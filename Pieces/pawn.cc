@@ -5,6 +5,7 @@
 #include "knight.h"
 #include "queen.h"
 #include "rook.h"
+#include <iostream>
 
 Pawn::Pawn(Board *b, PieceColor color, Square *pos, PieceType type)
 : Piece{b, color, pos, type} {
@@ -36,8 +37,19 @@ void Pawn::calculateAllMoves() {
         }
         // pawn in starting position, move two forward
         if (pos->getRow() == 1 && (b->getCell(pos->getRow() + 2, pos->getCol()))->getPiece() == nullptr) {
-            Square * m = b->getCell(pos->getRow() + 2, pos->getCol());
-            validMoves.push_back(m);
+            validMoves.push_back(b->getCell(pos->getRow() + 2, pos->getCol()));
+        }
+        // en passant
+        if (inBound(pos->getRow() + 1, pos->getCol() + 1) && inBound(pos->getRow(), pos->getCol() + 1) && b->getCell(pos->getRow() + 1, pos->getCol() + 1)->getPiece() == nullptr && b->getCell(pos->getRow(), pos->getCol() + 1)->getPiece() != nullptr && b->getCell(pos->getRow(), pos->getCol() + 1)->getPiece()->getPieceType() == PieceType::WhitePawn && b->getCell(pos->getRow(), pos->getCol() + 1)->getPiece()->getHasPawnMovedTwo() == true) {
+            validMoves.push_back(b->getCell(pos->getRow() + 1, pos->getCol() + 1));
+            capturingMoves.push_back(b->getCell(pos->getRow() + 1, pos->getCol() + 1));
+            b->getCell(pos->getRow(), pos->getCol() + 1)->getPiece()->setHasEnPassant(true);
+        }
+        // en passant
+        if (inBound(pos->getRow() + 1, pos->getCol() - 1) && inBound(pos->getRow(), pos->getCol() - 1) && b->getCell(pos->getRow() + 1, pos->getCol() - 1)->getPiece() == nullptr && b->getCell(pos->getRow(), pos->getCol() - 1)->getPiece() != nullptr && b->getCell(pos->getRow(), pos->getCol() - 1)->getPiece()->getPieceType() == PieceType::WhitePawn && b->getCell(pos->getRow(), pos->getCol() - 1)->getPiece()->getHasPawnMovedTwo() == true) {
+            validMoves.push_back(b->getCell(pos->getRow() + 1, pos->getCol() - 1));
+            capturingMoves.push_back(b->getCell(pos->getRow() + 1, pos->getCol() - 1));  
+            b->getCell(pos->getRow(), pos->getCol() - 1)->getPiece()->setHasEnPassant(true);     
         }
     } else if (color == PieceColor::White) {
         // white move up
@@ -61,6 +73,18 @@ void Pawn::calculateAllMoves() {
         // white in starting position, up two 
         if (pos->getRow() == 6 && (b->getCell(pos->getRow() - 2, pos->getCol()))->getPiece() == nullptr) {
             validMoves.push_back(b->getCell(pos->getRow() - 2, pos->getCol()));
+        }
+        // en passant
+        if (inBound(pos->getRow() - 1, pos->getCol() + 1) && inBound(pos->getRow(), pos->getCol() + 1) && b->getCell(pos->getRow() - 1, pos->getCol() + 1)->getPiece() == nullptr && b->getCell(pos->getRow(), pos->getCol() + 1)->getPiece() != nullptr && b->getCell(pos->getRow(), pos->getCol() + 1)->getPiece()->getPieceType() == PieceType::BlackPawn && b->getCell(pos->getRow(), pos->getCol() + 1)->getPiece()->getHasPawnMovedTwo() == true) {
+            validMoves.push_back(b->getCell(pos->getRow() - 1, pos->getCol() + 1));
+            capturingMoves.push_back(b->getCell(pos->getRow() - 1, pos->getCol() + 1));
+            b->getCell(pos->getRow(), pos->getCol() + 1)->getPiece()->setHasEnPassant(true);
+        }
+        // en passant
+        if (inBound(pos->getRow() - 1, pos->getCol() - 1) && inBound(pos->getRow(), pos->getCol() - 1) && b->getCell(pos->getRow() - 1, pos->getCol() - 1)->getPiece() == nullptr && b->getCell(pos->getRow(), pos->getCol() - 1)->getPiece() != nullptr && b->getCell(pos->getRow(), pos->getCol() - 1)->getPiece()->getPieceType() == PieceType::BlackPawn && b->getCell(pos->getRow(), pos->getCol() - 1)->getPiece()->getHasPawnMovedTwo() == true) {
+            validMoves.push_back(b->getCell(pos->getRow() - 1, pos->getCol() - 1));
+            capturingMoves.push_back(b->getCell(pos->getRow() - 1, pos->getCol() - 1));     
+            b->getCell(pos->getRow(), pos->getCol() - 1)->getPiece()->setHasEnPassant(true);    
         }
     }
 }

@@ -22,6 +22,8 @@ protected:
     std::vector <Square *> movesToCapture;
     bool inBound(int row, int col);
     std::vector <Square *> getCapturingMovesNoCheck();
+    bool hasPawnMovedTwo = false;
+    bool hasEnPassant = false;
 public:
     char convertPiece(PieceType type);
     Piece(Board *b, PieceColor color, Square *pos, PieceType type, bool hasMoved = false);
@@ -37,6 +39,10 @@ public:
     bool isMoveValid(int row, int col);
     std::vector <Square *> getValidMoves();
     std::vector <Square *> getCapturingMoves();
+    bool getHasPawnMovedTwo() const;
+    void setHasPawnMovedTwo(bool b);
+    bool getHasEnPassant() const;
+    void setHasEnPassant(bool b);
     std::vector <Square *> getMovesToCapture();
     bool canBeCaptured() const; 
     ~Piece();  

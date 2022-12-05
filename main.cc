@@ -44,6 +44,7 @@ int main() {
                 string from, to;
                 cin >> from >> to;
                 if (gameEngine->move(from, to)) {
+                    gameEngine->pawnMoveTwo(from, to);
                     if (gameEngine->isPawnUpgrading(to)) {
                         string c;
                         cin >> c;

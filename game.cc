@@ -6,7 +6,7 @@
 
 class ComputerEngine;
 
-Game::Game(): ongoing{false}, turn{PieceColor::White}, status{CheckStatus::None} {
+Game::Game(): ongoing{false}, turn{PieceColor::White}, status{CheckStatus::None}, prevMove{nullptr} {
     board = new Board{};
     scores[0] = 0;
     scores[1] = 0;
@@ -183,23 +183,17 @@ bool Game::move(int fromCol, int fromRow, int toCol, int toRow) {
         return false;
     }
 
-    // // Return false if move causes king to be in check
-    // if (movedPiece->getPieceType() == PieceType::WhiteKing || movedPiece->getPieceType() == PieceType::BlackKing) {
-    //     // Move king
-    //     board->getCell(fromRow, fromCol)->setPiece(nullptr);
-    //     board->getCell(toRow, toCol)->setPiece(movedPiece);
-    //     movedPiece->setPosition(toRow, toCol);
-    //     // Check if king is in check
-    //     if (movedPiece->canBeCaptured()) {
-    //         // If in check move king back
-    //         board->getCell(fromRow, fromCol)->setPiece(movedPiece);
-    //         board->getCell(toRow, toCol)->setPiece(old);
-    //         movedPiece->setPosition(fromRow, fromCol);
-    //         return false;
-    //     } else {
-    //         movedPiece->setHasMoved(true);
-    //     }
-    // }
+    // En passant
+    Square *right = board->getCell(movedPiece->getPosition()->getRow(), movedPiece->getPosition()->getCol() + 1);
+    Square *left = board->getCell(movedPiece->getPosition()->getRow(), movedPiece->getPosition()->getCol() - 1);
+    if (prevMove != nullptr && prevMove->getHasEnPassant() && ((left != nullptr && prevMove == left->getPiece()) || (right != nullptr && prevMove == right->getPiece()))) {
+        board->getCell(prevMove->getPosition()->getRow(), prevMove->getPosition()->getCol())->setPiece(nullptr);
+        old = prevMove;
+        prevMove->setHasEnPassant(false);
+        prevMove = nullptr;
+    }
+
+    if (prevMove != nullptr) prevMove->setHasPawnMovedTwo(false);
 
     // Castling
     if ((movedPiece->getPieceType() == PieceType::WhiteKing || movedPiece->getPieceType() == PieceType::BlackKing) && abs(fromCol - toCol) > 1 ) {
@@ -217,12 +211,12 @@ bool Game::move(int fromCol, int fromRow, int toCol, int toRow) {
             rook->setHasMoved(true);
         }
     }
+
     // Normal moves
     board->getCell(fromRow, fromCol)->setPiece(nullptr);
     board->getCell(toRow, toCol)->setPiece(movedPiece);
     movedPiece->setPosition(toRow, toCol);
     movedPiece->setHasMoved(true);
-
 
     // if move made doesn't get rid of check then invalid
     if ((status == CheckStatus::WhiteInCheck || status == CheckStatus::BlackInCheck) && status == calculateStatus()) {
@@ -235,8 +229,11 @@ bool Game::move(int fromCol, int fromRow, int toCol, int toRow) {
 
     // delete old piece if exists
     if (old != nullptr) {
+        std::cout << "Deleted" << std::endl;
         board->removePiece(old);
     }
+
+    prevMove = movedPiece;
     return true;
 }
 
@@ -267,6 +264,7 @@ Game::CheckStatus Game::calculateStatus() {
 }
 
 void Game::applyStatus() {
+    std::cout << "Apply status running" << std::endl;
     status = calculateStatus();
     if (status == CheckStatus::WhiteCheckmated) {
         reset();
@@ -327,5 +325,20 @@ void Game::upgradePawn(PieceType type, std::string to) {
         } else if (type == PieceType::WhiteQueen) {
             board->addPiece(toRow, toCol, PieceType::WhiteQueen);
         }
+    }
+}
+
+void Game::pawnMoveTwo(std::string from, std::string to) {
+    int fromCol = from[0] - 'a';
+    int fromRow = 8 - (from[1] - '0');
+    int toCol = to[0] - 'a';
+    int toRow = 8 - (to[1] - '0');
+    PieceType type = board->getCell(toRow, toCol)->getPiece()->getPieceType();
+    if ((fromRow == 1 && toRow - fromRow == 2 && toCol == fromCol) && type == PieceType::BlackPawn) {
+        std::cout << board->getCell(toRow, toCol)->getPiece()->getHasPawnMovedTwo() << std::endl;
+        board->getCell(toRow, toCol)->getPiece()->setHasPawnMovedTwo(true);
+    } else if ((fromRow == 6 && fromRow - toRow == 2 && toCol == fromCol) && type == PieceType::WhitePawn) {
+        std::cout << board->getCell(toRow, toCol)->getPiece()->getHasPawnMovedTwo() << std::endl;
+        board->getCell(toRow, toCol)->getPiece()->setHasPawnMovedTwo(true);
     }
 }

@@ -43,11 +43,11 @@ bool Piece::inBound(int row, int col) {
 bool Piece::isMoveValid(int row, int col) {
     calculateAllMoves();
     filterAllMoves();
-    // std::cout << "Valid Moves of: " << "[" << pos->getRow() << "," << pos->getCol() << "] " << convertPiece(type) << std::endl;
-    // for (auto move : validMoves) {
-    //     std::cout << "{" << move->getRow() << "," << move->getCol() << "} ";
-    // }
-    // std::cout << std::endl;
+    std::cout << "Valid Moves of: " << "[" << pos->getRow() << "," << pos->getCol() << "] " << convertPiece(type) << std::endl;
+    for (auto move : validMoves) {
+        std::cout << "{" << move->getRow() << "," << move->getCol() << "} ";
+    }
+    std::cout << std::endl;
     for (auto moves : validMoves) {
         if (moves == b->getCell(row, col)) {
             return true;
@@ -220,4 +220,20 @@ void Piece::setPosition(int newrow, int newcol) {
 
 void Piece::setHasMoved(bool val) {
     hasMoved = val;
+}
+
+bool Piece::getHasPawnMovedTwo() const {
+    return hasPawnMovedTwo;
+}
+
+void Piece::setHasPawnMovedTwo(bool b) {
+    hasPawnMovedTwo = b;
+}
+
+bool Piece::getHasEnPassant() const {
+    return hasEnPassant;
+}
+
+void Piece::setHasEnPassant(bool b) {
+    hasEnPassant = b;
 }
