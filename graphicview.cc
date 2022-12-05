@@ -18,7 +18,6 @@ GraphicView::GraphicView(Game *game): game {game}, window{550, 550} {
     }
     int rowCount = 8;
     for (int row = 40; row < 475; row += 62) {
-        std::cout << row << std::endl;
         window.drawBiggerString(510, row, std::to_string(rowCount));
         rowCount--;
         if (rowCount == 0) break;
