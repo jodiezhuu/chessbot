@@ -25,22 +25,20 @@ PieceType Game::getState(int row, int col) {
 }
 
 bool Game::addPiece(std::string type, std::string location) {
-    std::cout << "adding piece in game" << std::endl;
-    std::cout << location[0] << "_" << location[1] << std::endl;
+    if (type.size() != 1 || location.size() != 2) throw InvalidInput{};
     int col = location[0] - 'a';
     int row = 8 - (location[1] - '0');
-    std::cout << "row: " << row << " col: " << col << " type: " << (int) convertChar(type[0]) << std::endl;
+    if (col < 0 || col > 7 || row < 0 || row > 7) throw InvalidInput{};
     bool res = board->addPiece(row, col, convertChar(type[0]));
-    std::cout << "here" << std::endl;
     notifyObservers();
     return res;
 }
 
 void Game::removePiece(std::string location) {
-    std::cout << "removing piece in game" << std::endl;
+    if (location.size() != 2) throw InvalidInput{};
     int col = location[0] - 'a';
     int row = 8 - (location[1] - '0');
-    std::cout << "row: " << row << " col: " << col << std::endl;
+    if (col < 0 || col > 7 || row < 0 || row > 7) throw InvalidInput{};
     board->removePiece(row, col);
     notifyObservers();
 }
@@ -48,9 +46,12 @@ void Game::removePiece(std::string location) {
 void Game::setTurn(std::string colour) {
     if (colour == "white") {
         turn = PieceColor::White;
+        return;
     } else if (colour == "black") {
         turn = PieceColor::Black;
+        return;
     }
+    throw InvalidInput{};
 }
 
 PieceType Game::convertChar(char c) {
@@ -79,6 +80,7 @@ PieceType Game::convertChar(char c) {
     } else if (c == 'R') {
         return PieceType::WhiteRook;
     }
+    throw InvalidInput{};
 }
 
 void Game::printScore() {
@@ -123,8 +125,7 @@ void Game::startGame(std::string playerOneType, std::string playerTwoType) {
     } else if (playerOneType == "computer4") {
         players[0] = new Player{PieceColor::White, true, new ComputerEngine{4}};
     } else {
-        std::cout << "Invalid parameter for white-player" << std::endl;
-        return;
+        throw InvalidInput{};
     }
 
     if (playerTwoType == "human") {
@@ -138,8 +139,7 @@ void Game::startGame(std::string playerOneType, std::string playerTwoType) {
     } else if (playerTwoType == "computer4") {
         players[1] = new Player{PieceColor::Black, true, new ComputerEngine{4}};
     } else {
-        std::cout << "Invalid parameter for black-player" << std::endl;
-        return;
+        throw InvalidInput{};
     }
     ongoing = true;
 }
@@ -153,10 +153,12 @@ PieceColor Game::getTurn() {
 }
 
 bool Game::move(std::string from, std::string to) {
+    if (from.size() != 2 || to.size() != 2) throw InvalidInput{};
     int fromCol = from[0] - 'a';
     int fromRow = 8 - (from[1] - '0');
     int toCol = to[0] - 'a';
     int toRow = 8 - (to[1] - '0');
+    if (fromCol < 0 || fromCol > 7 || fromRow < 0 || fromRow > 7 || toCol < 0 || toCol > 7 || toRow < 0 || toRow > 7) throw InvalidInput{};
     return move(fromCol, fromRow, toCol, toRow);
 }
 
@@ -182,6 +184,17 @@ bool Game::move(int fromCol, int fromRow, int toCol, int toRow) {
         std::cout << "2Entered move is not valid" << std::endl;
         return false;
     }
+
+    // Test
+    // std::vector <Piece *> *list;
+    // if (movedPiece->getColor() == PieceColor::White) {
+    //     list = board->getWhitePieces()->getPieces();
+    // } else {
+    //     list = board->getBlackPieces()->getPieces();
+    // }
+    // for (auto piece : *list) {
+    //     piece->getDeliverChecks();
+    // }
 
     // En passant
     Square *right = board->getCell(movedPiece->getPosition()->getRow(), movedPiece->getPosition()->getCol() + 1);
