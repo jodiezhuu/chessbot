@@ -168,6 +168,16 @@ bool Game::move() {
     return move(computerMove->getFrom()->getCol(), computerMove->getFrom()->getRow(), computerMove->getTo()->getCol(), computerMove->getTo()->getRow());
 }
 
+std::string Game::getComputerToMove() {
+    Move* computerMove = players[1 - (int) turn]->getEngine()->makeMove(board, turn);
+    move(computerMove->getFrom()->getCol(), computerMove->getFrom()->getRow(), computerMove->getTo()->getCol(), computerMove->getTo()->getRow());
+    std::string toCol;
+    std::string toRow;
+    toCol += char(computerMove->getTo()->getCol() + 'a');
+    toRow += char(8 - computerMove->getTo()->getRow() + '0');
+    return toCol + toRow;
+}
+
 bool Game::move(int fromCol, int fromRow, int toCol, int toRow) {
     bool validMove = false;
     Piece * movedPiece = board->getCell(fromRow, fromCol)->getPiece();
