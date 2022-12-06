@@ -23,7 +23,7 @@ public:
     // Draws a rectangle
     void fillRectangle(int x, int y, int width, int height, int colour = Black);
 
-    // Draws a string
+    // Draws a different types of strings
     void drawString(int x, int y, std::string msg, int colour = Black);
     void drawBiggerString(int x, int y, std::string msg, int colour = Black);
     void printMessage(int x, int y, const std::string& msg, int colour, XFontStruct& f);
