@@ -5,6 +5,7 @@ Queen::Queen(Board *b, PieceColor color, Square *pos, PieceType type)
 : Piece{b, color, pos, type} {
 }
 
+// Can move in any of the eight possible directions, can't "jump" over pieces
 void Queen::calculateAllMoves() {
     validMoves.clear();
     capturingMoves.clear();
@@ -20,7 +21,6 @@ void Queen::calculateAllMoves() {
         } else if (piece->getColor() == color) {
             break;
         } else if (piece->getColor() != color) {
-           // std::cout << "pushing capture" << std::endl;
             validMoves.push_back(sq);
             capturingMoves.push_back(sq);
             break;
@@ -36,7 +36,6 @@ void Queen::calculateAllMoves() {
         } else if (piece->getColor() == color) {
             break;
         } else if (piece->getColor() != color) {
-           // std::cout << "pushing capture" << std::endl;
             validMoves.push_back(sq);
             capturingMoves.push_back(sq);
             break;
@@ -52,7 +51,6 @@ void Queen::calculateAllMoves() {
         } else if (piece->getColor() == color) {
             break;
         } else if (piece->getColor() != color) {
-            //std::cout << "pushing capture" << std::endl;
             validMoves.push_back(sq);
             capturingMoves.push_back(sq);
             break;
@@ -68,7 +66,6 @@ void Queen::calculateAllMoves() {
         } else if (piece->getColor() == color) {
             break;
         } else if (piece->getColor() != color) {
-            //std::cout << "pushing capture" << std::endl;
             validMoves.push_back(sq);
             capturingMoves.push_back(sq);
             break;
@@ -84,7 +81,6 @@ void Queen::calculateAllMoves() {
         } else if (piece->getColor() == color) {
             break;
         } else if (piece->getColor() != color) {
-            //std::cout << "pushing capture" << std::endl;
             validMoves.push_back(sq);
             capturingMoves.push_back(sq);
             break;
@@ -101,7 +97,6 @@ void Queen::calculateAllMoves() {
         } else if (piece->getColor() == color) {
             break;
         } else if (piece->getColor() != color) {
-            //std::cout << "pushing capture" << std::endl;
             validMoves.push_back(sq);
             capturingMoves.push_back(sq);
             break;
@@ -117,7 +112,6 @@ void Queen::calculateAllMoves() {
         } else if (piece->getColor() == color) {
             break;
         } else if (piece->getColor() != color) {
-            //std::cout << "pushing capture" << std::endl;
             validMoves.push_back(sq);
             capturingMoves.push_back(sq);
             break;
@@ -133,7 +127,6 @@ void Queen::calculateAllMoves() {
         } else if (piece->getColor() == color) {
             break;
         } else if (piece->getColor() != color) {
-            //std::cout << "pushing capture" << std::endl;
             validMoves.push_back(sq);
             capturingMoves.push_back(sq);
             break;

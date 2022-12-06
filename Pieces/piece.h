@@ -26,7 +26,6 @@ protected:
     bool hasPawnMovedTwo = false;
     bool hasEnPassant = false;
 public:
-    char convertPiece(PieceType type);
     Piece(Board *b, PieceColor color, Square *pos, PieceType type, bool hasMoved = false);
     PieceType getPieceType() const;
     PieceColor getColor() const;

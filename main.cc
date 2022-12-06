@@ -14,6 +14,7 @@ int main() {
     TextView * textOutput = new TextView{gameEngine};
     GraphicView * graphicOutput = new GraphicView{gameEngine};
     gameEngine->notifyObservers();
+    // Handles commands
     while (cin >> command) {
         if (command == "game") {
             graphicOutput->clearMessage();
@@ -49,10 +50,11 @@ int main() {
                 graphicOutput->displayMessage("Must start game before moving");
                 continue;
             }
+            // Makes a move from the computer player
             if ((gameEngine->getTurn() == PieceColor::White && gameEngine->isComputer(PieceColor::White)) || (gameEngine->getTurn() == PieceColor::Black && gameEngine->isComputer(PieceColor::Black))) {
                 graphicOutput->clearMessage();
                 try {
-                    std::string to = gameEngine->getComputerToMove();
+                    string to = gameEngine->getComputerToMove();
                     if (gameEngine->isPawnUpgrading(to)) {
                         PieceType upgradedPiece = {gameEngine->getTurn() == PieceColor::White ? gameEngine->convertChar('Q') : gameEngine->convertChar('q')};
                         gameEngine->upgradePawn(upgradedPiece, to);
@@ -63,7 +65,7 @@ int main() {
                 } catch (InvalidInput) {
                     graphicOutput->displayMessage("Entered move is invalid.");
                 }
-            } else {
+            } else { // Handles the input of the human players move
                 try {
                     graphicOutput->clearMessage();
                     string from, to;
@@ -86,6 +88,7 @@ int main() {
                 }
             }
             gameEngine->applyStatus();
+            // Outputs the current status of the game
             CheckStatus status = gameEngine->getStatus();
             if (status == CheckStatus::BlackInCheck) { // BlackInCheck
                 cout << "Black is in check" << endl;
@@ -153,7 +156,7 @@ int main() {
         }
     }
     gameEngine->printScore();
-    // Delete all objects
+    // Deletes all instances made
     delete gameEngine;
     delete textOutput;
     delete graphicOutput;

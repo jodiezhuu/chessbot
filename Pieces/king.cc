@@ -7,24 +7,7 @@
 King::King(Board *b, PieceColor color, Square *pos, PieceType type) 
 : Piece{b, color, pos, type} {}
 
-// bool King::moveInCheck(int row, int col) {
-//     std::vector<Piece *> *list;
-//     if (color == PieceColor::White) {
-//         list = b->getBlackPieces()->getPieces();
-//     } else {
-//         list = b->getWhitePieces()->getPieces();
-//     }
-    
-//     for (auto piece : *list) {
-//         for (auto moves : piece->getCapturingMoves()) {
-//             if (moves == pos) {
-//                 return true;
-//             }
-//         }
-//     }
-//     return false;
-// }
-
+// Can move one square in any direction
 void King::calculateAllMoves() {
     validMoves.clear();
     capturingMoves.clear();
@@ -46,11 +29,10 @@ void King::calculateAllMoves() {
         }
     }
 
-    //check for castling possibility
+    //Check for castling possibility
     if (!hasMoved) {
-        //for black king
         if (color == PieceColor::Black) {
-            //check both rooks
+            //Checks both rooks
             Piece* rook1 = b->getCell(0, 0)->getPiece();
             if (rook1 != nullptr && rook1->getPieceType() == PieceType::BlackRook && !(rook1->getHasMoved())) {
                 if (b->getCell(0, 1)->getPiece() == nullptr && b->getCell(0, 2)->getPiece() == nullptr && b->getCell(0, 3)->getPiece() == nullptr) {
@@ -64,7 +46,7 @@ void King::calculateAllMoves() {
                 }
             }
         } else {
-            //for white king check both rooks
+            //Checks both rooks
             Piece* rook1 = b->getCell(7, 0)->getPiece();
             if (rook1 != nullptr && rook1->getPieceType() == PieceType::WhiteRook && !(rook1->getHasMoved())) {
                 if (b->getCell(7, 1)->getPiece() == nullptr && b->getCell(7, 2)->getPiece() == nullptr && b->getCell(7, 3)->getPiece() == nullptr) {
@@ -80,16 +62,3 @@ void King::calculateAllMoves() {
         }
     }
 }
-
-// void King::filterChecks() {
-//     for (auto m = validMoves.begin(); m != validMoves.end(); ++m) {
-//         if (moveInCheck((*m)->getRow(), (*m)->getCol())) {
-//             validMoves.erase(m);
-//         }
-//     }
-//     for (auto cm = capturingMoves.begin(); cm != capturingMoves.end(); ++cm) {
-//         if (moveInCheck((*cm)->getRow(), (*cm)->getCol())) {
-//             capturingMoves.erase(cm);
-//         }
-//     }
-// }
