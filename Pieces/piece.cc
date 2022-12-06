@@ -6,10 +6,12 @@ Piece::Piece(Board *b, PieceColor color, Square *pos, PieceType type, bool hasMo
 
 Piece::~Piece() {}
 
+// check if the position is within the bounds of the chess board
 bool Piece::inBound(int row, int col) {
     return (0 <= row && row <= 7 && 0 <= col && col <= 7);
 }
 
+// check if move is valid 
 bool Piece::isMoveValid(int row, int col) {
     calculateAllMoves();
     filterAllMoves();
@@ -21,6 +23,7 @@ bool Piece::isMoveValid(int row, int col) {
     return false;
 }
 
+// checks if each move in valid moves vector is valid
 void Piece::filterAllMoves() {
     Piece *king;
     if (color == PieceColor::Black) {
@@ -109,41 +112,49 @@ void Piece::filterAllMoves() {
     }
 }
 
+// accessor for piece type
 PieceType Piece::getPieceType() const{
     return type;
 }
 
+// accessor for piece color
 PieceColor Piece::getColor() const{
     return color;
 }
 
+// accessor for piece position
 Square *Piece::getPosition() const{
     return pos;
 }
 
+// accessor for valid moves 
 std::vector <Square *> Piece::getValidMoves() {
     calculateAllMoves();
     filterAllMoves();
     return validMoves;
 }
 
+// accessor for capturing moves
 std::vector <Square *> Piece::getCapturingMovesNoCheck() {
     calculateAllMoves();
     return capturingMoves;
 }
 
+// accessor for capturing moves with check
 std::vector <Square *> Piece::getCapturingMoves() {
     calculateAllMoves();
     filterAllMoves();
     return capturingMovesWithCheck;
 }
 
+// accessor for checks
 std::vector <Square *> Piece::getDeliverChecks() {
     calculateAllMoves();
     filterAllMoves();
     return deliverChecks;
 }
 
+// accessor for capturing moves
 std::vector <Square *> Piece::getMovesToCapture() {
     calculateAllMoves();
     filterAllMoves();
@@ -186,30 +197,37 @@ bool Piece::canBeCaptured() const {
     return false;
 }
 
+// check if piece has moved
 bool Piece::getHasMoved() const {
     return hasMoved;
 }
 
+// mutator for position
 void Piece::setPosition(int newrow, int newcol) {
     pos = b->getCell(newrow, newcol);
 }
 
+// mutator to set if piece has moved
 void Piece::setHasMoved(bool val) {
     hasMoved = val;
 }
 
+// accessor for if a pawn has moved two positions from the starting pos
 bool Piece::getHasPawnMovedTwo() const {
     return hasPawnMovedTwo;
 }
 
+// mutator for if a pawn has moved two positions from the starting position
 void Piece::setHasPawnMovedTwo(bool b) {
     hasPawnMovedTwo = b;
 }
 
+// accessor for if a pawn has performed en passant
 bool Piece::getHasEnPassant() const {
     return hasEnPassant;
 }
 
+// mutator for if a pawn has performed en passant
 void Piece::setHasEnPassant(bool b) {
     hasEnPassant = b;
 }
