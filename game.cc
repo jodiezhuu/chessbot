@@ -1,6 +1,7 @@
 #include "game.h"
 #include "Pieces/piece.h"
 #include "computerengine.h"
+#include "checkstatus.h"
 #include <string>
 #include <iostream>
 
@@ -102,7 +103,6 @@ void Game::resign() {
 
 void Game::reset() {
     turn = PieceColor::White;
-    status = CheckStatus::None;
     board->resetBoard();
     ongoing = false;
     delete players[0];
@@ -183,8 +183,7 @@ bool Game::move(int fromCol, int fromRow, int toCol, int toRow) {
     Piece * movedPiece = board->getCell(fromRow, fromCol)->getPiece();
     Piece *old = board->getCell(toRow, toCol)->getPiece();
     if (movedPiece == nullptr || movedPiece->getColor() != turn) {
-        std::cout << "1Entered move is not valid" << std::endl;
-        return false;
+        throw InvalidInput{};
     }
     validMove = movedPiece->isMoveValid(toRow, toCol);
 
@@ -260,7 +259,7 @@ bool Game::move(int fromCol, int fromRow, int toCol, int toRow) {
     return true;
 }
 
-Game::CheckStatus Game::calculateStatus() {
+CheckStatus Game::calculateStatus() {
     Piece *blackKing = board->getBlackKing();
     Piece *whiteKing = board->getWhiteKing();
     if (whiteKing->canBeCapturedIgnoreCheck()) {
@@ -289,20 +288,27 @@ Game::CheckStatus Game::calculateStatus() {
 void Game::applyStatus() {
     status = calculateStatus();
     if (status == CheckStatus::WhiteCheckmated) {
+        std::cout << "WhiteCheckmated" << std::endl;
         reset();
         scores[1] += 1;
     } else if (status == CheckStatus::BlackCheckmated) {
+        std::cout << "BlackCheckmated" << std::endl;
         reset();
         scores[0] += 1;
     } else if (status == CheckStatus::Stalemate) {
+        std::cout << "Stalemate" << std::endl;
         reset();
         scores[0] += 0.5;
         scores[1] += 0.5;
+    } else if (status == CheckStatus::WhiteInCheck) {
+        std::cout << "WhiteInCheck" << std::endl;
+    } else if (status == CheckStatus::BlackInCheck) {
+        std::cout << "BlackInCheck" << std::endl;
     }
 }
 
-int Game::getStatus() {
-    return (int) status;
+CheckStatus Game::getStatus() {
+    return status;
 }
 
 bool Game::isOngoing() const {
@@ -360,4 +366,8 @@ void Game::pawnMoveTwo(std::string from, std::string to) {
         std::cout << board->getCell(toRow, toCol)->getPiece()->getHasPawnMovedTwo() << std::endl;
         board->getCell(toRow, toCol)->getPiece()->setHasPawnMovedTwo(true);
     }
+}
+
+void Game::setStatus(CheckStatus s) {
+    status = s;
 }

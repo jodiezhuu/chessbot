@@ -45,14 +45,18 @@ int main() {
             }
             if ((gameEngine->getTurn() == PieceColor::White && gameEngine->isComputer(PieceColor::White)) || (gameEngine->getTurn() == PieceColor::Black && gameEngine->isComputer(PieceColor::Black))) {
                 graphicOutput->clearMessage();
-                std::string to = gameEngine->getComputerToMove();
-                if (gameEngine->isPawnUpgrading(to)) {
-                    PieceType upgradedPiece = {gameEngine->getTurn() == PieceColor::White ? gameEngine->convertChar('Q') : gameEngine->convertChar('q')};
-                    gameEngine->upgradePawn(upgradedPiece, to);
+                try {
+                    std::string to = gameEngine->getComputerToMove();
+                    if (gameEngine->isPawnUpgrading(to)) {
+                        PieceType upgradedPiece = {gameEngine->getTurn() == PieceColor::White ? gameEngine->convertChar('Q') : gameEngine->convertChar('q')};
+                        gameEngine->upgradePawn(upgradedPiece, to);
+                    }
+                    if (gameEngine->getTurn() == PieceColor::Black) gameEngine->setTurn("white");
+                    else gameEngine->setTurn("black");
+                    gameEngine->notifyObservers();
+                } catch (InvalidInput) {
+                    graphicOutput->displayMessage("Entered move is invalid.");
                 }
-                if (gameEngine->getTurn() == PieceColor::Black) gameEngine->setTurn("white");
-                else gameEngine->setTurn("black");
-                gameEngine->notifyObservers();
             } else {
                 try {
                     graphicOutput->clearMessage();
@@ -76,23 +80,24 @@ int main() {
                 }
             }
             gameEngine->applyStatus();
-            int status = gameEngine->getStatus();
-            if (status == 0) { // BlackInCheck
+            CheckStatus status = gameEngine->getStatus();
+            if (status == CheckStatus::BlackInCheck) { // BlackInCheck
                 cout << "Black is in check" << endl;
                 graphicOutput->displayMessage("Black is in check");
-            } else if (status == 1) { // WhiteInCheck
+            } else if (status == CheckStatus::WhiteInCheck) { // WhiteInCheck
                 cout << "White is in check" << endl;
                 graphicOutput->displayMessage("White is in check");
-            } else if (status == 2) { // BlackCheckmated
+            } else if (status == CheckStatus::BlackCheckmated) { // BlackCheckmated
                 cout << "Checkmate! Black wins!" << endl;
                 graphicOutput->displayMessage("Checkmate! Black wins!");
-            } else if (status == 3) { // WhiteCheckmated
+            } else if (status == CheckStatus::WhiteCheckmated) { // WhiteCheckmated
                 cout << "Checkmate! White wins!" << endl;
                 graphicOutput->displayMessage("Checkmate! White wins!");
-            } else if (status == 4) { // Stalemate
+            } else if (status == CheckStatus::Stalemate) { // Stalemate
                 cout << "Stalemate!" << endl;
                 graphicOutput->displayMessage("Stalemate!");
             }
+            gameEngine->setStatus((CheckStatus) 5);
         } else if (command == "setup") {
             graphicOutput->clearMessage();
             cout << endl;

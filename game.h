@@ -4,6 +4,7 @@
 #include "Pieces/piecetype.h"
 #include "player.h"
 #include "subject.h"
+#include "checkstatus.h"
 #include <string>
 
 class Board;
@@ -14,7 +15,6 @@ class Game: public Subject {
     Board * board;
     PieceColor turn;
     Player *players[2];
-    enum class CheckStatus {BlackInCheck, WhiteInCheck, BlackCheckmated, WhiteCheckmated, Stalemate, None};
     CheckStatus status;
     float scores[2];
     void reset();
@@ -41,7 +41,8 @@ public:
     bool verifySetup();
     CheckStatus calculateStatus();
     void applyStatus();
-    int getStatus();
+    CheckStatus getStatus();
+    void setStatus(CheckStatus s);
     void pawnMoveTwo(std::string from, std::string to);
     bool isPawnUpgrading(std::string to);
     void upgradePawn(PieceType type, std::string to);
