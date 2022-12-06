@@ -1,0 +1,13 @@
+setup
+- e8
+done 
++ p e8
++ k c6
+done
+- e8
++ P b5
+done
+- b6
+- e2
++ r e2
+done
