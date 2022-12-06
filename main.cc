@@ -38,7 +38,11 @@ int main() {
                 continue;
             }
             if ((gameEngine->getTurn() == PieceColor::White && gameEngine->isComputer(PieceColor::White)) || (gameEngine->getTurn() == PieceColor::Black && gameEngine->isComputer(PieceColor::Black))) {
-                gameEngine->move();
+                std::string to = gameEngine->getComputerToMove();
+                if (gameEngine->isPawnUpgrading(to)) {
+                    PieceType upgradedPiece = {gameEngine->getTurn() == PieceColor::White ? gameEngine->convertChar('Q') : gameEngine->convertChar('q')};
+                    gameEngine->upgradePawn(upgradedPiece, to);
+                }
                 if (gameEngine->getTurn() == PieceColor::Black) gameEngine->setTurn("white");
                 else gameEngine->setTurn("black");
                 gameEngine->notifyObservers();
