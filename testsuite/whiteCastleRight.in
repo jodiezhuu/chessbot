@@ -1,0 +1,7 @@
+setup
+- f1
+- g1
+done
+game human human
+move e1 g1
+resign
