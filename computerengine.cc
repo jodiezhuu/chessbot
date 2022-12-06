@@ -11,11 +11,6 @@ ComputerEngine::ComputerEngine(int level) : level{level} {
 }
 
 Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
-     // Create a random number generator
-    std::default_random_engine generator;
-
-    // Generate a random number between 1 and 10
-    std::uniform_int_distribution<int> distribution(1, 10000000);
     switch (level) {
         case 1:
             {
@@ -27,11 +22,12 @@ Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
                 }
                 std::vector<Move*> moves;
                 for (auto piece : *list) {
-                    for (auto move : piece->getValidMoves())
-                    moves.push_back(new Move(piece->getPosition(), move, piece));
+                    for (auto move : piece->getValidMoves()) {
+                        moves.push_back(new Move(piece->getPosition(), move, piece));
+                    }
                 }
-                //int num = distribution(generator) % moves.size();
-                return moves.at(0);
+                int num = rand() % moves.size();
+                return moves.at(num);
             }
         case 2:
             {
@@ -44,26 +40,29 @@ Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
                 std::vector<Move*> moves;
                 std::vector<Move*> captureCheckMoves;
                 for (auto piece : *list) {
-                    for (auto move : piece->getValidMoves()) {
+                    std::vector<Square*> validmoves = piece->getValidMoves();
+                    std::vector<Square*> capturemoves = piece->getCapturingMoves();
+                    std::vector<Square*> checkmoves = piece->getDeliverChecks();
+                    for (auto move : validmoves) {
                         moves.push_back(new Move(piece->getPosition(), move, piece));
                     }
-                    for (auto move : piece->getCapturingMoves()) {
+                    for (auto move : capturemoves) {
+                        captureCheckMoves.push_back(new Move(piece->getPosition(), move, piece));
+                    }
+                    for (auto move : checkmoves) {
                         captureCheckMoves.push_back(new Move(piece->getPosition(), move, piece));
                     }
                 }
-                std::cout << list->size() << std::endl;
                 if (captureCheckMoves.size() != 0) {
                     int num = rand() % captureCheckMoves.size();
                     return captureCheckMoves.at(num);
-                }
-                else {
+                } else {
                     int num = rand() % moves.size();
                     return moves.at(num);
                 }
             }
         case 3:
             {
-                std::cout << "is this running" << std::endl;
                 std::vector<Piece*> * list;
                 if (color == PieceColor::White) {
                     list = board->getWhitePieces()->getPieces();
@@ -82,9 +81,11 @@ Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
                     for (auto move : capturemoves) {
                         preferredMoves.push_back(new Move(piece->getPosition(), move, piece));
                     }
-                    capturemoves.clear();
+                    std::vector<Square*> checkmoves = piece->getDeliverChecks();
+                    for (auto move : checkmoves) {
+                        preferredMoves.push_back(new Move(piece->getPosition(), move, piece));
+                    }
                 }
-                std::cout << "stuck here1" << std::endl;
                 std::vector<Piece*> * newlist;
                 std::vector<Square*> otherColorMoves;
                 if (color == PieceColor::Black) {
@@ -102,34 +103,24 @@ Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
                     }
                     for (auto move : othermoves) {
                         otherColorMoves.push_back(move);
-                        //std::cout << "OCRow: " << move->getRow() << "|OCCol: " << move->getCol() << std::endl;
                     }
                 }
-                std::cout << "stuck here2" << std::endl;
                 for (auto piece : *list) {
-                    bool safe = true;
                     if (!piece->canBeCaptured()) continue;
                     std::vector<Square*> validmoves = piece->getValidMoves();
                     for (auto move : validmoves) {
                         bool safe = true;
                         for (auto otherMove : otherColorMoves) {
                             if (move == otherMove) {
-                                //std::cout << "Row: " << move->getRow() << "|Col: " << move->getCol() << std::endl;
                                 safe = false;
                             }
                         }
-                        //std::cout << "safe?: " << (bool) safe << std::endl;
                         if (safe) {
                             preferredMoves.push_back(new Move(piece->getPosition(), move, piece));
                         }
                     }
-                    validmoves.clear();
                 }
-                // std::cout << "preferredmoves" << std::endl;
-                // for (auto move : preferredMoves) {
-                //     std::cout << "FRow: " << move->getFrom()->getRow() << "|FCol: " << move->getFrom()->getCol() << "|TRow: " << move->getTo()->getRow() << "|TCol: " << move->getTo()->getCol() << std::endl;
-                // }
-                std::cout << "stuckhere3" << std::endl;
+
                 if (preferredMoves.size() != 0) {
                     int num = rand() % preferredMoves.size();
                     return preferredMoves.at(num);
@@ -138,11 +129,12 @@ Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
                     int num = rand() % moves.size();
                     return moves.at(num);
                 }
+                break;
             }
         case 4:
             {
                 if (moveCount == 0) {
-                    //opening = rand() % 5;
+                    opening = (rand() % 3) + (int) color * 3;
                 }
 
                 std::vector<Piece*> * list;
@@ -159,16 +151,10 @@ Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
                     }
                 }
                 Move * testmove;
-                //std::cout << "movecount: " << moveCount << std::endl;
-                //std::cout << "opening: " << opening << std::endl;
                 if (moveCount < 5) {
                     testmove = playOpening(board);
-                    // std::cout << "FRow: " << testmove->getFrom()->getRow() << "|FCol: " << testmove->getFrom()->getCol() << "|TRow: " << testmove->getTo()->getRow() << "|TCol: " << testmove->getTo()->getCol() << std::endl;
-                    // std::cout << "size: " << moves.size() << std::endl;
                     for (auto move : moves) {
-                        // std::cout << "FRow: " << move->getFrom()->getRow() << "|FCol: " << move->getFrom()->getCol() << "|TRow: " << move->getTo()->getRow() << "|TCol: " << move->getTo()->getCol() << std::endl;
                         if (move->getFrom()->getRow() == testmove->getFrom()->getRow() && move->getFrom()->getCol() == testmove->getFrom()->getCol() && move->getTo()->getCol() == testmove->getTo()->getCol() && move->getTo()->getRow() == testmove->getTo()->getRow()) {
-                            // std::cout << "success" << std::endl;
                             ++moveCount;
                             return testmove;
                         }
@@ -179,17 +165,29 @@ Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
                 std::vector<Move*> attacks;
                 for (auto piece : *list) {
                     std::vector<Square*> validmoves = piece->getValidMoves();
-                    // for (auto move : validmoves) {
-                    //     Square *old = piece->getPosition();
-                    //     piece->setPosition(move->getRow(), move->getCol());
-                    //     if (piece->getCapturingMoves().size() > 1) {
-                    //         forks.push_back(new Move(old, move, piece));
-                    //     } else if (piece->getCapturingMoves().size() > 0) {
-                    //         attacks.push_back(new Move(old, move, piece));
-                    //     }
-                    //     piece->setPosition(old->getRow(), old->getCol());
-                    // }
+                    for (auto move : validmoves) {
+                        int fromRow = piece->getPosition()->getRow();
+                        int fromCol = piece->getPosition()->getCol();
+                        int toRow = move->getRow();
+                        int toCol = move->getCol();
+                        board->getCell(fromRow, fromCol)->setPiece(nullptr);
+                        Piece *old = board->getCell(toRow, toCol)->getPiece();
+                        board->getCell(toRow, toCol)->setPiece(piece);
+                        piece->setPosition(toRow, toCol);
+                        if (piece->getCapturingMoves().size() > 1) {
+                            forks.push_back(new Move(board->getCell(fromRow, fromCol), move, piece));
+                        } else if (piece->getCapturingMoves().size() > 0) {
+                            attacks.push_back(new Move(board->getCell(fromRow, fromCol), move, piece));
+                        }
+                        board->getCell(fromRow, fromCol)->setPiece(piece);
+                        board->getCell(toRow, toCol)->setPiece(old);
+                        piece->setPosition(fromRow, fromCol);
+                    }
                     validmoves = piece->getCapturingMoves();
+                    for (auto move : validmoves) {
+                        preferredMoves.push_back(new Move(piece->getPosition(), move, piece));
+                    }
+                    validmoves = piece->getDeliverChecks();
                     for (auto move : validmoves) {
                         preferredMoves.push_back(new Move(piece->getPosition(), move, piece));
                     }
@@ -211,7 +209,6 @@ Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
                     }
                     for (auto move : othermoves) {
                         otherColorMoves.push_back(move);
-                        //std::cout << "OCRow: " << move->getRow() << "|OCCol: " << move->getCol() << std::endl;
                     }
                 }
 
@@ -223,21 +220,15 @@ Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
                         bool safe = true;
                         for (auto otherMove : otherColorMoves) {
                             if (move == otherMove) {
-                                //std::cout << "Row: " << move->getRow() << "|Col: " << move->getCol() << std::endl;
                                 safe = false;
                             }
                         }
-                        //std::cout << "safe?: " << (bool) safe << std::endl;
                         if (safe) {
                             preferredMoves.push_back(new Move(piece->getPosition(), move, piece));
                         }
                     }
                 }
-
-                // for (auto move : preferredMoves) {
-                //     std::cout << "FRow: " << move->getFrom()->getRow() << "|FCol: " << move->getFrom()->getCol() << "|TRow: " << move->getTo()->getRow() << "|TCol: " << move->getTo()->getCol() << std::endl;
-                // }
-
+                
                 if (preferredMoves.size() != 0) {
                     int num = rand() % preferredMoves.size();
                     ++moveCount;
@@ -279,7 +270,81 @@ Move* ComputerEngine::playOpening(Board* board) {
                 case 4:
                     return new Move(board->getCell(0, 4), board->getCell(0, 6), board->getCell(0, 4)->getPiece());
             }
-
+        }
+        case 1:
+        {
+            switch(moveCount) {
+                case 0:
+                    return new Move(board->getCell(0, 6), board->getCell(2, 5), board->getCell(0, 6)->getPiece());
+                case 1:
+                    return new Move(board->getCell(1, 6), board->getCell(2, 6), board->getCell(1, 6)->getPiece());
+                case 2:
+                    return new Move(board->getCell(0, 5), board->getCell(1, 6), board->getCell(0, 5)->getPiece());
+                case 3:
+                    return new Move(board->getCell(1, 3), board->getCell(2, 3), board->getCell(1, 3)->getPiece());
+                case 4:
+                    return new Move(board->getCell(0, 4), board->getCell(0, 6), board->getCell(0, 4)->getPiece());
+            }
+        }
+        case 2:
+        {
+            switch(moveCount) {
+                case 0:
+                    return new Move(board->getCell(0, 6), board->getCell(2, 5), board->getCell(0, 6)->getPiece());
+                case 1:
+                    return new Move(board->getCell(1, 4), board->getCell(2, 4), board->getCell(1, 4)->getPiece());
+                case 2:
+                    return new Move(board->getCell(0, 5), board->getCell(1, 4), board->getCell(0, 5)->getPiece());
+                case 3:
+                    return new Move(board->getCell(1, 1), board->getCell(2, 1), board->getCell(1, 1)->getPiece());
+                case 4:
+                    return new Move(board->getCell(0, 2), board->getCell(2, 0), board->getCell(0, 2)->getPiece());
+            }
+        }
+        case 3:
+        {
+            switch(moveCount) {
+                case 0:
+                    return new Move(board->getCell(6, 4), board->getCell(4, 4), board->getCell(6, 4)->getPiece());
+                case 1:
+                    return new Move(board->getCell(7, 6), board->getCell(5, 5), board->getCell(7, 6)->getPiece());
+                case 2:
+                    return new Move(board->getCell(7, 5), board->getCell(4, 2), board->getCell(7, 5)->getPiece());
+                case 3:
+                    return new Move(board->getCell(6, 3), board->getCell(5, 3), board->getCell(6, 3)->getPiece());
+                case 4:
+                    return new Move(board->getCell(7, 4), board->getCell(7, 6), board->getCell(7, 4)->getPiece());
+            }
+        }
+        case 4:
+        {
+            switch(moveCount) {
+                case 0:
+                    return new Move(board->getCell(6, 3), board->getCell(4, 3), board->getCell(6, 3)->getPiece());
+                case 1:
+                    return new Move(board->getCell(7, 2), board->getCell(4, 5), board->getCell(7, 2)->getPiece());
+                case 2:
+                    return new Move(board->getCell(6, 4), board->getCell(5, 4), board->getCell(6, 4)->getPiece());
+                case 3:
+                    return new Move(board->getCell(7, 6), board->getCell(5, 5), board->getCell(7, 6)->getPiece());
+                case 4:
+                    return new Move(board->getCell(6, 2), board->getCell(5, 2), board->getCell(6, 2)->getPiece());
+            }
+        }
+        case 5:
+        {
+        switch(moveCount) {
+                case 0:
+                    return new Move(board->getCell(6, 2), board->getCell(4, 2), board->getCell(6, 2)->getPiece());
+                case 1:
+                    return new Move(board->getCell(7, 1), board->getCell(5, 2), board->getCell(7, 1)->getPiece());
+                case 2:
+                    return new Move(board->getCell(6, 4), board->getCell(4, 4), board->getCell(6, 4)->getPiece());
+                case 3:
+                    return new Move(board->getCell(6, 6), board->getCell(5, 6), board->getCell(6, 6)->getPiece());
+                case 4:
+                    return new Move(board->getCell(4, 4), board->getCell(3, 4), board->getCell(4, 4)->getPiece());
+            }
         }
     }
 }

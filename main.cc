@@ -8,7 +8,7 @@
 using namespace std;
 
 int main() {
-    //srand(time(0));
+    srand(time(NULL));
     string command;
     Game * gameEngine = new Game{};
     TextView * textOutput = new TextView{gameEngine};
