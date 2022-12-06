@@ -41,6 +41,7 @@ public:
     bool verifySetup();
     CheckStatus calculateStatus();
     void applyStatus();
+    int getStatus();
     void pawnMoveTwo(std::string from, std::string to);
     bool isPawnUpgrading(std::string to);
     void upgradePawn(PieceType type, std::string to);

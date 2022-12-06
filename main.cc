@@ -76,7 +76,23 @@ int main() {
                 }
             }
             gameEngine->applyStatus();
-
+            int status = gameEngine->getStatus();
+            if (status == 0) { // BlackInCheck
+                cout << "Black is in check" << endl;
+                graphicOutput->displayMessage("Black is in check");
+            } else if (status == 1) { // WhiteInCheck
+                cout << "White is in check" << endl;
+                graphicOutput->displayMessage("White is in check");
+            } else if (status == 2) { // BlackCheckmated
+                cout << "Checkmate! Black wins!" << endl;
+                graphicOutput->displayMessage("Checkmate! Black wins!");
+            } else if (status == 3) { // WhiteCheckmated
+                cout << "Checkmate! White wins!" << endl;
+                graphicOutput->displayMessage("Checkmate! White wins!");
+            } else if (status == 4) { // Stalemate
+                cout << "Stalemate!" << endl;
+                graphicOutput->displayMessage("Stalemate!");
+            }
         } else if (command == "setup") {
             graphicOutput->clearMessage();
             cout << endl;

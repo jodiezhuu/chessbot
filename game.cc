@@ -287,26 +287,22 @@ Game::CheckStatus Game::calculateStatus() {
 }
 
 void Game::applyStatus() {
-    std::cout << "Apply status running" << std::endl;
     status = calculateStatus();
     if (status == CheckStatus::WhiteCheckmated) {
         reset();
         scores[1] += 1;
-        std::cout << "Checkmate! Black wins!" << std::endl;
     } else if (status == CheckStatus::BlackCheckmated) {
         reset();
         scores[0] += 1;
-        std::cout << "Checkmate! White wins!" << std::endl;
-    } else if (status == CheckStatus::WhiteInCheck) {
-        std::cout << "White is in check" << std::endl;
-    } else if (status == CheckStatus::BlackInCheck) {
-        std::cout << "Black is in check" << std::endl;
     } else if (status == CheckStatus::Stalemate) {
-        std::cout << "Stalemate!" << std::endl;
         reset();
         scores[0] += 0.5;
         scores[1] += 0.5;
     }
+}
+
+int Game::getStatus() {
+    return (int) status;
 }
 
 bool Game::isOngoing() const {
