@@ -27,11 +27,14 @@ Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
                 }
                 std::vector<Move*> moves;
                 for (auto piece : *list) {
-                    for (auto move : piece->getValidMoves())
-                    moves.push_back(new Move(piece->getPosition(), move, piece));
+                    for (auto move : piece->getValidMoves()) {
+                        moves.push_back(new Move(piece->getPosition(), move, piece));
+                        std::cout << "pushed!" << std::endl;
+                    }
                 }
-                //int num = distribution(generator) % moves.size();
-                return moves.at(0);
+                std::cout << "size: " << moves.size() << std::endl;
+                int num = rand() % moves.size();
+                return moves.at(num);
             }
         case 2:
             {
@@ -44,19 +47,26 @@ Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
                 std::vector<Move*> moves;
                 std::vector<Move*> captureCheckMoves;
                 for (auto piece : *list) {
-                    for (auto move : piece->getValidMoves()) {
+                    std::vector<Square*> validmoves = piece->getValidMoves();
+                    std::vector<Square*> capturemoves = piece->getCapturingMoves();
+                    std::cout << "captures: " << capturemoves.size() << std::endl;
+                    std::vector<Square*> checkmoves = piece->getDeliverChecks();
+                    std::cout << "checks: " << checkmoves.size() << std::endl;
+                    for (auto move : validmoves) {
                         moves.push_back(new Move(piece->getPosition(), move, piece));
                     }
-                    for (auto move : piece->getCapturingMoves()) {
+                    for (auto move : capturemoves) {
+                        captureCheckMoves.push_back(new Move(piece->getPosition(), move, piece));
+                    }
+                    for (auto move : checkmoves) {
                         captureCheckMoves.push_back(new Move(piece->getPosition(), move, piece));
                     }
                 }
-                std::cout << list->size() << std::endl;
+                std::cout << "capturesize: " << captureCheckMoves.size() << std::endl;
                 if (captureCheckMoves.size() != 0) {
                     int num = rand() % captureCheckMoves.size();
                     return captureCheckMoves.at(num);
-                }
-                else {
+                } else {
                     int num = rand() % moves.size();
                     return moves.at(num);
                 }
@@ -84,7 +94,6 @@ Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
                     }
                     capturemoves.clear();
                 }
-                std::cout << "stuck here1" << std::endl;
                 std::vector<Piece*> * newlist;
                 std::vector<Square*> otherColorMoves;
                 if (color == PieceColor::Black) {
@@ -102,10 +111,9 @@ Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
                     }
                     for (auto move : othermoves) {
                         otherColorMoves.push_back(move);
-                        //std::cout << "OCRow: " << move->getRow() << "|OCCol: " << move->getCol() << std::endl;
+                        std::cout << "OCRow: " << move->getRow() << "|OCCol: " << move->getCol() << std::endl;
                     }
                 }
-                std::cout << "stuck here2" << std::endl;
                 for (auto piece : *list) {
                     bool safe = true;
                     if (!piece->canBeCaptured()) continue;
@@ -125,11 +133,10 @@ Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
                     }
                     validmoves.clear();
                 }
-                // std::cout << "preferredmoves" << std::endl;
-                // for (auto move : preferredMoves) {
-                //     std::cout << "FRow: " << move->getFrom()->getRow() << "|FCol: " << move->getFrom()->getCol() << "|TRow: " << move->getTo()->getRow() << "|TCol: " << move->getTo()->getCol() << std::endl;
-                // }
-                std::cout << "stuckhere3" << std::endl;
+                std::cout << "preferredmoves" << std::endl;
+                for (auto move : preferredMoves) {
+                    std::cout << "FRow: " << move->getFrom()->getRow() << "|FCol: " << move->getFrom()->getCol() << "|TRow: " << move->getTo()->getRow() << "|TCol: " << move->getTo()->getCol() << std::endl;
+                }
                 if (preferredMoves.size() != 0) {
                     int num = rand() % preferredMoves.size();
                     return preferredMoves.at(num);
@@ -138,6 +145,7 @@ Move* ComputerEngine::makeMove(Board* board, PieceColor color) {
                     int num = rand() % moves.size();
                     return moves.at(num);
                 }
+                break;
             }
         case 4:
             {

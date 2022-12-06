@@ -15,6 +15,7 @@ void Pawn::calculateAllMoves() {
     validMoves.clear();
     capturingMoves.clear();
     capturingMovesWithCheck.clear();
+    movesToCapture.clear();
     if (b->getCell(pos->getRow(), pos->getCol())->getPiece() != this) return;
     if (color == PieceColor::Black) {
         // black moving down
