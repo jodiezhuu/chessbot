@@ -34,8 +34,14 @@ int main() {
             }
         } else if (command == "resign") {
             graphicOutput->clearMessage();
-            if (gameEngine->isOngoing()) gameEngine->resign();
-            else cout << "No game has been started" << endl; graphicOutput->displayMessage("No game has been started");
+            if (gameEngine->isOngoing()) {
+                gameEngine->resign();
+                {gameEngine->getTurn() == PieceColor::White ? graphicOutput->displayMessage("White wins!") : graphicOutput->displayMessage("Black wins!");};
+            }
+            else {
+                cout << "No game has been started" << endl;
+                graphicOutput->displayMessage("No game has been started");
+            } 
         } else if (command == "move") {
             graphicOutput->clearMessage();
             if (!gameEngine->isOngoing()) {
