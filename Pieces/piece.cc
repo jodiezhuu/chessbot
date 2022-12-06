@@ -64,6 +64,12 @@ void Piece::filterAllMoves() {
         king = b->getWhiteKing();
     }
 
+    // std::cout << "Valid Moves before filter: " << "[" << pos->getRow() << "," << pos->getCol() << "] " << convertPiece(type) << ":" << std::endl;
+    // for (auto move : validMoves) {
+    //     std::cout << "{" << move->getRow() << "," << move->getCol() << "} ";
+    // }
+    // std::cout << std::endl;
+
     // Update valid moves vector
     // Makes each valid move, checks if move caues king to be in check, removes move accordingly
     std::vector <Square *> newValidMoves;
@@ -85,6 +91,7 @@ void Piece::filterAllMoves() {
         setPosition(fromRow, fromCol);
     }
     // calculate moves that can deliver checks
+    std::vector <Square *> oldCapturingMoves = capturingMoves;
     deliverChecks.clear();
     for (auto move : newValidMoves) {
         int fromRow = pos->getRow();
@@ -108,9 +115,16 @@ void Piece::filterAllMoves() {
     }
 
     validMoves = newValidMoves;
+    capturingMoves = oldCapturingMoves;
 
-    // std::cout << "Deliver Checks: " << "[" << pos->getRow() << "," << pos->getCol() << "] " << convertPiece(type) << ":" << std::endl;
-    // for (auto move : deliverChecks) {
+    // std::cout << "Valid Moves after filter: " << "[" << pos->getRow() << "," << pos->getCol() << "] " << convertPiece(type) << ":" << std::endl;
+    // for (auto move : validMoves) {
+    //     std::cout << "{" << move->getRow() << "," << move->getCol() << "} ";
+    // }
+    // std::cout << std::endl;
+
+    // std::cout << "Capturing Moves No Check: " << "[" << pos->getRow() << "," << pos->getCol() << "] " << convertPiece(type) << ":" << std::endl;
+    // for (auto move : capturingMoves) {
     //     std::cout << "{" << move->getRow() << "," << move->getCol() << "} ";
     // }
     // std::cout << std::endl;
@@ -137,12 +151,11 @@ void Piece::filterAllMoves() {
 
     // Update capturing moves vector with check
     for (size_t i = 0; i < capturingMoves.size(); ++i) {
-        bool inValid = true;
         for (auto vm = validMoves.begin(); vm != validMoves.end(); ++vm) {
-            if (capturingMoves[i] == *vm) inValid = false;
-        }
-        if (!inValid) {
-            capturingMovesWithCheck.push_back(capturingMoves[i]);
+            if (capturingMoves[i] == *vm) { 
+                capturingMovesWithCheck.push_back(capturingMoves[i]);
+                break;
+            }
         }
     }
 }
@@ -173,6 +186,11 @@ std::vector <Square *> Piece::getCapturingMovesNoCheck() {
 std::vector <Square *> Piece::getCapturingMoves() {
     calculateAllMoves();
     filterAllMoves();
+    // std::cout << "Capturing Moves Final" << "[" << pos->getRow() << "," << pos->getCol() << "] of: " << convertPiece(type) << std::endl;
+    // for (auto move : capturingMovesWithCheck) {
+    //     std::cout << "{" << move->getRow() << "," << move->getCol() << "} ";
+    // }
+    // std::cout << std::endl;
     return capturingMovesWithCheck;
 }
 
