@@ -340,10 +340,8 @@ void Game::pawnMoveTwo(std::string from, std::string to) {
     int toRow = 8 - (to[1] - '0');
     PieceType type = board->getCell(toRow, toCol)->getPiece()->getPieceType();
     if ((fromRow == 1 && toRow - fromRow == 2 && toCol == fromCol) && type == PieceType::BlackPawn) {
-        std::cout << board->getCell(toRow, toCol)->getPiece()->getHasPawnMovedTwo() << std::endl;
         board->getCell(toRow, toCol)->getPiece()->setHasPawnMovedTwo(true);
     } else if ((fromRow == 6 && fromRow - toRow == 2 && toCol == fromCol) && type == PieceType::WhitePawn) {
-        std::cout << board->getCell(toRow, toCol)->getPiece()->getHasPawnMovedTwo() << std::endl;
         board->getCell(toRow, toCol)->getPiece()->setHasPawnMovedTwo(true);
     }
 }
