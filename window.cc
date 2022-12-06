@@ -67,15 +67,14 @@ Xwindow::~Xwindow() {
     XCloseDisplay(d);
 }
 
+// draws rectangle with input (x,y) as the top left coordinate, width, height, and desired colour
 void Xwindow::fillRectangle(int x, int y, int width, int height, int colour) {
     XSetForeground(d, gc, colours[colour]);
     XFillRectangle(d, w, gc, x, y, width, height);
     XSetForeground(d, gc, colours[Black]);
 }
 
-// void Xwindow::drawString(int x, int y, string msg) {
-//     XDrawString(d, w, DefaultGC(d, s), x, y, msg.c_str(), msg.length());
-// }
+// draw string with input (x,y) as top left coordinate, display message, and desired colour
 void Xwindow::drawString(int x, int y, std::string msg, int colour) {
   XFontStruct * f = XLoadQueryFont(d, "6x13");
 	
@@ -84,16 +83,19 @@ void Xwindow::drawString(int x, int y, std::string msg, int colour) {
 	delete f;
 }
 
+// helper function for drawing circle
 void Xwindow::fillArc(int x, int y, int width, int height, int angle1, int angle2, int colour) {
     XSetForeground(d, gc, colours[colour]);
 	XFillArc(d, w, gc, x-width/2, y-height/2, width, height, angle1 * 64, angle2 * 64);
 	XSetForeground(d, gc, colours[Black]);
 }
 
+// draws circle
 void Xwindow::drawCircle(int x, int y, int di, int colour) {
 	fillArc(x, y, di, di, 0, 360, colour);
 }
 
+// helper function for draw string and draw bigger string
 void Xwindow::printMessage(int x, int y, const string& msg, int colour, XFontStruct& f){
     XSetForeground(d, gc, colours[colour]);
     XTextItem ti;
@@ -106,8 +108,8 @@ void Xwindow::printMessage(int x, int y, const string& msg, int colour, XFontStr
     XFlush(d);
 }
 
+// draws bigger string
 void Xwindow::drawBiggerString(int x, int y, string msg, int colour) {
-  // Font f = XLoadFont(d, "-*-helvetica-bold-r-normal--*-240-*-*-*-*-*");
     ostringstream name;
     name << "-*-helvetica-bold-r-*-*-*-240-" << 100 << "-" << 90 << "-*-*-*-*";
 

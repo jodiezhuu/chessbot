@@ -7,15 +7,18 @@
 
 PieceList::PieceList(PieceColor color): color{color} {}
 
+// returns the number of pieces of a certain piece type
 int PieceList::getPieceCount(PieceType type) {
     if (pieceCount.count(type) == 0) return 0;
     return pieceCount[type];
 }
 
+// accessor for piece list
 std::vector<Piece *> *PieceList::getPieces() {
     return &pieces;
 }
 
+// mutator to add to piece list 
 void PieceList::addPiece(Piece *p) {
     if (pieceCount.count(p->getPieceType()) == 0) {
         pieceCount[p->getPieceType()] = 1;
@@ -25,6 +28,7 @@ void PieceList::addPiece(Piece *p) {
     pieces.push_back(p);
 }
 
+// mutator to remove a piece in piece list
 void PieceList::removePieces(Piece *piece) {
     for (auto p = pieces.begin(); p != pieces.end(); ++p) {
         if (*p == piece) {
@@ -35,10 +39,12 @@ void PieceList::removePieces(Piece *piece) {
     }
 }
 
+// accessor to piece list length
 size_t PieceList::getLength() {
     return pieces.size();
 }
 
+// destroys piece list vector
 PieceList::~PieceList() {
     for (auto p: pieces) {
         delete p;

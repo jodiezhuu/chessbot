@@ -1,6 +1,7 @@
 #include "graphicview.h"
 #include <string>
 
+// constructor displays empty 8x8 board by default
 GraphicView::GraphicView(Game *game): game {game}, window{575, 650} {
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 8; col++) {
@@ -30,6 +31,7 @@ GraphicView::~GraphicView() {
     game->detach(this);
 }
 
+// draws a circle with piecetype symbol on the piece
 void GraphicView::drawPiece(PieceType type, int x, int y) {
     if (type == PieceType::BlackBishop) {
         window.drawCircle(x, y, 40, 1);
@@ -76,15 +78,18 @@ void GraphicView::drawPiece(PieceType type, int x, int y) {
     }
 }
 
+// draws message in display based on inputted string
 void GraphicView::displayMessage(std::string s) {
     window.fillRectangle(0, 540, 575, 175, 0);
     window.drawBiggerString(10, 590, s);
 }
 
+// clears message in display
 void GraphicView::clearMessage() {
     window.fillRectangle(0, 540, 575, 175, 0);
 }
 
+// renders and updates board based on moved pieces
 void GraphicView::notify() {
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {

@@ -6,6 +6,7 @@ Bishop::Bishop(Board *b, PieceColor color, Square *pos, PieceType type)
 }
 
 void Bishop::calculateAllMoves() {
+    // clears vector that holds valid moves, capturing moves, and capturing moves with check of another piece
     validMoves.clear();
     capturingMoves.clear();
     capturingMovesWithCheck.clear();
