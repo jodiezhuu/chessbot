@@ -28,7 +28,6 @@ public:
     bool isOngoing() const;
     bool move(std::string from, std::string to);
     bool move(int fromCol, int fromRow, int toCol, int toRow);
-    bool move();
     std::string getComputerToMove();
     bool isComputer(PieceColor color);
     void startGame(std::string playerOneType, std::string playerTwoType);

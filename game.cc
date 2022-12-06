@@ -17,6 +17,7 @@ Game::~Game() {
     delete board;
 }
 
+// Used by Observers
 PieceType Game::getState(int row, int col) {
     Piece * piece= board->getCell(row, col)->getPiece();
     if (piece == nullptr) {
@@ -93,10 +94,8 @@ void Game::printScore() {
 void Game::resign() {
     if (turn == PieceColor::White) {
         scores[1] += 1;
-        std::cout << "Black wins!" << std::endl;
     } else if (turn == PieceColor::Black) {
         scores[0] += 1;
-        std::cout << "White wins!" << std::endl;
     }
     reset();
 }
@@ -162,12 +161,7 @@ bool Game::move(std::string from, std::string to) {
     return move(fromCol, fromRow, toCol, toRow);
 }
 
-// For computer
-bool Game::move() {
-    Move* computerMove = players[1 - (int) turn]->getEngine()->makeMove(board, turn);
-    return move(computerMove->getFrom()->getCol(), computerMove->getFrom()->getRow(), computerMove->getTo()->getCol(), computerMove->getTo()->getRow());
-}
-
+// Returns the move made as a string to be used to check for pawn upgrading
 std::string Game::getComputerToMove() {
     Move* computerMove = players[1 - (int) turn]->getEngine()->makeMove(board, turn);
     move(computerMove->getFrom()->getCol(), computerMove->getFrom()->getRow(), computerMove->getTo()->getCol(), computerMove->getTo()->getRow());
@@ -179,33 +173,20 @@ std::string Game::getComputerToMove() {
 }
 
 bool Game::move(int fromCol, int fromRow, int toCol, int toRow) {
-    bool validMove = false;
     Piece * movedPiece = board->getCell(fromRow, fromCol)->getPiece();
     Piece *old = board->getCell(toRow, toCol)->getPiece();
     if (movedPiece == nullptr || movedPiece->getColor() != turn) {
         throw InvalidInput{};
+        return false;
     }
-    validMove = movedPiece->isMoveValid(toRow, toCol);
+    bool validMove = movedPiece->isMoveValid(toRow, toCol);
 
     if (!validMove) {
-        std::cout << "FRow: " << fromRow << "\nFCol: " << fromCol << std::endl;
-        std::cout << "TRow: " << toRow << "\nTCol: " << toCol << std::endl;
-        std::cout << "2Entered move is not valid" << std::endl;
+        throw InvalidInput{};
         return false;
     }
 
-    // Test
-    // std::vector <Piece *> *list;
-    // if (movedPiece->getColor() == PieceColor::White) {
-    //     list = board->getWhitePieces()->getPieces();
-    // } else {
-    //     list = board->getBlackPieces()->getPieces();
-    // }
-    // for (auto piece : *list) {
-    //     piece->getDeliverChecks();
-    // }
-
-    // En passant
+    // Checks if the previous move satisfies the conditions of en passant, if it does then it removes the pawn
     Square *right = board->getCell(movedPiece->getPosition()->getRow(), movedPiece->getPosition()->getCol() + 1);
     Square *left = board->getCell(movedPiece->getPosition()->getRow(), movedPiece->getPosition()->getCol() - 1);
     if (prevMove != nullptr && prevMove->getHasEnPassant() && ((left != nullptr && prevMove == left->getPiece()) || (right != nullptr && prevMove == right->getPiece()))) {
@@ -215,9 +196,10 @@ bool Game::move(int fromCol, int fromRow, int toCol, int toRow) {
         prevMove = nullptr;
     }
 
+    // For en passant
     if (prevMove != nullptr) prevMove->setHasPawnMovedTwo(false);
 
-    // Castling
+    // Handles castling (moves the rook and king)
     if ((movedPiece->getPieceType() == PieceType::WhiteKing || movedPiece->getPieceType() == PieceType::BlackKing) && abs(fromCol - toCol) > 1 ) {
         if (toCol == 6) {
             Piece * rook = board->getCell(fromRow, 7)->getPiece();
@@ -234,24 +216,23 @@ bool Game::move(int fromCol, int fromRow, int toCol, int toRow) {
         }
     }
 
-    // Normal moves
+    // Makes the move
     board->getCell(fromRow, fromCol)->setPiece(nullptr);
     board->getCell(toRow, toCol)->setPiece(movedPiece);
     movedPiece->setPosition(toRow, toCol);
     movedPiece->setHasMoved(true);
 
-    // if move made doesn't get rid of check then invalid
+    // If move made doesn't get rid of check then it is invalid
     if ((status == CheckStatus::WhiteInCheck || status == CheckStatus::BlackInCheck) && status == calculateStatus()) {
         board->getCell(fromRow, fromCol)->setPiece(movedPiece);
         board->getCell(toRow, toCol)->setPiece(old);
         movedPiece->setPosition(fromRow, fromCol);
-        std::cout << "Your king is in check!" << std::endl;
+        throw InvalidInput{};
         return false;
     }
 
-    // delete old piece if exists
+    // Delete captured piece
     if (old != nullptr) {
-        std::cout << "Deleted" << std::endl;
         board->removePiece(old);
     }
 
@@ -259,6 +240,7 @@ bool Game::move(int fromCol, int fromRow, int toCol, int toRow) {
     return true;
 }
 
+// Determines the checkstatus of the board
 CheckStatus Game::calculateStatus() {
     Piece *blackKing = board->getBlackKing();
     Piece *whiteKing = board->getWhiteKing();
@@ -273,6 +255,7 @@ CheckStatus Game::calculateStatus() {
         }
         return CheckStatus::BlackCheckmated;
     }
+    // Checks for stalemate
     std::vector <Piece *> *list;
     if (turn == PieceColor::Black) {
         list = board->getBlackPieces()->getPieces();
@@ -285,26 +268,20 @@ CheckStatus Game::calculateStatus() {
     return CheckStatus::Stalemate; 
 }
 
+// Updates the game according to the current check status
 void Game::applyStatus() {
     status = calculateStatus();
     if (status == CheckStatus::WhiteCheckmated) {
-        std::cout << "WhiteCheckmated" << std::endl;
         reset();
         scores[1] += 1;
     } else if (status == CheckStatus::BlackCheckmated) {
-        std::cout << "BlackCheckmated" << std::endl;
         reset();
         scores[0] += 1;
     } else if (status == CheckStatus::Stalemate) {
-        std::cout << "Stalemate" << std::endl;
         reset();
         scores[0] += 0.5;
         scores[1] += 0.5;
-    } else if (status == CheckStatus::WhiteInCheck) {
-        std::cout << "WhiteInCheck" << std::endl;
-    } else if (status == CheckStatus::BlackInCheck) {
-        std::cout << "BlackInCheck" << std::endl;
-    }
+    } 
 }
 
 CheckStatus Game::getStatus() {
@@ -315,6 +292,7 @@ bool Game::isOngoing() const {
     return ongoing;
 }
 
+// Checks if a pawn is on the top or bottom row
 bool Game::isPawnUpgrading(std::string to) {
     int toCol = to[0] - 'a';
     int toRow = 8 - (to[1] - '0');
@@ -324,6 +302,7 @@ bool Game::isPawnUpgrading(std::string to) {
     } return false;
 }
 
+// Removes pawn and replaces it with the upgrade piece type
 void Game::upgradePawn(PieceType type, std::string to) {
     int toCol = to[0] - 'a';
     int toRow = 8 - (to[1] - '0');
@@ -353,6 +332,7 @@ void Game::upgradePawn(PieceType type, std::string to) {
     }
 }
 
+// Updates pawn fields based on its move
 void Game::pawnMoveTwo(std::string from, std::string to) {
     int fromCol = from[0] - 'a';
     int fromRow = 8 - (from[1] - '0');
