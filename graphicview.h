@@ -5,6 +5,7 @@
 #include "Pieces/piecetype.h"
 #include <iostream>
 #include "window.h"
+#include <string>
 
 class GraphicView: public Observer {
     Game *game;
@@ -14,6 +15,8 @@ class GraphicView: public Observer {
 public:
     GraphicView(Game *game);
     void notify() override;
+    void displayMessage(std::string s);
+    void clearMessage();
     ~GraphicView();
 };
 

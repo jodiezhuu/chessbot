@@ -1,7 +1,7 @@
 #include "graphicview.h"
 #include <string>
 
-GraphicView::GraphicView(Game *game): game {game}, window{550, 550} {
+GraphicView::GraphicView(Game *game): game {game}, window{575, 650} {
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 8; col++) {
             pieceBoard[row][col] = PieceType::Empty;
@@ -74,6 +74,15 @@ void GraphicView::drawPiece(PieceType type, int x, int y) {
         window.drawCircle(x, y, 40, 0);
         window.drawString(x, y, "R", 1);
     }
+}
+
+void GraphicView::displayMessage(std::string s) {
+    window.fillRectangle(0, 540, 575, 175, 0);
+    window.drawBiggerString(10, 590, s);
+}
+
+void GraphicView::clearMessage() {
+    window.fillRectangle(0, 540, 575, 175, 0);
 }
 
 void GraphicView::notify() {
