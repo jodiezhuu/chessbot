@@ -26,14 +26,14 @@ void Pawn::calculateAllMoves() {
         if (inBound(pos->getRow() + 1, pos->getCol() - 1) && (b->getCell(pos->getRow() + 1, pos->getCol() - 1))->getPiece() != nullptr && (b->getCell(pos->getRow() + 1, pos->getCol() - 1))->getPiece()->getColor() != color) {
             validMoves.push_back(b->getCell(pos->getRow() + 1, pos->getCol() - 1));
             capturingMoves.push_back(b->getCell(pos->getRow() + 1, pos->getCol() - 1));
-        } else if (inBound(pos->getRow() + 1, pos->getCol() - 1) && (b->getCell(pos->getRow() + 1, pos->getCol() - 1))->getPiece() != nullptr) {
+        } else if (inBound(pos->getRow() + 1, pos->getCol() - 1) && (b->getCell(pos->getRow() + 1, pos->getCol() - 1))->getPiece() == nullptr) {
             movesToCapture.push_back(b->getCell(pos->getRow() + 1, pos->getCol() - 1));
         }
         // black down right
         if (inBound(pos->getRow() + 1, pos->getCol() + 1) && (b->getCell(pos->getRow() + 1, pos->getCol() + 1))->getPiece() != nullptr && (b->getCell(pos->getRow() + 1, pos->getCol() + 1))->getPiece()->getColor() != color) {
             validMoves.push_back(b->getCell(pos->getRow() + 1, pos->getCol() + 1));
             capturingMoves.push_back(b->getCell(pos->getRow() + 1, pos->getCol() + 1));
-        } else if (inBound(pos->getRow() + 1, pos->getCol() + 1) && (b->getCell(pos->getRow() + 1, pos->getCol() + 1))->getPiece() != nullptr) {
+        } else if (inBound(pos->getRow() + 1, pos->getCol() + 1) && (b->getCell(pos->getRow() + 1, pos->getCol() + 1))->getPiece() == nullptr) {
             movesToCapture.push_back(b->getCell(pos->getRow() + 1, pos->getCol() + 1));
         }
         // pawn in starting position, move two forward
@@ -61,14 +61,14 @@ void Pawn::calculateAllMoves() {
         if (inBound(pos->getRow() - 1, pos->getCol() + 1) && (b->getCell(pos->getRow() - 1, pos->getCol() + 1))->getPiece() != nullptr && (b->getCell(pos->getRow() - 1, pos->getCol() + 1))->getPiece()->getColor() != color) {
             validMoves.push_back(b->getCell(pos->getRow() - 1, pos->getCol() + 1));
             capturingMoves.push_back(b->getCell(pos->getRow() - 1, pos->getCol() + 1));
-        } else if (inBound(pos->getRow() - 1, pos->getCol() + 1) && (b->getCell(pos->getRow() - 1, pos->getCol() + 1))->getPiece() != nullptr) {
+        } else if (inBound(pos->getRow() - 1, pos->getCol() + 1) && (b->getCell(pos->getRow() - 1, pos->getCol() + 1))->getPiece() == nullptr) {
             movesToCapture.push_back(b->getCell(pos->getRow() - 1, pos->getCol() + 1));
         }
         // white up left
         if (inBound(pos->getRow() - 1, pos->getCol() - 1) && (b->getCell(pos->getRow() - 1, pos->getCol() - 1))->getPiece() != nullptr && (b->getCell(pos->getRow() - 1, pos->getCol() - 1))->getPiece()->getColor() != color) {
             validMoves.push_back(b->getCell(pos->getRow() - 1, pos->getCol() - 1));
             capturingMoves.push_back(b->getCell(pos->getRow() - 1, pos->getCol() - 1));
-        } else if (inBound(pos->getRow() - 1, pos->getCol() - 1) && (b->getCell(pos->getRow() - 1, pos->getCol() - 1))->getPiece() != nullptr) {
+        } else if (inBound(pos->getRow() - 1, pos->getCol() - 1) && (b->getCell(pos->getRow() - 1, pos->getCol() - 1))->getPiece() == nullptr) {
             movesToCapture.push_back(b->getCell(pos->getRow() - 1, pos->getCol() - 1));
         }
         // white in starting position, up two 

@@ -203,6 +203,9 @@ std::vector <Square *> Piece::getDeliverChecks() {
 std::vector <Square *> Piece::getMovesToCapture() {
     calculateAllMoves();
     filterAllMoves();
+    // for (auto move : movesToCapture) {
+    //     std::cout << "Row: " << move->getRow() << "|Col: " << move->getCol() << std::endl;
+    // }
     return movesToCapture;
 }
 
