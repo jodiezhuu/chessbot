@@ -1,0 +1,9 @@
+setup
+- b8
+- c8
+- d8
+= black
+done
+game human human
+move e8 c8
+resign
