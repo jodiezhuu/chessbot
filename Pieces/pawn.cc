@@ -37,7 +37,7 @@ void Pawn::calculateAllMoves() {
             movesToCapture.push_back(b->getCell(pos->getRow() + 1, pos->getCol() + 1));
         }
         // pawn in starting position, move two forward
-        if (pos->getRow() == 1 && (b->getCell(pos->getRow() + 2, pos->getCol()))->getPiece() == nullptr) {
+        if (pos->getRow() == 1 && (b->getCell(pos->getRow() + 1, pos->getCol()))->getPiece() == nullptr && (b->getCell(pos->getRow() + 2, pos->getCol()))->getPiece() == nullptr) {
             validMoves.push_back(b->getCell(pos->getRow() + 2, pos->getCol()));
         }
         // en passant
@@ -72,7 +72,7 @@ void Pawn::calculateAllMoves() {
             movesToCapture.push_back(b->getCell(pos->getRow() - 1, pos->getCol() - 1));
         }
         // white in starting position, up two 
-        if (pos->getRow() == 6 && (b->getCell(pos->getRow() - 2, pos->getCol()))->getPiece() == nullptr) {
+        if (pos->getRow() == 6 && (b->getCell(pos->getRow() - 1, pos->getCol()))->getPiece() == nullptr && (b->getCell(pos->getRow() - 2, pos->getCol()))->getPiece() == nullptr) {
             validMoves.push_back(b->getCell(pos->getRow() - 2, pos->getCol()));
         }
         // en passant
